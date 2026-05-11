@@ -1,0 +1,24 @@
+{
+  "name": "driven",
+  "version": "1.0.0-alpha",
+  "description": "Compagnon de workspaces collaboratifs Claude — capture mémoire timestampée, factualité en collectif, cross-author, propagation, maintenance des fichiers normatifs. Activé automatiquement dans un workspace contenant un marker .driven à la racine.",
+  "author": {
+    "name": "Alexandre Bouchez",
+    "url": "https://github.com/alexandrebouchez"
+  },
+  "homepage": "https://github.com/alexandrebouchez/driven-alex-plugins",
+  "repository": "https://github.com/alexandrebouchez/driven-alex-plugins",
+  "license": "Proprietary — Drivenlabs",
+  "keywords": [
+    "drivenlabs",
+    "shared-space",
+    "personal-space",
+    "collaboration",
+    "memory",
+    "markdown",
+    "claude-code",
+    "cowork"
+  ],
+  "skills": "./skills",
+  "commands": "./commands"
+}
