@@ -2,6 +2,8 @@
 
 Une memory entry est une note timestampée dans un dossier `memory/` à la racine d'un dossier thématique. C'est la mémoire long terme du workspace : décisions, RDV, interactions, insights, contexte projet.
 
+Avant d'écrire une mémoire, le test pivot doit avoir été passé : l'information est un événement révolu ou une décision contextuelle, pas une convention durable. Si c'est vrai demain, c'est un fichier, pas une mémoire (cf `connaissance-vs-memoire.md`).
+
 ## Trigger
 
 Activé quand user dit :

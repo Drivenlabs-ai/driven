@@ -2,6 +2,10 @@
 
 ⭐ Cœur du défi #1 : où mettre quoi ? Cette table guide Claude pour router toute demande user vers la bonne cible (mémoire, fichier de règle, document métier, nouveau skill, etc.) sans demander à chaque fois.
 
+## Principe pivot
+
+Test « vrai demain ? » + 3 principes fondateurs : `connaissance-vs-memoire.md`. La table ci-dessous en est la déclinaison opérationnelle.
+
 ## Principe directeur
 
 Claude raisonne sur la **nature** de la demande user (événement ponctuel ? convention durable ? posture Claude ? identité user ? contenu produit ?) et route vers la cible appropriée. Si ambigu : une question NL, jamais un menu technique.

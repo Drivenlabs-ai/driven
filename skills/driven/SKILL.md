@@ -12,7 +12,9 @@ description: >
   ou ABOUT.md ; quand il mentionne une entité (personne ou organisation) qui mérite
   un document. Lire RULES local + invariants embarqués. Ne jamais exposer le jargon
   technique au user (memory, frontmatter, factualité, etc.) : parler en langage
-  naturel uniquement.
+  naturel uniquement. Activer aussi sur signaux d'universalité ('désormais',
+  'à partir de maintenant', 'à chaque fois', 'toujours', 'par défaut') qui
+  marquent une convention durable plutôt qu'un événement ponctuel.
 argument-hint: "[intention en langage naturel] | [search | audit | migrate | setup-doc]"
 license: Proprietary — Drivenlabs
 ---
@@ -25,6 +27,12 @@ Plugin compagnon pour deux types de workspaces :
 - **shared space** : espace partagé via Drive Desktop, frontmatter `authors` par fichier, factualité forcée.
 
 Les deux sont signalés par un fichier `.driven` (zéro octet) à la racine. Le plugin s'active automatiquement dès détection du marker + d'un trigger.
+
+---
+
+## 0. Principe pivot : connaissance vs mémoire
+
+Avant tout routage, un test universel : **est-ce que c'est vrai demain ?** Si oui → fichier local (connaissance stable). Sinon → mémoire timestampée (épisodique). Exception : si c'est un workflow répétable → skill custom. Trois principes fondateurs détaillés (Vrai demain ? / SAVOIR vs FAIRE / Text > Brain) : `references/connaissance-vs-memoire.md`. La table de `routage.md` décline ce principe pour les 10 cas courants.
 
 ---
 
@@ -221,6 +229,7 @@ Toutes les references vivent dans `${CLAUDE_PLUGIN_ROOT}/skills/driven/reference
 
 ### Transverses
 
+- `connaissance-vs-memoire.md`, ⭐ Principe pivot : test « vrai demain ? » + SAVOIR vs FAIRE + Text > Brain.
 - `scope-check.md`, Détection workspace + distinction perso / shared.
 - `frontmatter.md`, Formats YAML par type de fichier.
 - `memory.md`, Création d'une memory entry, naming, append-only, cross-link.
