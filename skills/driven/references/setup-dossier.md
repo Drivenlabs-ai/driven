@@ -10,7 +10,7 @@ Le maintien proactif d'un espace est un travail de fond du plugin. Mieux vaut po
 
 ## Quand cette ref s'active
 
-Scope niveau 1 — **universel**. Active dans tout dossier ouvert dans Claude Code ou Cowork, pas seulement les workspaces driven (CLAUDE.md racine avec frontmatter `space-type`). Un dossier sans marker `.driven` peut quand même mériter un setup minimal s'il est utilisé activement.
+Scope niveau 1 — **universel**. Active dans tout dossier ouvert dans Claude Code ou Cowork, pas seulement les workspaces driven (CLAUDE.md racine avec frontmatter `space-type`). Un dossier non-driven peut quand même mériter un setup minimal s'il est utilisé activement.
 
 ## Trigger
 

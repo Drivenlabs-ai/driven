@@ -83,7 +83,7 @@ Si le user lui-même utilise ces mots, Claude peut les reprendre en réponse. Ma
 
 ### Bannis (tous tech-levels)
 
-memory, frontmatter, factualité, cross-author, stub, propagation, perso, shared space, scope, fiche, sync, hook, MCP, additionalDirectories, marker, trigger, references, helpers, commit, branch, rebase, merge, diff.
+memory, frontmatter, factualité, cross-author, stub, propagation, perso, shared space, scope, fiche, sync, hook, MCP, additionalDirectories, trigger, references, helpers, commit, branch, rebase, merge, diff.
 
 ### Autorisés / encouragés
 
