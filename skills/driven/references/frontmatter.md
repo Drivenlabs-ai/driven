@@ -18,18 +18,38 @@ name: Alexandre Bouchez
 - `emails`, tous les emails dont le user est titulaire. Permet de matcher contre `authors` quel que soit l'alias.
 - `name`, nom complet, utilisé dans les recaps en langage naturel.
 
-## CLAUDE.md d'un shared space
+## CLAUDE.md racine d'un shared space
+
+Le CLAUDE.md à la racine d'un shared space porte un champ supplémentaire `members:` qui mappe chaque email au nom de l'auteur correspondant. Cette table sert au flow cross-author pour résoudre les emails en noms lisibles.
 
 ```yaml
 ---
 authors:
   - alex@drivenlabs.ai
-last-updated: 2026-05-11
+last-updated: 2026-05-12
+members:
+  - email: alex@drivenlabs.ai
+    name: Alexandre Bouchez
+  - email: mael@drivenlabs.ai
+    name: Maël Urien
 ---
 ```
 
 - `authors`, liste plate (pas de hiérarchie owner/contributeur), ordre première contribution.
 - `last-updated`, date ISO de la dernière modification structurelle. Mise à jour automatique au write.
+- `members` (CLAUDE.md racine uniquement), liste plate de mappings `email + name`. Maintenue manuellement à chaque onboarding d'un nouveau membre. Le plugin lit cette table en début de session pour résoudre les emails dans les questions cross-author. Le `name:` est libre : prénom (« Alex »), nom complet (« Alexandre Bouchez »), surnom (« AB »), comme le member souhaite être nommé dans les questions.
+
+## CLAUDE.md de sous-dossier (shared space)
+
+Pas de `members:` dans les sous-dossiers (pas dupliqué, la table racine fait foi).
+
+```yaml
+---
+authors:
+  - alex@drivenlabs.ai
+last-updated: 2026-05-12
+---
+```
 
 ## CONTRIBUTING.md (sous-dossier sélectif, shared)
 

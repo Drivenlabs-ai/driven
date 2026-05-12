@@ -20,7 +20,11 @@ Langage naturel, zéro jargon, deux issues possibles :
 
 > Ce document est de [Nom des authors actuels]. Tu continues ?
 
-Le nom est récupéré depuis les `ME.md` correspondants aux emails dans `authors`. Si plusieurs auteurs : *« Ce document est d'Alex et Maël. Tu continues ? »*.
+Le nom est récupéré depuis la table `members:` du frontmatter du CLAUDE.md racine du shared space (cf `frontmatter.md`). Le plugin lit ce CLAUDE.md racine en début de session via remontée d'arborescence depuis le fichier ciblé, parse la table `members:`, et résout chaque email d'`authors` vers son `name`.
+
+Si plusieurs auteurs : *« Ce document est d'Alex et Maël. Tu continues ? »*.
+
+Si un email d'`authors` n'apparaît pas dans la table `members:` (cas exceptionnel d'un contributeur externe ou retiré), fallback sur l'email tel quel : *« Ce document est de externe@partenaire.com. Tu continues ? »*. Pas bloquant, juste moins lisible.
 
 Pas de menu, pas d'options multiples, pas de « Es-tu sûr ? ». Une seule question, deux issues.
 

@@ -6,11 +6,18 @@ Le `CLAUDE.md` racine est le point d'entrée du shared space. Il est lu en premi
 
 Le template commence avec un **meta header** qui pointe vers le plugin, puis 4 sections au choix selon les besoins du shared.
 
+Le frontmatter du CLAUDE.md **racine** porte `authors`, `last-updated`, et la table `members:` (résolution email → nom utilisée par le flow cross-author) :
+
 ```yaml
 ---
 authors:
   - alex@drivenlabs.ai
-last-updated: 2026-05-11
+last-updated: 2026-05-12
+members:
+  - email: alex@drivenlabs.ai
+    name: Alexandre Bouchez
+  - email: mael@drivenlabs.ai
+    name: Maël Urien
 ---
 ```
 
