@@ -113,7 +113,7 @@ On reprend [Nom du projet].
 
 ### Ce que le prompt ne dit PAS
 
-- Ne ré-explique pas ce que le plugin fait (la nouvelle session le détecte via le marker `.driven`).
+- Ne ré-explique pas ce que le plugin fait (la nouvelle session le détecte via le frontmatter `space-type` du CLAUDE.md racine).
 - Ne liste pas les principes invariants (le plugin les charge automatiquement).
 - Ne donne pas le ton ou la voix attendus (le plugin + SOUL.md s'en chargent).
 - Ne décrit pas la structure du workspace (le plugin la découvre via lecture-arborescente).

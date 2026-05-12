@@ -1,6 +1,6 @@
 # interface-cli : Comportement de `/driven` explicite
 
-La commande slash `/driven` est rarement tapée explicitement, le plugin s'active automatiquement dès détection du marker `.driven` + d'un trigger. Mais l'invocation explicite reste utile pour forcer un comportement, faire un audit, ou utiliser la recherche BM25.
+La commande slash `/driven` est rarement tapée explicitement, le plugin s'active automatiquement dès détection d'un CLAUDE.md racine avec frontmatter `space-type` + d'un trigger. Mais l'invocation explicite reste utile pour forcer un comportement, faire un audit, ou utiliser la recherche BM25.
 
 ## 3 modes d'invocation
 
@@ -103,11 +103,11 @@ Tu veux que je détaille une mémoire en particulier ?
 
 ## Comportement quand workspace non-driven
 
-Si `/driven` est tapé dans un dossier sans `.driven` ancêtre :
+Si `/driven` est tapé dans un dossier sans CLAUDE.md `space-type` ancêtre :
 
-> Ce dossier n'est pas un workspace driven (pas de fichier `.driven` à la racine). Tu veux que je transforme ce dossier en workspace driven (création d'un `.driven` + CLAUDE.md minimal) ?
+> Ce dossier n'est pas un workspace driven (pas de CLAUDE.md avec space-type à la racine). Tu veux que je transforme ce dossier en workspace driven (création d'un CLAUDE.md racine avec space-type) ?
 
-Si user dit oui : créer `.driven` (zéro octet) + `CLAUDE.md` minimal au plus haut niveau pertinent. Si user dit non : abandon.
+Si user dit oui : créer un CLAUDE.md minimal avec frontmatter `space-type: personal` ou `space-type: shared` au plus haut niveau pertinent. Si user dit non : abandon.
 
 ## Comportement quand argument ambigu
 

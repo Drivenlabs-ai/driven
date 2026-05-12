@@ -1,8 +1,10 @@
 ---
 name: driven
 description: >
-  Ce skill doit être utilisé quand le workspace courant contient un fichier `.driven`
-  à la racine (détecté par remontée d'arborescence depuis le dossier courant). Il
+  Ce skill doit être utilisé quand le workspace courant contient un CLAUDE.md racine
+  avec un frontmatter `space-type` (détecté par remontée d'arborescence depuis le dossier courant).
+  Les patterns proactifs A (setup-dossier) et B (capitalise-workflow) ainsi que la
+  doctrine AskUserQuestion s'activent partout, même hors workspace driven. Il
   maintient un workspace collaboratif Claude (espace perso ou espace partagé Drive
   Desktop) : capture mémoire timestampée, cross-author, propagation silencieuse,
   routage de l'information, maintenance holistique des fichiers normatifs. Activer
@@ -26,7 +28,7 @@ Plugin compagnon pour deux types de workspaces :
 - **personal space** : espace privé local, jamais synchronisé, identité user (ME.md, SOUL.md, VOICE/).
 - **shared space** : espace partagé via Drive Desktop, frontmatter `authors` par fichier, factualité forcée.
 
-Les deux sont signalés par un fichier `.driven` (zéro octet) à la racine. Le plugin s'active automatiquement dès détection du marker + d'un trigger.
+Les deux sont signalés par un CLAUDE.md racine portant un frontmatter `space-type` (valeur `personal` ou `shared`). Le plugin s'active automatiquement dès détection de ce frontmatter + d'un trigger.
 
 ---
 
@@ -44,11 +46,23 @@ Ne jamais exposer la machinerie. Ne pas dire « je vais créer une memory entry 
 
 ---
 
+## 1bis. Doctrine AskUserQuestion par défaut
+
+Toute phase Q&R avec l'utilisateur utilise `AskUserQuestion` plutôt qu'une question ouverte en texte libre. L'utilisateur gagne du temps en sélectionnant parmi des options pré-rédigées plutôt qu'en formulant ses réponses.
+
+Format : 1 à 4 questions max par batch, 2 à 4 options par question, recommandation marquée « (Recommandé) » sur la première option si claire, contexte décisionnel intégré dans chaque description d'option.
+
+Exceptions : demandes triviales déterministes, exploration libre, texte libre substantiel attendu, confirmation simple binaire qui suit naturellement la conversation.
+
+Détail complet : `references/askuserquestion.md`.
+
+---
+
 ## 2. Vocabulaire selon tech-level inféré
 
 ### Bannis envers user (tous tech-levels)
 
-memory, frontmatter, factualité, cross-author, stub, propagation, scope, fiche, sync, hook, MCP, additionalDirectories, marker, trigger, references, helpers, commit, branch, rebase, merge, diff.
+memory, frontmatter, factualité, cross-author, stub, propagation, scope, fiche, sync, hook, MCP, additionalDirectories, trigger, references, helpers, commit, branch, rebase, merge, diff.
 
 ### Autorisés / encouragés
 
@@ -94,17 +108,17 @@ Détail : `references/maintenance-fichiers-racines.md`.
 
 ## 4. Détection workspace driven
 
-Avant tout trigger, vérifier la présence du marker `.driven` à la racine du workspace courant :
+Avant tout trigger, vérifier la présence d'un `CLAUDE.md` avec frontmatter `space-type` dans le path remonté :
 
 1. Depuis le dossier courant (cwd), remonter l'arborescence parent par parent.
-2. À chaque niveau, vérifier l'existence d'un fichier `.driven` (zéro octet, persistant).
-3. Premier `.driven` rencontré → racine du workspace.
-4. Si aucun `.driven` trouvé jusqu'à la racine système → workspace non-driven, plugin silencieux (comportement Claude standard).
+2. À chaque niveau, vérifier l'existence d'un `CLAUDE.md` et parser son frontmatter YAML.
+3. Si un `CLAUDE.md` porte le champ `space-type` (`personal` ou `shared`) → c'est la racine du workspace driven.
+4. Si aucun `CLAUDE.md` avec `space-type` n'est trouvé jusqu'à la racine système → workspace non-driven. Seul le niveau universel s'applique (patterns proactifs A et B, doctrine AskUserQuestion).
 
-Le path de la racine workspace permet de distinguer :
+La valeur du champ `space-type` détermine le scope :
 
-- **personal space** : path local hors Drive Desktop (ex `~/Personal OS/`). RULE de factualité désactivée.
-- **shared space** : path sous Drive Desktop (ex `~/Library/CloudStorage/GoogleDrive-.../shared/`). RULE active. `authors` trackés par fichier.
+- **personal space** : `space-type: personal`. RULE de factualité désactivée. Pas de tracking `authors`. Vit en local (hors Drive Desktop).
+- **shared space** : `space-type: shared`. RULE de factualité active. `authors` trackés par fichier. Vit sous Drive Desktop, sync entre members.
 
 Si workspace ambigu ou multi-folder Cowork actif, vérifier le path du fichier cible avant chaque write, jamais la racine de la session. Détail : `references/scope-check.md`.
 
@@ -120,13 +134,15 @@ Si workspace ambigu ou multi-folder Cowork actif, vérifier le path du fichier c
 | **Demande de retenir une info** | Phrases NL : « retiens ça », « note ça », « garde une trace », « je veux retenir » | `memory.md`, `factualite.md` si shared, `links.md` si mentions |
 | **Modification d'un fichier de règle** | `Edit`/`Write` sur RULES.md, RULES/*.md, CONTRIBUTING.md, CLAUDE.md, SOUL.md, ME.md, VOICE.md, ABOUT.md | `maintenance-fichiers-racines.md` + référence dédiée au type de fichier, `propagation.md` |
 
-### 3 supports automatiques
+### 5 supports automatiques
 
-| Support | Détection | References |
-|---|---|---|
-| **Cross-author détecté** | Avant `Edit` shared space : email user ∉ frontmatter `authors` | `cross-author.md` (active **avant** préparation du diff) |
-| **Mention d'entité sans document** | Pendant rédaction shared, mention personne/organisation sans document existant | `links.md` (seuil de pertinence, pas de stub) |
-| **Saturation conversationnelle** | 4 signaux possibles : > 40 échanges, > 10 tool-heavy actions, pluri-sujets (3+ distincts), agacement user (« je m'y perds », « tu te répètes », « fait court ») | `session-handoff.md` (proposition NL de basculer en nouvelle session avec mémoire de récap + prompt de reprise) |
+| Support | Détection | Scope d'activation | References à charger |
+|---|---|---|---|
+| **Cross-author détecté** | Avant `Edit` shared space : email user ∉ frontmatter `authors` | Niveau 3 (shared uniquement) | `cross-author.md` |
+| **Mention d'entité sans document** | Pendant rédaction shared, mention personne/organisation sans document existant | Niveau 3 (shared uniquement) | `links.md` |
+| **Saturation conversationnelle** | 4 signaux possibles : > 40 échanges, > 10 tool-heavy actions, pluri-sujets (3+ distincts), agacement user (« je m'y perds », « tu te répètes », « fait court ») | Niveau 1 (universel) | `session-handoff.md` |
+| **Manque de contexte dossier** | Action Claude (Write/Read/Edit/Bash cd) dans un dossier qui passe pré-filtre technique ET échoue au jugement « ai-je de quoi m'orienter ? » | Niveau 1 (universel) | `setup-dossier.md` |
+| **Workflow non-trivial à capitaliser** | Fin de session avec ≥ 2 signaux : ≥5 actions structurantes même sujet / création script ad-hoc / décisions tranchées via AskUserQuestion ou /align / refactor multi-fichiers / phrases user de satisfaction | Niveau 1 (universel) | `capitalise-workflow.md` |
 
 ### Exclusion : mode routine
 
@@ -195,7 +211,7 @@ Détail complet : `references/maintenance-fichiers-racines.md`.
 |---|---|---|---|
 | Plugins account-level | Auto-loaded | Hérités via account | Update Code propage Cowork au prochain accès |
 | Frontmatter `description` SKILL.md | Auto-trigger natif | Partiel | Project Instructions compensent |
-| Marker `.driven` | Lu via Read tool | Lu via Read tool | Identique |
+| Frontmatter `space-type` CLAUDE.md racine | Lu via Read tool | Lu via Read tool | Identique |
 | Read / Write / Edit / Grep / Glob | Oui | Oui (approbation user) | Identique |
 | Bash tool | Oui (sandbox) | Oui (sandbox Ubuntu 22.04) | `scripts/search_memories.py` tourne dans les deux |
 | Python | Oui | Oui via Bash | Pas de fallback à coder |
@@ -213,7 +229,7 @@ Aucune asymétrie majeure à coder. Détail : Spec 5 + `references/lecture-arbor
 
 | Check | Workspace concerné | Action si manquant |
 |---|---|---|
-| `.driven` à la racine | Les deux | Workspace non-driven, plugin silencieux |
+| `space-type` dans le frontmatter du CLAUDE.md racine | Les deux | Workspace non-driven, niveau universel seul actif |
 | `CLAUDE.md` à la racine | Les deux | Mention NL en fin de réponse, propose création |
 | `ME.md` ou équivalent | personal | Mention NL, propose création |
 | `ABOUT.md` | shared, si CLAUDE.md absent ou maigre | Mention NL, propose création |
@@ -230,6 +246,9 @@ Toutes les references vivent dans `${CLAUDE_PLUGIN_ROOT}/skills/driven/reference
 ### Transverses
 
 - `connaissance-vs-memoire.md`, ⭐ Principe pivot : test « vrai demain ? » + SAVOIR vs FAIRE + Text > Brain.
+- `setup-dossier.md`, ⭐ Pattern A proactivité : détection manque de contexte + mini-interview + outputs.
+- `capitalise-workflow.md`, ⭐ Pattern B proactivité : workflow non-trivial à sauvegarder + routage 3 options.
+- `askuserquestion.md`, ⭐ Doctrine d'interaction par défaut + format + anti-patterns.
 - `scope-check.md`, Détection workspace + distinction perso / shared.
 - `frontmatter.md`, Formats YAML par type de fichier.
 - `memory.md`, Création d'une memory entry, naming, append-only, cross-link.

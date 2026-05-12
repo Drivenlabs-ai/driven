@@ -1,6 +1,6 @@
 ---
-description: "Maintient un workspace driven, capture, cross-author, propagation, routage, structure. Activé automatiquement dans un workspace contenant `.driven` à la racine."
-argument-hint: "[intention en langage naturel] | [search | audit | migrate | setup-doc]"
+description: "Maintient un workspace driven, capture, cross-author, propagation, routage, structure. Activé automatiquement dans un workspace dont le CLAUDE.md racine porte space-type dans son frontmatter."
+argument-hint: "[intention en langage naturel] | [search | audit | migrate | setup-doc | setup-dossier | workflow]"
 ---
 
 # /driven
@@ -14,7 +14,13 @@ Lire `${CLAUDE_PLUGIN_ROOT}/skills/driven/SKILL.md` (skill principal, détection
 Selon l'argument :
 
 - **Aucun argument** → afficher récap contexte courant + actions pertinentes en langage naturel.
-- **Nom d'action explicite** (`search`, `audit`, `migrate`, `setup-doc`) → charger la référence correspondante.
+- **Nom d'action explicite** → charger la référence correspondante :
+  - `search` → recherche mémoire
+  - `audit` → audit du workspace
+  - `migrate` → migration de structure
+  - `setup-doc` → mise en place d'un document normatif
+  - `setup-dossier` → mise en place proactive d'un dossier (charge `setup-dossier.md`)
+  - `workflow` → sauvegarde le workflow de la session courante (charge `capitalise-workflow.md`)
 - **Intention en langage naturel** → inférer action depuis `routage.md` + références pertinentes.
 
-Note : `/driven` est rarement tapé explicitement. Le skill s'active automatiquement dès détection du marker `.driven` + trigger.
+Note : `/driven` est rarement tapé explicitement. Le skill s'active automatiquement dès détection d'un CLAUDE.md racine avec space-type + trigger. Les patterns proactifs setup-dossier et capitalise-workflow s'activent partout, même hors workspace driven.

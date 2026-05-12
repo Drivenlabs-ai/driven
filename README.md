@@ -2,7 +2,7 @@
 
 Plugin compagnon pour workspaces collaboratifs Claude.
 
-Maintient automatiquement un workspace contenant un marker `.driven` à la racine :
+Maintient automatiquement un workspace dont le CLAUDE.md racine porte un frontmatter `space-type` :
 mémoire timestampée, factualité en collectif, suivi des contributeurs, propagation
 silencieuse, maintenance des fichiers normatifs.
 
@@ -16,9 +16,9 @@ Propage automatiquement à Claude Cowork (account-level).
 
 ## Activation
 
-Le plugin s'active dès qu'il détecte un fichier `.driven` à la racine du workspace
-courant (remontée d'arborescence depuis le dossier courant). Pas de configuration
-locale requise.
+Le plugin s'active dès qu'il détecte un CLAUDE.md racine avec `space-type` dans le path remonté depuis le cwd. Pas de configuration locale requise.
+
+En mode universel, les patterns proactifs (setup-dossier, capitalise-workflow) et la doctrine AskUserQuestion s'activent partout, pas seulement dans les workspaces driven.
 
 ## Commande slash
 

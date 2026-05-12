@@ -18,26 +18,43 @@ name: Alexandre Bouchez
 - `emails`, tous les emails dont le user est titulaire. Permet de matcher contre `authors` quel que soit l'alias.
 - `name`, nom complet, utilisé dans les recaps en langage naturel.
 
-## CLAUDE.md racine d'un shared space
+## CLAUDE.md racine d'un workspace driven
 
-Le CLAUDE.md à la racine d'un shared space porte un champ supplémentaire `members:` qui mappe chaque email au nom de l'auteur correspondant. Cette table sert au flow cross-author pour résoudre les emails en noms lisibles.
+Le CLAUDE.md à la racine porte un champ `space-type` qui détermine le scope du workspace. C'est le signal d'activation des comportements workspace du plugin (cf `scope-check.md`) : sa présence dans le frontmatter — avec valeur `personal` ou `shared` — fait du dossier la racine d'un workspace driven.
+
+### Personal space
 
 ```yaml
 ---
-authors:
-  - alex@drivenlabs.ai
+space-type: personal              # OBLIGATOIRE — détermine le scope du workspace
 last-updated: 2026-05-12
-members:
+---
+```
+
+- `space-type: personal`, scope mono-user, pas d'`authors` ni de `members` (l'auteur est implicitement le user du `ME.md` racine).
+- `last-updated`, date ISO de la dernière modification structurelle. Mise à jour automatique au write.
+
+### Shared space
+
+Un shared space porte en plus `authors` + `members:`, qui mappe chaque email au nom de l'auteur correspondant. Cette table sert au flow cross-author pour résoudre les emails en noms lisibles.
+
+```yaml
+---
+space-type: shared                # OBLIGATOIRE — détermine le scope du workspace
+authors:                          # OBLIGATOIRE en shared
+  - alex@drivenlabs.ai
+members:                          # OBLIGATOIRE en shared
   - email: alex@drivenlabs.ai
     name: Alexandre Bouchez
   - email: mael@drivenlabs.ai
     name: Maël Urien
+last-updated: 2026-05-12
 ---
 ```
 
 - `authors`, liste plate (pas de hiérarchie owner/contributeur), ordre première contribution.
-- `last-updated`, date ISO de la dernière modification structurelle. Mise à jour automatique au write.
 - `members` (CLAUDE.md racine uniquement), liste plate de mappings `email + name`. Maintenue manuellement à chaque onboarding d'un nouveau membre. Le plugin lit cette table en début de session pour résoudre les emails dans les questions cross-author. Le `name:` est libre : prénom (« Alex »), nom complet (« Alexandre Bouchez »), surnom (« AB »), comme le member souhaite être nommé dans les questions.
+- `last-updated`, date ISO de la dernière modification structurelle. Mise à jour automatique au write.
 
 ## CLAUDE.md de sous-dossier (shared space)
 
