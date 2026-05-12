@@ -112,12 +112,23 @@ Si workspace ambigu ou multi-folder Cowork actif, vérifier le path du fichier c
 | **Demande de retenir une info** | Phrases NL : « retiens ça », « note ça », « garde une trace », « je veux retenir » | `memory.md`, `factualite.md` si shared, `links.md` si mentions |
 | **Modification d'un fichier de règle** | `Edit`/`Write` sur RULES.md, RULES/*.md, CONTRIBUTING.md, CLAUDE.md, SOUL.md, ME.md, VOICE.md, ABOUT.md | `maintenance-fichiers-racines.md` + référence dédiée au type de fichier, `propagation.md` |
 
-### 2 supports automatiques
+### 3 supports automatiques
 
 | Support | Détection | References |
 |---|---|---|
 | **Cross-author détecté** | Avant `Edit` shared space : email user ∉ frontmatter `authors` | `cross-author.md` (active **avant** préparation du diff) |
 | **Mention d'entité sans document** | Pendant rédaction shared, mention personne/organisation sans document existant | `links.md` (seuil de pertinence, pas de stub) |
+| **Saturation conversationnelle** | 4 signaux possibles : > 40 échanges, > 10 tool-heavy actions, pluri-sujets (3+ distincts), agacement user (« je m'y perds », « tu te répètes », « fait court ») | `session-handoff.md` (proposition NL de basculer en nouvelle session avec mémoire de récap + prompt de reprise) |
+
+### Exclusion : mode routine
+
+Les supports automatiques (et en particulier le trigger saturation) **ne s'activent jamais en mode routine**. Mode routine détecté quand :
+
+- Sentinel `<<autonomous-loop>>` ou `<<autonomous-loop-dynamic>>` présent dans le prompt initial.
+- Tool `ScheduleWakeup` ou `CronCreate` disponible.
+- Section « Autonomous loop check » ou « Autonomous loop persistence guidance » dans le system prompt.
+
+En routine, Claude est un agent autonome qui exécute une tâche et termine — aucune proposition à un user qui n'est pas là. Détail : `session-handoff.md`.
 
 ---
 
@@ -243,6 +254,7 @@ Toutes les references vivent dans `${CLAUDE_PLUGIN_ROOT}/skills/driven/reference
 - `verbosity-tech-level.md`, Inférence tech-level + verbosité recap.
 - `skill-creator-routing.md`, Quand router vers `/skill-creator`.
 - `stop-slop-routing.md`, Invoquer `/stop-slop` avant contenu à partage externe.
+- `session-handoff.md`, Proposition proactive de basculer en nouvelle session quand la conversation sature (avec mémoire de récap + prompt de reprise dense).
 
 ---
 

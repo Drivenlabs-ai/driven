@@ -16,11 +16,17 @@ Le user ne tape jamais le frontmatter. Claude infère silencieusement :
 
 1. **Scope**, perso vs shared, et lequel. Voir `scope-check.md`.
 2. **Dossier cible**, chercher le `memory/` du dossier thématique pertinent (ex `Clients/Olenbee/memory/`). Si absent → créer le dossier. Si le sujet est transverse → choisir le dossier qui colle le mieux ou demander en NL.
-3. **`topic`**, kebab-case court (ex `rdv-olenbee`, `decision-pricing`, `update-positioning`).
-4. **`type`**, `decision` si arbitrage tranché, `interaction` si RDV/call/échange, `insight` si apprentissage ou observation, `memory` par défaut, `other` exceptionnel.
-5. **`keywords`**, 5 à 10 mots-clés couvrant variantes + synonymes implicites. Critique pour la recherche BM25 (pondération ×3). Inférés depuis le contenu, pas demandés au user.
-6. **Préambule `## Contexte`**, 2 à 3 phrases self-contained. Doit pouvoir être lu isolément 6 mois plus tard.
-7. **Corps `## Notes`**, contenu factuel (RULE active en shared, cf `factualite.md`). Brut en perso.
+3. **Lecture proactive des dernières mémoires du dossier cible**, par souci de cohérence. Claude juge le volume selon l'activité du dossier :
+   - Dossier neuf (< 5 mémoires) → toutes lues.
+   - Dossier modéré (5-30 mémoires) → 5 plus récentes (tri lexico = tri chrono).
+   - Dossier dense (> 30 mémoires) → 5 plus récentes + search BM25 sur le topic inféré (top 5 hits).
+   - Préambule `## Contexte` suffit en général. Lecture du corps si une mémoire semble directement pertinente au sujet.
+   - Permet d'enrichir une mémoire existante plutôt que créer un doublon, et de croiser proprement les liens.
+4. **`topic`**, kebab-case court (ex `rdv-olenbee`, `decision-pricing`, `update-positioning`).
+5. **`type`**, `decision` si arbitrage tranché, `interaction` si RDV/call/échange, `insight` si apprentissage ou observation, `memory` par défaut, `other` exceptionnel.
+6. **`keywords`**, 5 à 10 mots-clés couvrant variantes + synonymes implicites. Critique pour la recherche BM25 (pondération ×3). Inférés depuis le contenu, pas demandés au user.
+7. **Préambule `## Contexte`**, 2 à 3 phrases self-contained. Doit pouvoir être lu isolément 6 mois plus tard.
+8. **Corps `## Notes`**, contenu factuel (RULE active en shared, cf `factualite.md`). Brut en perso.
 
 ## Naming du fichier
 
