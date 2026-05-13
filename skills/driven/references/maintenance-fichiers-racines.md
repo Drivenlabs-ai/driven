@@ -115,11 +115,46 @@ User dit pendant une session : *« évite les emojis dans mes posts »*. Claude 
 
 ### Avant modif d'un fichier normatif
 
-Validation explicite en langage naturel. Pas de menu, pas de checkbox. Une phrase :
+Validation explicite en langage naturel via **AskUserQuestion** (doctrine du plugin, cf `askuserquestion.md`). Pas de question ouverte texte libre, mais des options pré-rédigées avec contexte décisionnel.
 
-> Cette modif touche le SOUL.md. Je propose de refondre la section ton plutôt que d'ajouter une ligne. OK ?
+### Explication des répercussions d'usage avant validation
 
-User dit oui → exécution. User dit non → discussion en NL pour comprendre l'intention exacte.
+Avant chaque modification structurante d'un fichier normatif racine (CLAUDE.md, RULES.md, ME.md, SOUL.md, VOICE.md, CONTRIBUTING.md, ABOUT.md), Claude explique en langage naturel haut niveau **les conséquences concrètes d'usage** de la modification. Pas juste « tu confirmes ? » mais « voici ce qui changera dans ma manière de t'aider si on fait ça. OK ? ».
+
+L'objectif : un user non-tech doit comprendre l'impact concret sur son quotidien avant de valider, pas juste cocher une case.
+
+#### Exemples concrets
+
+- **Retrait d'un fichier de la liste « à charger impérativement »** :
+
+   > Attention, si on retire la lecture de `VOICE/VOICE.md`, je ne lirai plus ce fichier à chaque session. Les supports que je rédigerai pour tes contacts externes (mails, posts LinkedIn, brouillons) pourront ne pas refléter ta manière de parler. Tu es sûr ?
+
+- **Suppression d'une section du CLAUDE.md racine** :
+
+   > Si on supprime la section Conventions, les workflows internes qu'elle contient (revues, validation des devis, escalation) ne seront plus chargés d'office. Je devrai les redécouvrir à chaque session via la cascade, ce qui peut prendre du temps et créer des incohérences. OK pour quand même ?
+
+- **Changement du `space-type` du workspace** :
+
+   > Si on passe le workspace de personal à shared, la règle de factualité s'active sur toutes les mémoires créées ensuite (zéro émotion, zéro jugement) et chaque écriture tracera qui en est l'auteur. C'est une bascule structurante, pensée pour le collectif. C'est ce que tu veux ?
+
+- **Ajout d'un fichier critique à la liste « à charger impérativement »** :
+
+   > Si on ajoute la lecture de ce fichier à chaque session, il pèsera dans mon contexte tout le temps. Si son contenu évolue beaucoup, ça peut me biaiser dans des directions non voulues. Tu es sûr de vouloir le rendre obligatoire, ou tu préfères qu'il soit chargé seulement quand c'est pertinent ?
+
+- **Retrait de la liste « members » d'un workspace shared** :
+
+   > Si on retire ce membre de la liste, je ne pourrai plus le mentionner par son nom quand tu cites son email (ex : `alex@drivenlabs.ai`). Il continuera d'apparaître comme co-auteur des fichiers existants, mais nouveaux fichiers n'auront plus la résolution automatique. OK ?
+
+#### Pattern d'invocation
+
+Claude présente l'explication en bloc texte (pas dans une option AskUserQuestion — trop long), puis pose **une question AskUserQuestion** avec 2 options :
+
+- « OK, applique cette modif »
+- « Annuler, on en reste à l'existant »
+
+Optionnellement une 3ème option : « Ajuste, voilà ce que je préfère » avec champ texte libre.
+
+User dit oui → exécution. User dit non → silence et retour à l'état précédent.
 
 ### Pour les fichiers à criticité élevée
 
