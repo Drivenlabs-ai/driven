@@ -20,13 +20,17 @@ name: Alexandre Bouchez
 
 ## CLAUDE.md racine d'un workspace driven
 
-Le CLAUDE.md à la racine porte un champ `space-type` qui détermine le scope du workspace. C'est le signal d'activation des comportements workspace du plugin (cf `scope-check.md`) : sa présence dans le frontmatter — avec valeur `personal` ou `shared` — fait du dossier la racine d'un workspace driven.
+Le CLAUDE.md à la racine peut porter un champ `space-type` qui détermine le scope du workspace.
+
+- `space-type` (optionnel mais recommandé) : `personal` ou `shared`. Hint pour le plugin sur le profil à appliquer. En son absence, le plugin observe les autres signaux (`authors:`, `members:`, path Drive Desktop) et infre le type. Détail : `scope-check.md`.
+
+`authors:` et `members:` sont **obligatoires uniquement si `space-type: shared`** ou si le contexte est shared inféré depuis les signaux disponibles. En personal ou hors workspace driven, ils n'ont pas lieu d'être.
 
 ### Personal space
 
 ```yaml
 ---
-space-type: personal              # OBLIGATOIRE — détermine le scope du workspace
+space-type: personal              # optionnel mais recommandé
 last-updated: 2026-05-12
 ---
 ```
@@ -40,10 +44,10 @@ Un shared space porte en plus `authors` + `members:`, qui mappe chaque email au 
 
 ```yaml
 ---
-space-type: shared                # OBLIGATOIRE — détermine le scope du workspace
-authors:                          # OBLIGATOIRE en shared
+space-type: shared                # optionnel mais recommandé
+authors:                          # obligatoire en shared
   - alex@drivenlabs.ai
-members:                          # OBLIGATOIRE en shared
+members:                          # obligatoire en shared
   - email: alex@drivenlabs.ai
     name: Alexandre Bouchez
   - email: mael@drivenlabs.ai

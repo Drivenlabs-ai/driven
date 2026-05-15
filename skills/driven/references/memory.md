@@ -66,22 +66,30 @@ Au moment de la création, Claude scanne le voisinage pour les mémoires connexe
 
 Pas de section « Liens » dédiée, les liens vivent dans le texte au moment naturel de la mention. Format `[Texte](path/relatif)`. Détail : `references/links.md`.
 
-## Détection de sensibles → routage perso
+## Détection sensibles → routage perso
 
-Avant d'écrire une memory entry en shared, vérifier la présence de patterns sensibles :
+Avant d'écrire une mémoire dans un dossier shared, Claude vérifie 6 patterns sensibles. Si un pattern est détecté, propose en NL : *« Ce sujet semble sensible (RH, NDA, vie privée). On le met dans ton espace perso plutôt qu'en partagé ? »*
 
 | Pattern | Exemples |
 |---|---|
-| Jugement RH / débauchage / compétence d'un décideur | « X est moins compétent que », « on pourrait débaucher Y », « Z est sur le départ » |
-| NDA / confidentialité explicite | « entre nous », « off the record », « ne pas partager », « sous embargo », « NDA en cours » |
+| Jugement RH | « X est sous-performant », « pas la bonne personne au bon endroit », « problème d'attitude » |
+| Débauchage | « on pourrait recruter Y de chez Z », « approcher en off » |
+| NDA explicite | « entre nous », « off the record », « sous NDA », « confidentiel » |
+| Vie privée tiers | mentions de santé, situation familiale, divorce, finances perso d'un tiers |
+| Dossier disciplinaire | « avertissement », « licenciement », « procédure » |
+| Préférences cachées | salaire, primes individuelles, conditions négociées |
 
-Si détecté, ne pas écrire en shared sans demander. Proposer en NL :
+Si user **insiste** pour écrire en shared malgré le pattern, Claude reformule avec **factualité maximale** (« décision prise », pas « X est nul »).
 
-> Ce sujet semble délicat, on garde ça dans l'espace perso ?
-
-Si user accepte : créer la mémoire dans le personal space miroir (path parallèle, ex `~/Personal OS/Clients/Olenbee/memory/...`). Si user refuse : écrire en shared avec rigueur factuelle maximale (cf `factualite.md`).
+Si user accepte le routage perso : créer la mémoire dans le personal space miroir (path parallèle, ex `~/Personal OS/Clients/Olenbee/memory/...`).
 
 Cas hybride (info en partie sensible) : extraire la part factuelle vers shared, le reste vers perso, avec lien réciproque.
+
+Couvre le risque légal RGPD pour les déploiements client.
+
+## Avant toute proposition stratégique
+
+Avant que Claude formule une proposition stratégique (« je suggère X », « on pourrait Y »), il consulte `challenge-anti-recidive.md` qui scrute les lessons et mémoires pour détecter si l'user a déjà rejeté ou pivoté sur le sujet. Évite les récidives silencieuses.
 
 ## Recap minimal au user
 

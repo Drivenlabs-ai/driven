@@ -97,6 +97,44 @@ Format :
 
 Le plugin maintient cet index. Le user n'y touche pas à la main. Pour les sous-dossiers profonds, l'index racine reste de niveau 1-2 (vue stratégique), et chaque sous-dossier maintient son propre index dans son CLAUDE.md local.
 
+## Sections optionnelles (selon jugement Claude)
+
+### Lessons
+
+Section optionnelle pour capturer des apprentissages durables scopés au dossier (universels dans le scope, intemporels, contextuellement neutres). Détail : `references/lessons.md`.
+
+Format minimaliste :
+
+````markdown
+## Lessons
+
+- Pour [scope], toujours [action].
+- [Autre lesson concise].
+````
+
+Pas plus de 5-7 lessons par CLAUDE.md. Au-delà, signe d'inflation.
+
+### État actuel
+
+Section optionnelle pour dossiers actifs (projet client, mission en cours). Pas de doctrine stricte. Claude juge si cette section apporte de la valeur :
+
+- Le dossier représente un projet actif avec une trajectoire claire
+- Une reprise multi-session bénéficierait d'un résumé « où on en est »
+- L'user le demande
+
+Format :
+
+````markdown
+## État actuel
+
+- **Où on en est** : <2-3 phrases>
+- **Prochaine action** : <action concrète>
+- **Bloqueurs** : <si pertinent>
+- **Mis à jour** : <date ISO>
+````
+
+Mise à jour proposée par Claude en fin de session structurante via doctrine Q5. Pas systématique.
+
 ## Découpage progressif
 
 À mesure que le shared grossit, les sections sont extraites vers des fichiers dédiés :

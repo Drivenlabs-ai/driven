@@ -106,21 +106,15 @@ Détail : `references/maintenance-fichiers-racines.md`.
 
 ---
 
-## 4. Détection workspace driven
+## 4. Observation des signaux du workspace
 
-Avant tout trigger, vérifier la présence d'un `CLAUDE.md` avec frontmatter `space-type` dans le path remonté :
+Le plugin observe les signaux disponibles dans l'environnement et adapte ses comportements **sans rigidité**. Pas de message « pas de space-type trouvé » ni de comportement bloquant.
 
-1. Depuis le dossier courant (cwd), remonter l'arborescence parent par parent.
-2. À chaque niveau, vérifier l'existence d'un `CLAUDE.md` et parser son frontmatter YAML.
-3. Si un `CLAUDE.md` porte le champ `space-type` (`personal` ou `shared`) → c'est la racine du workspace driven.
-4. Si aucun `CLAUDE.md` avec `space-type` n'est trouvé jusqu'à la racine système → workspace non-driven. Seul le niveau universel s'applique (patterns proactifs A et B, doctrine AskUserQuestion).
+**Signaux observés** : frontmatter `space-type` du CLAUDE.md racine (hint utile, optionnel), présence de `authors:` au frontmatter des fichiers, présence de `members:` au CLAUDE.md racine, path sous Drive Desktop, fichiers `*(<n>).md` (conflits Drive).
 
-La valeur du champ `space-type` détermine le scope :
+**Algorithme** : remontée d'arborescence depuis cwd, lecture des frontmatter, observation des signaux, application des profils correspondants. Détail : `references/scope-check.md`.
 
-- **personal space** : `space-type: personal`. RULE de factualité désactivée. Pas de tracking `authors`. Vit en local (hors Drive Desktop).
-- **shared space** : `space-type: shared`. RULE de factualité active. `authors` trackés par fichier. Vit sous Drive Desktop, sync entre members.
-
-Si workspace ambigu ou multi-folder Cowork actif, vérifier le path du fichier cible avant chaque write, jamais la racine de la session. Détail : `references/scope-check.md`.
+**Fallback** : hors workspace driven, comportements de base actifs (patterns proactifs setup-dossier, capitalise-workflow, doctrine AskUserQuestion). Pas de blocage.
 
 ---
 
@@ -134,7 +128,7 @@ Si workspace ambigu ou multi-folder Cowork actif, vérifier le path du fichier c
 | **Demande de retenir une info** | Phrases NL : « retiens ça », « note ça », « garde une trace », « je veux retenir » | `memory.md`, `factualite.md` si shared, `links.md` si mentions |
 | **Modification d'un fichier de règle** | `Edit`/`Write` sur RULES.md, RULES/*.md, CONTRIBUTING.md, CLAUDE.md, SOUL.md, ME.md, VOICE.md, ABOUT.md | `maintenance-fichiers-racines.md` + référence dédiée au type de fichier, `propagation.md` |
 
-### 5 supports automatiques
+### 6 supports automatiques
 
 | Support | Détection | Scope d'activation | References à charger |
 |---|---|---|---|
@@ -143,6 +137,7 @@ Si workspace ambigu ou multi-folder Cowork actif, vérifier le path du fichier c
 | **Saturation conversationnelle** | 4 signaux possibles : > 40 échanges, > 10 tool-heavy actions, pluri-sujets (3+ distincts), agacement user (« je m'y perds », « tu te répètes », « fait court ») | Niveau 1 (universel) | `session-handoff.md` |
 | **Manque de contexte dossier** | Action Claude (Write/Read/Edit/Bash cd) dans un dossier qui passe pré-filtre technique ET échoue au jugement « ai-je de quoi m'orienter ? » | Niveau 1 (universel) | `setup-dossier.md` |
 | **Workflow non-trivial à capitaliser** | Fin de session avec ≥ 2 signaux : ≥5 actions structurantes même sujet / création script ad-hoc / décisions tranchées via AskUserQuestion ou /align / refactor multi-fichiers / phrases user de satisfaction | Niveau 1 (universel) | `capitalise-workflow.md` |
+| **Conflit Drive Desktop** | Détection fichiers `*(<n>).md` proches d'un fichier sans numéro dans workspace sous Drive Desktop | Niveau workspace driven | `drive-conflicts.md` |
 
 ### Exclusion : mode routine
 
@@ -258,6 +253,9 @@ Toutes les references vivent dans `${CLAUDE_PLUGIN_ROOT}/skills/driven/reference
 - `cross-author.md`, Flow 1 question, ajout co-auteur.
 - `routage.md`, ⭐ Table de routage de l'information (10 cas).
 - `maintenance-fichiers-racines.md`, ⭐ Refactor for coherence, clean slate, anti-micromanagement.
+- `lessons.md`, ⭐ Capture d'apprentissages durables scopés par dossier (universel/intemporel/contextuellement neutre dans le scope).
+- `challenge-anti-recidive.md`, ⭐ Comportement auto avant proposition stratégique (consulte lessons + mémoires, ref pure pas de commande).
+- `drive-conflicts.md`, ⭐ Détection auto + 3 options résolution conflits Drive Desktop.
 
 ### Découpage progressif
 

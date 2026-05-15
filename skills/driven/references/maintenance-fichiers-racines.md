@@ -156,6 +156,20 @@ Optionnellement une 3ème option : « Ajuste, voilà ce que je préfère » avec
 
 User dit oui → exécution. User dit non → silence et retour à l'état précédent.
 
+## Bascule du space-type
+
+Si l'user veut basculer un workspace (perso → shared ou inverse), aucune commande dédiée n'est nécessaire. Le plugin observe le nouvel état et adapte.
+
+**Doctrine Q5 appliquée** :
+
+- **Perso → shared** : *« Si tu passes le workspace de personal à shared, la RULE de factualité s'active sur toutes les mémoires créées ensuite (zéro émotion, zéro jugement) et chaque écriture tracera qui en est l'auteur. C'est une bascule structurante, pensée pour le collectif. C'est ce que tu veux ? »*
+
+- **Shared → perso** : *« Si tu passes le workspace de shared à personal, plus de tracking d'authors, plus de RULE factualité. Les anciens fichiers gardent leurs authors (append-only), mais les nouveaux n'en auront pas. C'est ce que tu veux ? »*
+
+**Pas de rétroactivité automatique** sur les anciens fichiers (cohérent append-only). Seuls les nouveaux écrits suivent le nouveau profil.
+
+**Pas de message « pas de space-type »** si l'user retire le champ — le plugin infre depuis les signaux disponibles (cf `scope-check.md`).
+
 ### Pour les fichiers à criticité élevée
 
 Alerte renforcée pour `RULES.md` racine d'un shared, `CONTRIBUTING.md` racine d'un shared, `CLAUDE.md` racine d'un shared :

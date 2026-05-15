@@ -1,59 +1,80 @@
-# scope-check : Détection du workspace courant
+# scope-check : Observation des signaux du workspace
 
-Avant chaque write, vérifier le scope cible et appliquer les règles correspondantes. Sans cette vérification, une note privée peut atterrir dans un espace partagé et vice-versa.
+Avant chaque write, observer les signaux disponibles dans l'environnement et adapter les comportements en conséquence. Pas de rigidité sur un type d'espace figé.
 
-## Détection du workspace driven
+## Doctrine d'optionnalité
 
-Algorithme de remontée d'arborescence depuis le cwd :
+Le plugin **observe** les signaux disponibles et adapte ses comportements **sans rigidité**. Pas de message « pas de space-type trouvé » ni de comportement bloquant. Les comportements émergent des signaux, pas d'une déclaration figée.
 
-1. Lister le contenu du dossier courant.
-2. Si un `CLAUDE.md` est présent et contient un frontmatter YAML avec le champ `space-type` (valeur `personal` ou `shared`) → c'est la racine du workspace driven.
-3. Sinon, remonter au parent.
-4. Répéter jusqu'à la racine système (`/`) ou jusqu'à trouver un tel `CLAUDE.md`.
-5. Si aucun `CLAUDE.md` avec `space-type` n'est trouvé → workspace non-driven. Seul le niveau universel s'applique (patterns proactifs A et B, doctrine AskUserQuestion).
+## Signaux observés
 
-Implémentation : `pathlib.Path(cwd).resolve()` puis boucle `.parent`. À chaque niveau, vérifier la présence d'un `CLAUDE.md`, lire ses premières lignes pour parser le frontmatter YAML, et chercher le champ `space-type`.
+À chaque action dans un dossier, Claude vérifie les signaux suivants et active les comportements correspondants :
 
-## Distinction personal space ↔ shared space
-
-Une fois la racine identifiée, lire la valeur du champ `space-type` :
-
-| Valeur | Type | Règles applicables |
+| Signal | Détection | Comportements activés |
 |---|---|---|
-| `personal` | personal space | RULE de factualité **désactivée**. Pas de tracking `authors`. Anti-fuite vers shared. |
-| `shared` | shared space | RULE de factualité **active**. `authors` trackés par fichier. Cross-author détecté avant write. |
+| Frontmatter `space-type: personal` du CLAUDE.md racine (remonté) | Lecture du frontmatter YAML | Hint perso, pas de tracking authors par défaut |
+| Frontmatter `space-type: shared` du CLAUDE.md racine | Idem | Hint shared, RULE factualité activée |
+| Fichiers portent `authors:` au frontmatter | Scan des fichiers du dossier | Cross-author détecté avant write, ajout authors aux nouveaux fichiers |
+| CLAUDE.md racine porte `members:` | Lecture frontmatter | Résolution email → nom (cross-author flow complet) |
+| Path sous Drive Desktop (`CloudStorage`, `Google Drive`) | Inspection du path absolu | Support `drive-conflicts.md` actif |
+| Fichiers présents `<name> (<n>).md` | Scan du dossier | Conflit Drive détecté (cf `drive-conflicts.md`) |
+| CLAUDE.md du dossier contient section « Lessons » | Lecture du fichier | Lessons consultées avant proposition stratégique (cf `challenge-anti-recidive.md`) |
+
+## Algorithme de remontée
+
+Pour identifier le workspace driven racine (si présent) :
+
+1. Depuis le dossier courant (cwd), remonter parent par parent.
+2. À chaque niveau, vérifier l'existence d'un `CLAUDE.md` et parser son frontmatter YAML.
+3. Si un `CLAUDE.md` porte le champ `space-type` (`personal` ou `shared`) → c'est la racine du workspace driven. **Hint** : applique le profil correspondant directement.
+4. Sinon, continuer la remontée. Si aucun match → workspace non-driven, comportements de base (niveau universel) actifs.
+
+Le `space-type` reste un **hint utile** mais pas une condition obligatoire. En absence, le plugin observe les autres signaux et adapte.
+
+## Distinction personal ↔ shared (sans `space-type`)
+
+Si le frontmatter `space-type` n'est pas présent mais d'autres signaux suggèrent un type :
+
+| Indicateurs shared | Indicateurs perso |
+|---|---|
+| Path sous Drive Desktop | Path local hors Drive Desktop |
+| Fichiers portent `authors:` | Pas de `authors:` |
+| Présence de `members:` quelque part | Pas de `members:` |
+| Multiple users observés via authors | Un seul user |
+
+Claude infère le type le plus probable et adapte. Pas de message d'erreur si l'inférence est incertaine — comportement réduit à ce qui fait sens.
 
 ## Cas multi-folder (Cowork ou multi-workspace)
 
-Un user peut avoir plusieurs workspaces ouverts simultanément (personal + plusieurs shared spaces). Le plugin ne se fie pas à la racine de session, il vérifie le path du fichier cible **avant chaque write individuel** :
+Un user peut avoir plusieurs workspaces ouverts simultanément. Le plugin vérifie le path du fichier cible **avant chaque write individuel** :
 
-1. Path cible identifié (ex `~/Drive/Drivenlabs Team/Clients/Olenbee/notes.md`).
+1. Path cible identifié.
 2. Remontée d'arborescence depuis ce path.
-3. Premier `CLAUDE.md` avec `space-type` rencontré = workspace du fichier.
-4. Règles appliquées selon `space-type` de ce workspace, pas de la session.
+3. Premier `CLAUDE.md` avec signaux pertinents = workspace du fichier.
+4. Règles appliquées selon signaux observés.
 
 ## Anti-fuite personal → shared
 
-Si user demande une action qui pourrait écrire un contenu sensible dans le shared :
+Si user demande une action qui pourrait écrire un contenu sensible dans un dossier shared (signaux observés) :
 
-- Mention RH explicite, jugement sur une personne, NDA → propose perso (cf `references/memory.md` détection sensibles).
-- Brouillon en cours, contenu non-factuel → propose perso ou reformulation factuelle.
-- Donnée personnelle tierce → demande NL avant écriture.
+- Mention RH explicite, jugement, NDA → cf `memory.md` détection sensibles
+- Brouillon non-factuel → propose perso ou reformulation factuelle
+- Donnée personnelle tierce → demande NL avant écriture
 
-Le mouvement perso → shared est **toujours conscient** : jamais une action automatique du plugin. Le mouvement shared → perso (extraire un brouillon personnel d'une mémoire collective) suit le même principe.
+Le mouvement perso → shared est **toujours conscient**. Jamais une action automatique du plugin.
 
 ## Fallback hors workspace driven
 
-Si Claude est invoqué dans un dossier sans `CLAUDE.md` `space-type` ancêtre :
+Si Claude est invoqué dans un dossier sans signaux driven (pas de `CLAUDE.md` avec `space-type`, pas d'`authors:`, pas sous Drive Desktop) :
 
-- Niveau 1 universel actif : patterns A (setup-dossier), B (capitalise-workflow), doctrine AskUserQuestion.
-- Niveaux 2 et 3 inactifs : pas de routage connaissance vs mémoire, pas de RULE de factualité, pas d'ajout `authors`.
-- Si user invoque explicitement `/driven` dans ce contexte → proposer la création d'un `CLAUDE.md` racine avec frontmatter `space-type` au plus haut niveau pertinent, pour activer les comportements workspace.
+- Comportements de base (niveau universel) actifs : patterns proactifs setup-dossier, capitalise-workflow, doctrine AskUserQuestion
+- Pas de routage connaissance vs mémoire, pas de RULE factualité, pas d'ajout authors
+- Si user invoque `/driven` explicitement → propose la création d'un CLAUDE.md racine avec `space-type` au niveau pertinent (optionnel)
 
 ## Récap minimal au user
 
-Le scope-check est silencieux par construction. Pas de mention sauf erreur (tentative d'écriture dans un workspace sans permission, ambiguïté de path). Si le scope est ambigu malgré l'algorithme, demander en NL :
+Le scope-check est silencieux par construction. Pas de mention sauf erreur (ex : tentative d'écriture dans un workspace sans permission, ambiguïté de path).
+
+Jamais de jargon (« perso », « shared », « space-type ») envers user. Si scope ambigu malgré l'observation, demande NL :
 
 > Le fichier que tu veux modifier vit dans le partagé Drivenlabs Team. Tu veux que je l'écrive là-bas ou tu préfères une note locale ?
-
-Jamais de jargon (« perso », « shared », « space-type »). Le user voit « le partagé Drivenlabs Team » et « une note locale ».
