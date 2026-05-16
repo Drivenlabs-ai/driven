@@ -1,5 +1,12 @@
 # maintenance-fichiers-racines : Refactor for coherence
 
+## Quand cette ref s'active
+
+- Trigger user §6.1 : modification d'un fichier de règle (RULES.md, CONTRIBUTING.md, CLAUDE.md, SOUL.md, ME.md, VOICE.md, ABOUT.md, RULES/*.md).
+- Pattern langagier « tu es trop X », « sois moins Y », « change ta posture sur Z » → refonte holistique requise.
+- Demande de retirer une règle précédemment ajoutée → clean slate strict (pas de note historique).
+- Avant toute édition d'un fichier normatif racine ou de domaine.
+
 ⭐ Pattern critique contre la dérive long-terme des fichiers normatifs. Le défi : sans cette discipline, les CLAUDE/RULES/CONTRIBUTING/ME/SOUL/VOICE deviennent des stacks de micro-règles contradictoires accumulées au fil des sessions, et finissent par biaiser fortement Claude dans des directions non voulues.
 
 ## Principe central

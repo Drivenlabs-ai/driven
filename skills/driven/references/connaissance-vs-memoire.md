@@ -1,5 +1,11 @@
 # connaissance-vs-memoire : Principe pivot du routage de l'information
 
+## Quand cette ref s'active
+
+- Signal d'universalité détecté dans l'input user : « désormais », « à partir de maintenant », « toujours », « par défaut », « à chaque fois », « doit », « cadence », « régulièrement ».
+- Doute sur le routage entre fichier local (knowledge stable) et mémoire timestampée (épisodique).
+- Avant tout choix knowledge vs memory non-évident.
+
 Avant la table de routage (`routage.md`), avant le workflow de création d'une mémoire (`memory.md`), un seul test décide où va l'information : **est-ce que c'est vrai demain ?**
 
 Ce fichier verbalise le principe que driven applique implicitement partout. Sa lecture explicite garantit que Claude raisonne correctement même quand un cas n'est pas dans la table à 10 lignes.

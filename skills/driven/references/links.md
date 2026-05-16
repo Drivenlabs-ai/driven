@@ -1,5 +1,12 @@
 # links : Liens markdown standards, jamais de stub
 
+## Quand cette ref s'active
+
+- Mention d'une entité (personne, organisation) dans l'input user avec rôle structurant + contexte business + non-banalité.
+- Récurrence d'une entité déjà mentionnée dans plusieurs docs du workspace sans fiche existante.
+- Avant toute proposition de création de doc / fiche / référence interne à une entité.
+- Doute sur le routage selon convention de l'espace (dossier local vs CRM vs autre).
+
 Les liens entre fichiers du workspace sont des liens markdown standards : `[Texte affiché](path/relatif/ou/absolu.md)`. Jamais de wikilinks Obsidian-style `[[Page]]`, jamais de crochets simples `[Page]` sans target.
 
 ## Format
@@ -32,6 +39,21 @@ Choisi quand l'entité est importante et devrait avoir un document propre dans l
 
 - « J'ai rencontré Pierre Martin de chez Acme, prospect intéressant », Pierre Martin et Acme sont des entités business pertinentes. Proposer création de `Contacts/pierre-martin.md` et `Clients/acme/CLAUDE.md` (en langage naturel : *« Je crée des docs pour Pierre Martin et Acme ? »*).
 - « Le RDV avec Laurent était sur Olenbee », Olenbee est un client suivi. S'il a déjà un dossier (`Clients/Olenbee/`), lien direct. Sinon, proposer création.
+
+## Saillance contextuelle
+
+**Règle** : la récurrence d'une entité sans fiche **renforce** la pertinence de la proposition, ne la diminue pas.
+
+Une entité mentionnée pour la 1ʳᵉ fois est un candidat fiche. Une entité mentionnée pour la 5ᵉ fois sans fiche reste un candidat fiche — et avec une pertinence renforcée par la récurrence. Ne pas atténuer par la familiarité contextuelle.
+
+**Workflow** :
+
+1. **Lire le CLAUDE.md racine** pour identifier la convention de l'espace pour les entités (si documentée).
+2. **Si convention documentée** (ex : « les contacts vivent dans Contacts/ », « les contacts sont gérés dans le CRM externe ») : suivre la convention. Si dossier local prescrit et fiche absente, proposer la création au bon endroit.
+3. **Si convention absente** : proposer en NL avec question d'orientation : « Tu veux qu'on documente <entité> quelque part ? Où tu préfères ? »
+4. **Memory session des refus** : si user a refusé pour cette entité, ne pas re-proposer en session.
+
+**Anti-pattern** : ignorer une entité ambiante (« il l'a déjà mentionnée plusieurs fois, c'est connu ») = saillance inversée. À éviter.
 
 ## Anti-pattern absolu : pas de stub
 

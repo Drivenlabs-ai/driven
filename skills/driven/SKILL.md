@@ -46,7 +46,66 @@ Ne jamais exposer la machinerie. Ne pas dire « je vais créer une memory entry 
 
 ---
 
-## 1bis. Doctrine AskUserQuestion par défaut
+## 2. Doctrine proactivité (biais vers la proposition)
+
+Symétrique de l'invisibilité (§1). L'invisibilité dit : « ne pas exposer la machinerie au user ». La proactivité dit : « ne pas laisser passer le signal ».
+
+**Principe** : en cas de doute sur la valeur d'une info partagée par user, propose une capture en NL. Le coût d'une question est inférieur au coût d'une info perdue.
+
+**Application** :
+
+- Sur fact-drop (énoncé déclaratif sur entité business + info nouvelle non-banale) : propose « je note ça quelque part ? »
+- Sur mention d'entité sans fiche (selon convention de l'espace observée dans CLAUDE.md racine) : propose la création d'un doc au bon endroit
+- Sur fin de session avec ≥ 2 signaux de capitalisation : propose le routage de `capitalise-workflow.md`
+- Sur récurrence d'une entité sans fiche : la récurrence renforce la pertinence de la proposition, ne la diminue pas
+
+**Calibration anti-saturation** :
+
+- Max 1 proposition de capture par tour user
+- Pas de re-proposition en session si user a refusé pour la même info
+- Seuil plus bas en début de session (3 premiers tours), plus haut ensuite
+
+Tout le forcing reste **interne**. Le user ne voit que la proposition NL finale, jamais le scan ou les TaskCreate. Détail opérationnel : `references/proactivite.md`.
+
+---
+
+## 2ter. Doctrine référencement (`@` vs lien markdown)
+
+Le système distingue deux mécanismes de référence entre fichiers, avec sémantiques distinctes :
+
+- **`@fichier`** : référence à chargement **transitif** — quand tu lis un fichier qui contient `@B`, tu dois charger B en contexte immédiatement, puis appliquer la même règle à tout `@C` rencontré dans B (cascade). Côté Claude Code, le harness le fait automatiquement. Côté Claude Cowork, tu dois le faire manuellement via Read tool dès la détection.
+- **Lien markdown** (`[texte](path)` ou mention textuelle) : référence à lire selon le besoin de la tâche.
+
+### Côté lecture — règle de priorité absolue (transitive)
+
+| Syntaxe rencontrée | Comportement attendu |
+|---|---|
+| `@fichier` (dans un fichier en cours de lecture) | **Lecture impérative et immédiate, sans question, en cascade transitive**. Lire le fichier référencé via Read tool dès détection. Appliquer la même règle aux `@` rencontrés dans le fichier ainsi chargé. Ne pas survoler. |
+| Lien markdown ou référence textuelle | **Lecture recommandée selon contexte**. Si la tâche courante peut bénéficier du contenu, lire. Sinon, garder comme pointeur. |
+
+Cette règle est critique en Claude Cowork qui ne réplique pas nativement la transitivité du `@`.
+
+### Côté écriture — heuristique de décision
+
+Quand tu écris un markdown normatif (CLAUDE.md, RULES.md, fichier de règle d'un dossier) et que tu dois référencer un autre fichier, choisir entre `@` et lien selon :
+
+| Critère | `@fichier` | Lien markdown |
+|---|---|---|
+| Universalité d'usage pour quiconque lit le parent | Utile à TOUS les usages du parent | Utile à certains usages seulement |
+| Fréquence d'usage utile | Consulté chaque fois que le parent l'est | Consulté à la demande |
+| Taille du fichier référencé | Petit / moyen (le `@` charge en cascade) | Grand |
+| Stabilité | Info stable, faible turnover | Info qui change souvent |
+| Caractère impératif | Doctrine, identité, profil, principes que le lecteur du parent DOIT connaître | Documentation détaillée, exemples |
+
+**Règle pratique** : si l'absence du fichier dans le contexte de quiconque lit le parent pourrait causer une erreur ou un oubli structurel, utiliser `@`. Sinon, utiliser un lien.
+
+**Anti-pattern** : abuser de `@` (chaque référence devient un import transitif) → contexte saturé à chaque cascade. Préserver le budget contexte pour le travail courant.
+
+**Anti-pattern** : sous-utiliser `@` sur un fichier de doctrine essentielle → Claude redécouvre les principes à chaque lecture du parent, drift comportemental.
+
+---
+
+## 2bis. Doctrine AskUserQuestion par défaut
 
 Toute phase Q&R avec l'utilisateur utilise `AskUserQuestion` plutôt qu'une question ouverte en texte libre. L'utilisateur gagne du temps en sélectionnant parmi des options pré-rédigées plutôt qu'en formulant ses réponses.
 
@@ -58,7 +117,7 @@ Détail complet : `references/askuserquestion.md`.
 
 ---
 
-## 2. Vocabulaire selon tech-level inféré
+## 3. Vocabulaire selon tech-level inféré
 
 ### Bannis envers user (tous tech-levels)
 
@@ -85,7 +144,7 @@ Le défaut s'ajuste selon ME.md et le comportement user observé en session. Dé
 
 ---
 
-## 3. Clean slate à l'édition
+## 4. Clean slate à l'édition
 
 Toute édition produit un fichier qui lit comme s'il avait toujours été ainsi. Pas de trace d'une version antérieure.
 
@@ -106,7 +165,7 @@ Détail : `references/maintenance-fichiers-racines.md`.
 
 ---
 
-## 4. Observation des signaux du workspace
+## 5. Observation des signaux du workspace
 
 Le plugin observe les signaux disponibles dans l'environnement et adapte ses comportements **sans rigidité**. Pas de message « pas de space-type trouvé » ni de comportement bloquant.
 
@@ -118,9 +177,11 @@ Le plugin observe les signaux disponibles dans l'environnement et adapte ses com
 
 ---
 
-## 5. Triggers V1
+## 6. Triggers user + signaux de support
 
-### 3 triggers user
+### 6.1 Triggers user (mécanisme de forcing : TaskCreate obligatoire)
+
+Les 3 triggers user activent un TaskCreate `Lire <refs>` AVANT toute action de modification. Cf §7 pour le scan multi-trigger préalable qui peut élargir les refs à charger.
 
 | Trigger | Détection | References à charger |
 |---|---|---|
@@ -128,20 +189,29 @@ Le plugin observe les signaux disponibles dans l'environnement et adapte ses com
 | **Demande de retenir une info** | Phrases NL : « retiens ça », « note ça », « garde une trace », « je veux retenir » | `memory.md`, `factualite.md` si shared, `links.md` si mentions |
 | **Modification d'un fichier de règle** | `Edit`/`Write` sur RULES.md, RULES/*.md, CONTRIBUTING.md, CLAUDE.md, SOUL.md, ME.md, VOICE.md, ABOUT.md | `maintenance-fichiers-racines.md` + référence dédiée au type de fichier, `propagation.md` |
 
-### 6 supports automatiques
+### 6.2 Signaux de support (refs ⭐ transverses attachées)
 
-| Support | Détection | Scope d'activation | References à charger |
-|---|---|---|---|
-| **Cross-author détecté** | Avant `Edit` shared space : email user ∉ frontmatter `authors` | Niveau 3 (shared uniquement) | `cross-author.md` |
-| **Mention d'entité sans document** | Pendant rédaction shared, mention personne/organisation sans document existant | Niveau 3 (shared uniquement) | `links.md` |
-| **Saturation conversationnelle** | 4 signaux possibles : > 40 échanges, > 10 tool-heavy actions, pluri-sujets (3+ distincts), agacement user (« je m'y perds », « tu te répètes », « fait court ») | Niveau 1 (universel) | `session-handoff.md` |
-| **Manque de contexte dossier** | Action Claude (Write/Read/Edit/Bash cd) dans un dossier qui passe pré-filtre technique ET échoue au jugement « ai-je de quoi m'orienter ? » | Niveau 1 (universel) | `setup-dossier.md` |
-| **Workflow non-trivial à capitaliser** | Fin de session avec ≥ 2 signaux : ≥5 actions structurantes même sujet / création script ad-hoc / décisions tranchées via AskUserQuestion ou /align / refactor multi-fichiers / phrases user de satisfaction | Niveau 1 (universel) | `capitalise-workflow.md` |
-| **Conflit Drive Desktop** | Détection fichiers `*(<n>).md` proches d'un fichier sans numéro dans workspace sous Drive Desktop | Niveau workspace driven | `drive-conflicts.md` |
+Chaque ref ⭐ transverse a un signal d'activation observable. Quand le signal est détecté dans l'input user ou dans l'état du workspace, charger la ref correspondante.
 
-### Exclusion : mode routine
+| Signal observable | Ref ⭐ à charger | Action attendue |
+|---|---|---|
+| ≥ 2 actions distinctes proposées dans la même réponse OU décision user-facing à valider | `askuserquestion.md` | Format batch d'options pré-rédigées |
+| Ambiguïté NL sur destination de l'info OU demande qui touche plusieurs cibles | `routage.md` | Table 10 cas + cas tordus |
+| cwd ou cible dans dossier sans CLAUDE.md | `setup-dossier.md` | Mini-interview + outputs |
+| Signal d'universalité (« désormais », « à partir de », « toujours », « par défaut », « doit », « cadence ») | `connaissance-vs-memoire.md` + `lessons.md` | Test « vrai demain ? » + lesson scopée |
+| Convention scopée à un dossier (universel + intemporel dans le scope) | `lessons.md` | Section Lessons dans CLAUDE.md du dossier |
+| Proposition stratégique sur sujet avec mémoires antérieures (« je pense », « on pourrait », « tu devrais ») | `challenge-anti-recidive.md` | Cascade lessons + mémoires |
+| Pattern fichier `*(<n>).md` détecté | `drive-conflicts.md` | 3 options résolution NL |
+| Mention d'entité avec rôle structurant + contexte business + non-banalité | `links.md` + `proactivite.md` | Option selon convention de l'espace observée |
+| ≥ 2 signaux conversationnels de capitalisation en fin de session | `capitalise-workflow.md` | 3 options de routage |
+| Fact-drop business (verbe passé sur entité, décision future, opinion, découverte) | `proactivite.md` | Proposition NL de capture |
+| Saturation conversationnelle (> 40 échanges, > 10 tool-heavy, pluri-sujets, agacement) | `session-handoff.md` | Proposition bascule nouvelle session |
+| Sensible RH détecté (jugement RH, débauchage, NDA, vie privée tiers, dossier disciplinaire, préférences cachées) | `memory.md` §sensibles + `routage.md` | Routage personal (« ailleurs juste pour toi ») |
+| Cross-author shared (email user ∉ frontmatter `authors`) | `cross-author.md` | Question NL « Ce document est de X. Tu continues ? » |
 
-Les supports automatiques (et en particulier le trigger saturation) **ne s'activent jamais en mode routine**. Mode routine détecté quand :
+### 6.3 Exclusion : mode routine
+
+Les triggers user et signaux de support **ne s'activent jamais en mode routine**. Mode routine détecté quand :
 
 - Sentinel `<<autonomous-loop>>` ou `<<autonomous-loop-dynamic>>` présent dans le prompt initial.
 - Tool `ScheduleWakeup` ou `CronCreate` disponible.
@@ -151,7 +221,44 @@ En routine, Claude est un agent autonome qui exécute une tâche et termine — 
 
 ---
 
-## 6. Routing rules
+## 7. Scan multi-trigger préalable
+
+Avant toute action sur un input user, scanner mentalement les **6 dimensions** suivantes. Si plusieurs sont détectées, charger les refs en cumul.
+
+### 7.1 Les 6 dimensions
+
+1. **Création d'un fichier ou d'un dossier** : `Write` sur path inexistant, ou demande de créer un nouveau doc / dossier.
+2. **Mention d'une entité** : personne ou organisation citée dans l'input avec rôle ou contexte business.
+3. **Décision stratégique sur sujet déjà discuté** : proposition « on pourrait », « tu devrais », « qu'est-ce que t'en penses » + sujet ayant des mémoires antérieures dans un dossier.
+4. **Convention durable** : signaux d'universalité (« désormais », « à partir de », « toujours », « doit », « cadence »).
+5. **Sensible RH** : jugement RH, débauchage, NDA, vie privée tiers, dossier disciplinaire, préférences cachées (6 patterns dans `memory.md`).
+6. **Cross-author** : workspace shared + user en train d'éditer un fichier dont son email est absent du frontmatter `authors`.
+
+### 7.2 Mécanisme de forcing
+
+Sur les 3 triggers user explicites du §6.1 (création fichier / retiens / modif règle), créer un TaskCreate `Lire <refs>` AVANT toute action de modification.
+
+Le Task de lecture passe à `completed` SEULEMENT après les Read tool calls effectifs (pas de marquage prématuré).
+
+Pour les supports auto (§6.2), le scan reste mental sans TaskCreate (pas de pollution TaskList sur petits inputs).
+
+### 7.3 Cumul des refs
+
+Si l'input matche plusieurs dimensions, charger les refs de toutes les dimensions concernées avant action. Ne pas s'arrêter au trigger primaire.
+
+Exemple : « On a fait un kickoff avec Sarah de Acme, et désormais on les facture en €. » →
+
+- Dimension 1 (création) si dossier Acme à créer
+- Dimension 2 (entité) → `links.md` + `proactivite.md`
+- Dimension 4 (universalité « désormais ») → `connaissance-vs-memoire.md` + `lessons.md`
+
+Refs cumulatives : `links.md`, `proactivite.md`, `connaissance-vs-memoire.md`, `lessons.md`, et éventuellement `frontmatter.md` + `scope-check.md` si création.
+
+### 7.4 Checkpoint de format de sortie
+
+Les outputs des refs critiques exigent des champs précis (preuve passive de lecture). Une mémoire avec frontmatter incomplet, une refonte de fichier normatif avec trace de l'ancien comportement, ou un recap qui mélange machinerie et intention signalent que la ref correspondante n'a pas été lue.
+
+## 8. Routing rules
 
 Trois cas d'invocation de `/driven` :
 
@@ -180,7 +287,7 @@ Inférer l'action depuis `references/routage.md` (table des 10 types de demande 
 
 ---
 
-## 7. Garde-fous critiques
+## 9. Garde-fous critiques
 
 ### Avant tout write sur un fichier normatif
 
@@ -200,7 +307,7 @@ Détail complet : `references/maintenance-fichiers-racines.md`.
 
 ---
 
-## 8. Bivalence Code / Cowork
+## 10. Bivalence Code / Cowork
 
 | Capacité | Claude Code | Claude Cowork | Notes |
 |---|---|---|---|
@@ -218,7 +325,7 @@ Aucune asymétrie majeure à coder. Détail : Spec 5 + `references/lecture-arbor
 
 ---
 
-## 9. Setup checks non-bloquants
+## 11. Setup checks non-bloquants
 
 À la première activation dans un workspace driven, vérifier silencieusement :
 
@@ -234,53 +341,59 @@ Aucune asymétrie majeure à coder. Détail : Spec 5 + `references/lecture-arbor
 
 ---
 
-## 10. References disponibles
+## 12. References disponibles
 
 Toutes les references vivent dans `${CLAUDE_PLUGIN_ROOT}/skills/driven/references/`. Chargées à la demande via `Read`. Pas de frontmatter.
 
-### Transverses
+**Convention pour les refs ⭐** : titre + verbe d'action obligatoire (« charger AVANT X »). Pas de mini-résumé qui pourrait servir de substitut à la lecture. Le signal d'activation est inscrit dans §6.2 ou §7.
 
-- `connaissance-vs-memoire.md`, ⭐ Principe pivot : test « vrai demain ? » + SAVOIR vs FAIRE + Text > Brain.
-- `setup-dossier.md`, ⭐ Pattern A proactivité : détection manque de contexte + mini-interview + outputs.
-- `capitalise-workflow.md`, ⭐ Pattern B proactivité : workflow non-trivial à sauvegarder + routage 3 options.
-- `askuserquestion.md`, ⭐ Doctrine d'interaction par défaut + format + anti-patterns.
-- `scope-check.md`, Détection workspace + distinction perso / shared.
-- `frontmatter.md`, Formats YAML par type de fichier.
-- `memory.md`, Création d'une memory entry, naming, append-only, cross-link.
-- `links.md`, Liens markdown standards, pas de stub.
-- `propagation.md`, Cascades silencieuses + proposées.
-- `factualite.md`, 4 heuristiques + reformulation silencieuse.
-- `cross-author.md`, Flow 1 question, ajout co-auteur.
-- `routage.md`, ⭐ Table de routage de l'information (10 cas).
-- `maintenance-fichiers-racines.md`, ⭐ Refactor for coherence, clean slate, anti-micromanagement.
-- `lessons.md`, ⭐ Capture d'apprentissages durables scopés par dossier (universel/intemporel/contextuellement neutre dans le scope).
-- `challenge-anti-recidive.md`, ⭐ Comportement auto avant proposition stratégique (consulte lessons + mémoires, ref pure pas de commande).
-- `drive-conflicts.md`, ⭐ Détection auto + 3 options résolution conflits Drive Desktop.
+### Transverses (toutes ⭐ — verbe d'action obligatoire)
+
+- `connaissance-vs-memoire.md` — Charger AVANT tout choix knowledge vs memory (signal §6.2).
+- `setup-dossier.md` — Charger AVANT toute action dans un dossier sans CLAUDE.md (signal §6.2).
+- `capitalise-workflow.md` — Charger en fin de session si ≥ 2 signaux de capitalisation (signal §6.2).
+- `askuserquestion.md` — Charger DÈS qu'une décision user-facing existe OU ≥ 2 actions proposées dans la même réponse (signal §6.2).
+- `routage.md` — Charger AVANT toute décision de placement d'info ambiguë (signal §6.2).
+- `maintenance-fichiers-racines.md` — Charger AVANT toute modif de fichier normatif (trigger user §6.1).
+- `lessons.md` — Charger AVANT toute création de section Lessons scopée (signal §6.2).
+- `challenge-anti-recidive.md` — Charger AVANT toute proposition stratégique sur sujet avec mémoires antérieures (signal §6.2).
+- `drive-conflicts.md` — Charger AVANT toute action si pattern fichier `*(<n>).md` détecté (signal §6.2).
+- `proactivite.md` — Charger DÈS qu'un signal proactif latent existe : fact-drop, mention d'entité sans fiche, doute sur proposer (signal §6.2).
+
+### Triggers user et opérationnelles
+
+- `scope-check.md` — Détection workspace + distinction perso / shared (trigger user §6.1).
+- `frontmatter.md` — Formats YAML par type de fichier (trigger user §6.1).
+- `memory.md` — Création d'une memory entry, naming, append-only, cross-link (trigger user §6.1).
+- `links.md` — Liens markdown standards, pas de stub, saillance contextuelle des entités (signal §6.2).
+- `propagation.md` — Cascades silencieuses + proposées (trigger user §6.1).
+- `factualite.md` — 4 heuristiques + reformulation silencieuse (signal shared §6.2).
+- `cross-author.md` — Flow 1 question, ajout co-auteur (signal §6.2).
 
 ### Découpage progressif
 
-- `claude-md-template.md`, 4 sections du CLAUDE.md racine shared.
-- `audit-sections.md`, Audit + détection sections gonflées.
-- `decoupage-progressif.md`, Extraction ABOUT/RULES/CONTRIBUTING/RULES/<thème>.md.
+- `claude-md-template.md` — 4 sections du CLAUDE.md racine shared.
+- `audit-sections.md` — Audit + détection sections gonflées.
+- `decoupage-progressif.md` — Extraction ABOUT/RULES/CONTRIBUTING/RULES/<thème>.md.
 
 ### Personal space
 
-- `me-md.md`, Identité user, ME.md + sous-dossier ME/.
-- `soul-md.md`, Posture Claude, anti-complaisance.
-- `voice-md.md`, Routeur surfaces + registres par contact.
+- `me-md.md` — Identité user, ME.md + sous-dossier ME/.
+- `soul-md.md` — Posture Claude, anti-complaisance.
+- `voice-md.md` — Routeur surfaces + registres par contact.
 
 ### Cascades Cowork
 
-- `lecture-arborescente.md`, CLAUDE.md + CONTRIBUTING + 5 dernières mémoires.
-- `comprehension-contextuelle.md`, Pré-trigger contextuel.
+- `lecture-arborescente.md` — CLAUDE.md + CONTRIBUTING + 5 dernières mémoires.
+- `comprehension-contextuelle.md` — Pré-trigger contextuel.
 
 ### Compléments
 
-- `interface-cli.md`, Comportement `/driven` (sans arg / argument / NL).
-- `verbosity-tech-level.md`, Inférence tech-level + verbosité recap.
-- `skill-creator-routing.md`, Quand router vers `/skill-creator`.
-- `stop-slop-routing.md`, Invoquer `/stop-slop` avant contenu à partage externe.
-- `session-handoff.md`, Proposition proactive de basculer en nouvelle session quand la conversation sature (avec mémoire de récap + prompt de reprise dense).
+- `interface-cli.md` — Comportement `/driven` (sans arg / argument / NL).
+- `verbosity-tech-level.md` — Inférence tech-level + verbosité recap.
+- `skill-creator-routing.md` — Quand router vers `/skill-creator`.
+- `stop-slop-routing.md` — Invoquer `/stop-slop` avant contenu à partage externe.
+- `session-handoff.md` — Proposition proactive de basculer en nouvelle session (signal §6.2).
 
 ---
 

@@ -1,5 +1,12 @@
 # routage : Table de routage de l'information
 
+## Quand cette ref s'active
+
+- Ambiguïté NL sur destination de l'info partagée par user (« où je note ça ? »).
+- Input user qui touche plusieurs cibles potentielles (mémoire + fichier normatif + skill).
+- Avant toute décision de placement non-évidente d'une info.
+- Demande qui ressemble à une mémoire mais qui est en fait une convention durable (ou inversement).
+
 ⭐ Cœur du défi #1 : où mettre quoi ? Cette table guide Claude pour router toute demande user vers la bonne cible (mémoire, fichier de règle, document métier, nouveau skill, etc.) sans demander à chaque fois.
 
 ## Principe pivot

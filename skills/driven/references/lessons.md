@@ -1,5 +1,12 @@
 # lessons : Capture d'apprentissages durables scopés par dossier
 
+## Quand cette ref s'active
+
+- Convention scopée à un dossier (universel dans le scope + intemporel + contextuellement neutre).
+- Demande d'ajouter une règle qui s'applique partout sous un dossier précis.
+- Énoncé d'apprentissage durable lié à un domaine (ex : « pour tous les devis Olenbee, valider avec Laurent »).
+- Doute sur le scope d'une lesson (globale RULES vs local CLAUDE.md de dossier).
+
 ## Doctrine
 
 Le plugin a 3 surfaces de capture distinctes. Une lesson est le type intermédiaire entre événement ponctuel et convention globale.

@@ -14,6 +14,9 @@ Scope niveau 1 — **universel**. Active dans tout dossier ouvert dans Claude Co
 
 Niveau 2/3 — quand un `CLAUDE.md` racine avec frontmatter `space-type` est détecté, le routage de capitalisation est enrichi : accès aux conventions du workspace (RULES.md, CONTRIBUTING.md, structure `memory/`), choix éclairé de la cible selon les patterns du dossier.
 
+- Fin de session avec ≥ 2 signaux parmi : ≥ 5 actions structurantes même sujet, création script ad-hoc, décisions tranchées via `AskUserQuestion` ou `/align`, refactor multi-fichiers, phrases user de satisfaction.
+- Demande user explicite : « capitalise », « garde ça pour la prochaine fois », « on en fait un skill ? ».
+
 ## Trigger
 
 | Type | Déclencheur |

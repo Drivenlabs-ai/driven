@@ -12,6 +12,10 @@ Cette ref encode un comportement de détection + résolution proposée en langag
 
 Support automatique du plugin (niveau workspace driven). Trigger : Claude détecte un fichier avec pattern `*(<n>).md` (où `<n>` est un entier) proche d'un fichier sans numéro, dans un workspace sous Drive Desktop.
 
+- Pattern fichier `*(<n>).md` détecté proche d'un fichier sans numéro dans un workspace sous Drive Desktop.
+- Avant toute action d'écriture sur un fichier dans un workspace partagé Drive si un fichier conflit `*(<n>).md` existe à côté.
+- ls / Read d'un dossier qui révèle plusieurs versions d'un même fichier avec suffixe ` (N)`.
+
 ## Pré-conditions
 
 - Workspace driven (signaux `space-type`, `authors:`, ou path Drive Desktop)

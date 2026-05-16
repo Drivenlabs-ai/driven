@@ -1,5 +1,12 @@
 # askuserquestion : Pattern d'interaction par défaut
 
+## Quand cette ref s'active
+
+- ≥ 2 actions distinctes proposées dans la même réponse user-facing.
+- Décision user-facing à valider avec ≥ 2 options non-évidentes.
+- Choix d'architecture, de stratégie, de routage qui nécessite l'arbitrage explicite du user.
+- Avant toute phase Q&R où le user gagnerait du temps en sélectionnant plutôt qu'en rédigeant.
+
 ## Doctrine
 
 L'utilisateur gagne du temps en sélectionnant parmi des options pré-rédigées plutôt qu'en formulant des réponses libres. Chaque question intègre les éléments de contexte nécessaires à une décision éclairée — trade-offs, conséquences, raison du choix. Le user lit, choisit, avance. Pas de friction texte libre, pas d'arbitrage à formuler de zéro.

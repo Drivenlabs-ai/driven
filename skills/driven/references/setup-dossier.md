@@ -12,6 +12,10 @@ Le maintien proactif d'un espace est un travail de fond du plugin. Mieux vaut po
 
 Scope niveau 1 — **universel**. Active dans tout dossier ouvert dans Claude Code ou Cowork, pas seulement les workspaces driven (CLAUDE.md racine avec frontmatter `space-type`). Un dossier non-driven peut quand même mériter un setup minimal s'il est utilisé activement.
 
+- cwd ou cible d'action dans un dossier sans CLAUDE.md.
+- Création d'un nouveau dossier dans un workspace driven.
+- Action Claude (Write / Read / Edit / Bash cd) dans un dossier qui passe pré-filtre technique ET échoue au jugement « ai-je de quoi m'orienter ? ».
+
 ## Trigger
 
 | Type | Déclencheur |
