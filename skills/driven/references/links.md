@@ -51,9 +51,12 @@ Une entité mentionnée pour la 1ʳᵉ fois est un candidat fiche. Une entité m
 1. **Lire le CLAUDE.md racine** pour identifier la convention de l'espace pour les entités (si documentée).
 2. **Si convention documentée** (ex : « les contacts vivent dans Contacts/ », « les contacts sont gérés dans le CRM externe ») : suivre la convention. Si dossier local prescrit et fiche absente, proposer la création au bon endroit.
 3. **Si convention absente** : proposer en NL avec question d'orientation : « Tu veux qu'on documente <entité> quelque part ? Où tu préfères ? »
-4. **Memory session des refus** : si user a refusé pour cette entité, ne pas re-proposer en session.
+4. **Si l'entité est ambiante** (déjà mentionnée dans plusieurs docs sans fiche) : la récurrence renforce la pertinence, ne la diminue pas. Proposer.
+5. **Memory session des refus** : si user a refusé pour cette entité dans la session courante, ne pas re-proposer.
 
 **Anti-pattern** : ignorer une entité ambiante (« il l'a déjà mentionnée plusieurs fois, c'est connu ») = saillance inversée. À éviter.
+
+**Voir aussi** : `proactivite.md` (calibration anti-saturation, format de proposition NL, grammaire des fact-drops liée à la mention d'entité).
 
 ## Anti-pattern absolu : pas de stub
 

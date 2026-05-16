@@ -62,7 +62,7 @@ Détection → application du test des 3 critères → si valide, proposition de
 
 ## Suppression directe
 
-Si une lesson devient obsolète (scope change, apprentissage ne tient plus), Claude la retire **sans contre-règle ni archivage**. Pas de mention « anciennement on faisait X ». Clean slate strict cohérent avec doctrine du plugin (SKILL.md §3).
+Si une lesson devient obsolète (scope change, apprentissage ne tient plus), Claude la retire **sans contre-règle ni archivage**. Pas de mention « anciennement on faisait X ». Clean slate strict cohérent avec doctrine du plugin (SKILL.md §4).
 
 ## Anti-patterns
 

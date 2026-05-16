@@ -60,7 +60,7 @@ La spéculation est rendue explicite (« doit confirmer », « a indiqué », «
 3. Avant écriture, scan le contenu prévu contre les 4 heuristiques.
 4. Reformulation silencieuse des passages détectés.
 5. Écriture de la mémoire avec le contenu factuel.
-6. Recap minimal au user, pas de mention de la reformulation. Le document apparaît comme s'il avait toujours été factuel (cf clean slate, principe §3.10).
+6. Recap minimal au user, pas de mention de la reformulation. Le document apparaît comme s'il avait toujours été factuel (cf clean slate, SKILL.md §4).
 
 Aucune note de bas de fichier (« reformulé pour factualité »), aucun flag frontmatter, aucun commentaire HTML. Le clean slate est strict.
 

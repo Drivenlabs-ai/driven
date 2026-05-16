@@ -57,12 +57,9 @@ Liste explicite + jugement complémentaire.
 
 ## Workflow saillance entité
 
-Quand une entité est mentionnée :
+Quand une entité est mentionnée, applique le workflow canonique défini dans `links.md` §Saillance contextuelle (lecture CLAUDE.md racine → convention documentée ou absente → récurrence renforce → mémoire de session des refus).
 
-1. **Lire le CLAUDE.md racine** pour identifier la convention de l'espace pour les entités (si documentée).
-2. **Si convention documentée** (ex: « les contacts vivent dans Contacts/ », « les contacts sont gérés dans le CRM externe ») : suivre la convention. Si dossier local prescrit et fiche absente, proposer la création au bon endroit.
-3. **Si convention absente** : proposer en NL avec question d'orientation : « Tu veux qu'on documente <entité> quelque part ? Où tu préfères ? »
-4. **Si l'entité est ambiante** (déjà mentionnée dans plusieurs docs sans fiche) : la récurrence renforce la pertinence, ne la diminue pas. Proposer.
+Ce que `proactivite.md` ajoute : la **calibration anti-saturation** (max 1 proposition par tour, seuil progressif, réinitialisation par session) s'applique aussi aux propositions de fiche entité, pas seulement aux captures mémoire.
 
 ## Anti-patterns
 

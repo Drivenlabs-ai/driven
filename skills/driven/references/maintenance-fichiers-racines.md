@@ -108,7 +108,7 @@ Si user dit « finalement on retire X », le fichier final ne mentionne plus X d
 - « Note : la règle X a été retirée le 11/05 »
 - Commentaire HTML qui garde trace
 
-Le retrait est définitif et silencieux. Cohérent avec clean slate (cf SKILL.md §3).
+Le retrait est définitif et silencieux. Cohérent avec clean slate (cf SKILL.md §4).
 
 ### Exemple
 
@@ -219,7 +219,7 @@ Toute édition produit un fichier qui lit comme s'il avait toujours été ainsi.
 - Notes changelog inline
 - Commentaires HTML historiques
 
-Détail dans le SKILL.md §3. Cette règle vit dans le plugin (invariant universel), pas dans les RULES.md du shared (overlay client).
+Détail dans le SKILL.md §4. Cette règle vit dans le plugin (invariant universel), pas dans les RULES.md du shared (overlay client).
 
 ## Récap au user après refonte
 
