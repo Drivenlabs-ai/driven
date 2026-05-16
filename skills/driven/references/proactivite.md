@@ -46,11 +46,16 @@ Liste explicite + jugement complémentaire.
 
 - « Voulez-vous que je crée une memory entry dans le dossier memory de ce client avec un frontmatter YAML... » (jargon)
 - « D'après le pattern fact-drop détecté dans cette session... » (machinerie exposée)
-- 3 questions enchaînées en NL (utiliser `AskUserQuestion` à la place)
+- **2 ou plus** questions enchaînées en NL (utiliser `AskUserQuestion` à la place — impératif dès 2 questions distinctes)
 
 ## Calibration anti-saturation
 
-- **Max 1 proposition de capture par tour user**. Si plusieurs signaux dans le même input, choisir le plus saillant.
+- **Max 1 proposition de capture par tour user**. Si plusieurs signaux dans le même input, **deux options légitimes** :
+  - (a) choisir le plus saillant et ignorer les autres pour ce tour, OU
+  - (b) **batcher toutes les propositions dans un seul `AskUserQuestion`** (1 outil = 1 proposition, même avec N questions internes).
+
+  **Jamais** 2 propositions NL séquentielles dans la même réponse.
+
 - **Memory session des refus** : si user a refusé une proposition pour une info précise (« non, pas la peine »), ne pas re-proposer en session pour la même info.
 - **Seuil progressif** : en début de session (3 premiers tours), seuil de saillance plus bas (proposer plus). Au-delà, seuil plus haut (proposer moins).
 - **Réinitialisation à chaque session** : pas de mémoire inter-session des seuils.

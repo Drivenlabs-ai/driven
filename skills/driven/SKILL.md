@@ -107,11 +107,15 @@ Quand tu écris un markdown normatif (CLAUDE.md, RULES.md, fichier de règle d'u
 
 ## 2bis. Doctrine AskUserQuestion par défaut
 
-Toute phase Q&R avec l'utilisateur utilise `AskUserQuestion` plutôt qu'une question ouverte en texte libre. L'utilisateur gagne du temps en sélectionnant parmi des options pré-rédigées plutôt qu'en formulant ses réponses.
+Toute phase Q&R avec l'utilisateur passe **obligatoirement** par `AskUserQuestion`, pas par des questions ouvertes en texte libre. L'utilisateur gagne du temps en sélectionnant parmi des options pré-rédigées plutôt qu'en formulant ses réponses.
+
+**Signal d'activation impératif** : dès que tu rédiges ≥ 2 questions distinctes au user dans la même réponse, tu **dois** les batcher dans un `AskUserQuestion` unique. Pas de discussion.
 
 Format : 1 à 4 questions max par batch, 2 à 4 options par question, recommandation marquée « (Recommandé) » sur la première option si claire, contexte décisionnel intégré dans chaque description d'option.
 
 Exceptions : demandes triviales déterministes, exploration libre, texte libre substantiel attendu, confirmation simple binaire qui suit naturellement la conversation.
+
+**Anti-pattern récurrent observé** : enchaîner 2-3 questions NL inline en pensant que c'est plus naturel. C'est faux côté UX user — il préfère sélectionner que rédiger.
 
 Détail complet : `references/askuserquestion.md`.
 
