@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "drivenlabs-ai-driven",
+  "description": "Drivenlabs — driven plugin marketplace (workspace companion for Claude Code & Cowork).",
+  "owner": {
+    "name": "Drivenlabs",
+    "url": "https://drivenlabs.ai"
+  },
+  "plugins": [
+    {
+      "name": "driven",
+      "description": "Compagnon de workspaces collaboratifs Claude — capture mémoire timestampée, factualité en collectif, cross-author, propagation, maintenance des fichiers normatifs.",
+      "version": "1.5.3",
+      "source": "./"
+    }
+  ]
+}

@@ -3,10 +3,11 @@
   "version": "1.5.3",
   "description": "Compagnon de workspaces collaboratifs Claude — capture mémoire timestampée, factualité en collectif, cross-author, propagation, maintenance des fichiers normatifs. Activé automatiquement dans un workspace dont le CLAUDE.md racine porte un frontmatter space-type. Patterns proactifs A et B (setup-dossier, capitalise-workflow) et doctrine AskUserQuestion actifs partout.",
   "author": {
-    "name": "Alexandre Bouchez"
+    "name": "Drivenlabs",
+    "url": "https://drivenlabs.ai"
   },
-  "homepage": "https://github.com/alexbouchez/driven-alex-plugins",
-  "repository": "https://github.com/alexbouchez/driven-alex-plugins",
+  "homepage": "https://github.com/drivenlabs-ai/driven",
+  "repository": "https://github.com/drivenlabs-ai/driven",
   "keywords": [
     "drivenlabs",
     "shared-space",
