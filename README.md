@@ -9,7 +9,8 @@ silencieuse, maintenance des fichiers normatifs.
 ## Install
 
 ```bash
-claude plugin install driven@driven-alex-plugins
+/plugin marketplace add drivenlabs-ai/plugins
+/plugin install driven@drivenlabs-ai
 ```
 
 Propage automatiquement à Claude Cowork (account-level).
@@ -34,7 +35,7 @@ demande de retenir une info, modification d'un fichier de règle).
 ## Dépendances Python (recherche mémoire)
 
 ```bash
-pip install rank-bm25 pyyaml
+uv pip install rank-bm25 pyyaml
 ```
 
 Marche en Claude Code et Claude Cowork (Bash + Python disponibles dans les deux).
