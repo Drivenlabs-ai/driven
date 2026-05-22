@@ -2,6 +2,8 @@
 
 Une conversation trop longue brouille le contexte et dégrade la précision de Claude. Le plugin détecte proactivement les signaux de saturation et propose à l'user de reprendre dans une nouvelle session, avec une mémoire de récap qui préserve le contexte et un prompt de reprise dense pour relancer rapidement.
 
+Le risque structurel d'un wrap-up de session : la nouvelle instance Claude n'a pas vécu la session précédente. Si le récap contient des inférences non vérifiables présentées comme des faits, la nouvelle session hérite d'un **drift silencieux** — elle agit sur la base de déductions qu'elle ne peut pas retracer. La doctrine anti-drift (§Doctrine ci-dessous) impose un tri strict avant toute inscription dans le récap ou le prompt de reprise.
+
 ## Quand cette ref s'active
 
 Trigger 4 — saturation conversationnelle. Quatre signaux possibles, n'importe lequel suffit :
@@ -14,6 +16,30 @@ Trigger 4 — saturation conversationnelle. Quatre signaux possibles, n'importe 
 | Agacement user | Phrases : « je m'y perds », « tu te répètes », « c'est bordélique », « fait court », « trop d'infos », « j'ai du mal à suivre », « tu deviens confus » |
 
 Claude n'a pas accès direct au compteur de tokens en Code ni en Cowork. L'estimation est qualitative.
+
+La ref s'active aussi sur demande explicite user : « on bascule », « nouvelle session », « fais le récap pour reprendre », « prépare le handoff ». Dans ce cas, pas de proposition préalable — Claude enchaîne directement sur le forcing TaskCreate.
+
+## Doctrine anti-drift : tri en 3 catégories
+
+Toute info candidate à l'inscription dans la mémoire de récap ou dans le prompt de reprise passe par un tri en 3 catégories.
+
+| Catégorie | Définition | Action |
+|---|---|---|
+| **C1 — Vérifiable** | Existe dans une source primaire localisable : path fichier, Message-ID Gmail, URL, ID document, output tool précis, hash de commit, output Bash daté | Inscrire avec son pointeur source |
+| **C2 — Inférée** | Synthèse, déduction ou interprétation produite par Claude pendant la session, non rattachable à une source primaire | Ne PAS inscrire comme fait. Si l'info reste utile, l'inscrire dans la section « NON inscrit volontairement » avec instruction de re-déduction par la nouvelle session |
+| **C3 — Incertaine** | Détail partiel, rapporté de mémoire conversationnelle sans pointeur, ou oublié en cours de session | Ne pas inscrire dans les faits. Optionnellement, marquer dans « NON inscrit volontairement » comme à re-vérifier par lecture directe |
+
+**Règle de tri strict** : en cas de doute entre C1 et C2 → traiter comme C2. La sur-inclusion d'inférences est plus coûteuse que l'omission : un fait C1 manquant sera redécouvert par lecture, un fait C2 inscrit comme C1 contamine durablement la nouvelle session.
+
+**Distinction faits vs décisions actées** : un fait C1 décrit un état du monde vérifiable techniquement (version dans plugin.json, contenu d'un fichier, output d'un tool). Une décision actée est un arbitrage explicite tranché par user au cours de la session, qui n'existe pas ailleurs que dans la conversation. Les deux vont dans le prompt de reprise mais dans deux blocs distincts (cf format §Format).
+
+## Forcing : TaskCreate avant wrap-up
+
+Dès que la bascule est engagée (user accepte la proposition saturation, ou demande explicite de handoff), Claude crée un TaskCreate `Trier infos en 3 catégories` AVANT toute production du récap ou du prompt de reprise.
+
+Le Task passe à `completed` seulement après application effective du tri sur chaque info candidate (pas de marquage prématuré). Aligné sur §7.2 du SKILL.md (mécanisme de forcing TaskCreate pour les triggers user §6.1).
+
+Production de la mémoire et du prompt **après** complétion du tri uniquement.
 
 ## Exclusion : mode routine
 
@@ -43,21 +69,26 @@ Si signal d'agacement détecté, adapter le phrasing :
 
 > Je sens qu'on s'y perd un peu. On reprend dans une nouvelle session avec un récap propre ?
 
-### 3. Si user accepte
+### 3. Si user accepte (ou demande explicitement le handoff)
 
-a. **Création de la mémoire de récap** dans le `memory/` du dossier projet dominant.
+a. **TaskCreate forcing du tri** : Claude crée un TaskCreate `Trier infos en 3 catégories` (doctrine anti-drift §Doctrine). Aucune production du récap ou du prompt avant complétion.
+
+b. **Application du tri** : Claude scanne mentalement chaque info candidate (décisions, faits, locks, pointeurs, actions identifiées) et les classe C1 / C2 / C3 selon la doctrine. Pour chaque C1, identifier le pointeur source exact (path:section, Message-ID, URL, output tool daté).
+
+c. **Création de la mémoire de récap** dans le `memory/` du dossier projet dominant.
 
    - Mémoire **standard**, suit `memory.md`. Pas de type spécial.
    - Topic descriptif : `recap-pricing-olenbee`, `recap-design-plugin-driven`, etc.
    - `type` adapté : `decision` si arbitrages tranchés en session, `insight` si apprentissages, `memory` par défaut.
    - Préambule `## Contexte` : 2-3 phrases self-contained résumant ce sur quoi on a travaillé.
-   - Corps `## Notes` : décisions prises, actions identifiées, fichiers touchés (liens markdown), locks structurants, anything qui mérite d'être préservé pour la reprise.
+   - Corps `## Notes` : seulement du C1, chaque ligne avec son pointeur source. Décisions actées avec date et porteur de validation. Fichiers touchés via liens markdown.
+   - Section `## NON inscrit volontairement` : ce qui était candidat mais classé C2 / C3, avec instruction d'action pour la nouvelle session (re-déduire, re-vérifier par lecture directe, escalader à user).
 
-b. **Multi-projet** : si la session a touché plusieurs projets distincts, Claude infère le projet dominant (celui qui a concentré l'essentiel des décisions). Si vraiment ambigu, demande NL :
+d. **Multi-projet** : si la session a touché plusieurs projets distincts, Claude infère le projet dominant (celui qui a concentré l'essentiel des décisions). Si vraiment ambigu, demande NL :
 
-   > On a touché Olenbee et le plugin driven. Je mets le récap dans Olenbee (dominant) ou je split ?
+   > On a touché Olenbee et le plugin driven. Je mets le récap dans Olenbee (dominant) ou je fais un récap par projet ?
 
-c. **Génération du prompt de reprise** : dense et concis (cf section suivante). Présenté à l'user en fin de message dans un code block, prêt à copier-coller.
+e. **Génération du prompt de reprise** : 6 blocs denses (cf section suivante). Présenté à l'user en fin de message dans un code block, prêt à copier-coller.
 
 ### 4. Si user refuse
 
@@ -83,33 +114,48 @@ User lance un nouveau `claude` dans le terminal (ou nouveau pane / nouveau termi
 
 ## Format du prompt de reprise
 
-5 blocs **denses et concis**. Cible : 12-18 lignes max. Le user doit pouvoir le lire en 10 secondes.
+6 blocs **denses, vérifiables, sans inférence implicite**. Cible : 20-35 lignes selon le volume de C1 disponible. Le user doit pouvoir le lire en 15 secondes ; la nouvelle session doit pouvoir vérifier chaque ligne contre une source.
 
-```markdown
+````markdown
 On reprend [Nom du projet].
 
-## État actuel
-[1-2 phrases : où on en est exactement.]
+## Sources à lire en priorité (paths réels)
+- [path/mémoire-récap.md] — tri C1 détaillé de la session précédente
+- [path/fichier-touché.md] — [raison concise]
+- [autre source vérifiable : Message-ID Gmail, URL, ID document, output tool]
 
-## Documents à charger
-- [path/mémoire-récap.md] — état détaillé de la session précédente
-- [path/autre-fichier.md] — [raison concise]
+## Faits 100% certains (vérifiés contre sources)
+- [Fait C1] (vérifié dans [path:section] ou [Message-ID] ou [tool output daté])
+- [Fait C1] (vérifié dans [...])
 
-## Locks structurants
-- [décision verrouillée 1]
-- [décision verrouillée 2]
+## Décisions actées (validées par user le DD/MM/YYYY)
+- [Arbitrage tranché 1]
+- [Arbitrage tranché 2]
+
+## NON inscrit volontairement (à reconstruire / re-vérifier)
+- [Inférence C2 utile — instruction : re-déduire par lecture de X]
+- [Détail C3 oublié — instruction : re-vérifier par lecture directe de Y]
+- [Hypothèse non sourcée — instruction : escalader à user si nécessaire]
 
 ## Action immédiate
 [1 phrase concrète : par quoi commencer.]
-```
+
+## Instructions pour la nouvelle session
+- Lire impérativement les sources listées avant toute proposition
+- Re-vérifier directement la cohérence des faits listés ; pas de confiance aveugle au handoff
+- Si point flou ou inférence à trancher : demander via AskUserQuestion, ne pas inférer silencieusement
+- Le handoff est un raccourci de contexte, pas un onboarding complet — doctrine driven, cascade Personal OS, conventions globales restent à charger via CLAUDE.md / RULES.md / USER.md habituels
+````
 
 ### Règles d'écriture
 
 - **Identification** : nom court du projet, pas de jargon technique.
-- **État actuel** : factuel, sans émotion. Phrase nominale acceptable.
-- **Documents à charger** : 1 à 3 maximum. Chaque ligne = path + raison ultra-courte. La mémoire de récap est citée en premier — c'est le pivot qui contient le détail.
-- **Locks structurants** : 2 à 4 bullets max. Décisions verrouillées critiques pour ne pas re-débattre dans la nouvelle session.
+- **Sources à lire en priorité** : 2 à 5 paths / IDs concrets, chacun vérifiable directement par la nouvelle session. La mémoire de récap est citée en premier — c'est le pivot qui contient le tri C1 complet.
+- **Faits 100% certains** : exclusivement du C1. Chaque ligne porte son pointeur source entre parenthèses. Pas de fait sans source. Si pas de pointeur listable → le fait bascule en « NON inscrit volontairement ».
+- **Décisions actées** : arbitrages explicitement tranchés par user au cours de la session, avec date si possible. Distinct des faits C1 car porte un acte de validation conversationnelle, pas une vérifiabilité technique d'état du monde.
+- **NON inscrit volontairement** : explicite ce qui était candidat mais classé C2 / C3. Sans cette section, la nouvelle session ignore qu'elle hérite d'un contexte tronqué et peut prendre les inférences précédentes pour acquises. Chaque ligne porte une instruction d'action concrète (re-déduire, re-vérifier par lecture, escalader).
 - **Action immédiate** : une seule chose à faire en premier. Pas de liste à puces, une phrase concrète.
+- **Instructions pour la nouvelle session** : bullets méta d'orientation, pas du contenu. Rappelle que le handoff est un raccourci, pas un onboarding.
 
 ### Ce que le prompt ne dit PAS
 
@@ -117,8 +163,9 @@ On reprend [Nom du projet].
 - Ne liste pas les principes invariants (le plugin les charge automatiquement).
 - Ne donne pas le ton ou la voix attendus (le plugin + SOUL.md s'en chargent).
 - Ne décrit pas la structure du workspace (le plugin la découvre via lecture-arborescente).
+- Ne formule pas d'inférence non sourcée comme fait acquis — C2 va dans « NON inscrit volontairement », pas dans « Faits ».
 
-Le prompt est un **raccourci de contexte**, pas un onboarding complet.
+Le prompt est un **raccourci de contexte vérifiable**, pas un onboarding complet.
 
 ## Recap user après wrap-up
 
@@ -137,9 +184,14 @@ Pas plus. Le user voit la mémoire créée, le prompt prêt, et sait quoi faire 
 - **Re-proposer trop souvent** : strictement 10 échanges entre relances, pas plus serré.
 - **Forcer la décision** : c'est une proposition, pas une obligation. Si user refuse définitivement, respecter.
 - **Inventer une saturation** : si aucun des 4 signaux n'est présent, ne pas proposer. Pas de paranoïa préventive.
-- **Prompt verbeux** : > 25 lignes = échec. Le user doit lire en 10 secondes max.
+- **Prompt verbeux** : > 40 lignes = échec. Lisible en 15 secondes max par user.
 - **Wrap-up générique** : la mémoire de récap doit capturer ce qui s'est passé en session de manière factuelle et précise, pas un résumé corporate vague.
 - **Proposer en mode routine** : violation absolue. Si Claude tourne en /loop, /schedule ou comme sub-agent, jamais de proposition.
+- **Skipper le TaskCreate de tri** : forcing aligné §7.2 SKILL.md. Produire le wrap-up sans tri préalable contamine la nouvelle session avec des inférences présentées comme des faits.
+- **Mélanger C1 et C2 dans « Faits »** : inscrire une inférence comme un fait crée un drift silencieux dans la nouvelle session. Le tri est strict ; en cas de doute → C2.
+- **Fait sans pointeur source** : un fait dans « Faits 100% certains » doit pouvoir être vérifié par la nouvelle session. Si pas de path / Message-ID / URL / ID / output tool listable → ce n'est pas un C1, bascule en « NON inscrit volontairement ».
+- **Omettre « NON inscrit volontairement »** : sans cette section, la nouvelle session ignore qu'elle hérite d'un contexte tronqué. La section explicite le trou et donne l'instruction de comblement.
+- **Pointeur source vague** (« on en a parlé », « tu m'as dit ») : pas un pointeur. Un pointeur est localisable indépendamment de la session courante.
 
 ## Bivalence Code / Cowork
 
@@ -150,3 +202,4 @@ Pas plus. Le user voit la mémoire créée, le prompt prêt, et sait quoi faire 
 | Multi-folder préservé | Via `additionalDirectories` du `settings.json` | Via le Project actuel |
 | Prompt de reprise | Collé en premier message | Collé en premier message |
 | `/compact` disponible | Oui | Oui mais perd la scrollable history (non recommandé) |
+| TaskCreate forcing du tri | Tool natif | Tool natif via plugin |

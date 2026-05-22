@@ -1,6 +1,6 @@
 {
   "name": "driven",
-  "version": "1.5.3",
+  "version": "1.6.0",
   "description": "Compagnon de workspaces collaboratifs Claude — capture mémoire timestampée, factualité en collectif, cross-author, propagation, maintenance des fichiers normatifs. Activé automatiquement dans un workspace dont le CLAUDE.md racine porte un frontmatter space-type. Patterns proactifs A et B (setup-dossier, capitalise-workflow) et doctrine AskUserQuestion actifs partout.",
   "author": {
     "name": "Drivenlabs",

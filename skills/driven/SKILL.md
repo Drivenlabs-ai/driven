@@ -9,7 +9,8 @@ description: >
   Desktop) : capture mémoire timestampée, cross-author, propagation silencieuse,
   routage de l'information, maintenance holistique des fichiers normatifs. Activer
   quand l'utilisateur dit 'retiens ça', 'note ce truc', 'on a décidé que', 'rdv avec',
-  'X m'a dit', 'je veux retenir' ; quand il crée un fichier dans un workspace driven ;
+  'X m'a dit', 'je veux retenir', 'on bascule', 'nouvelle session', 'fais le récap pour
+  reprendre', 'prépare le handoff' ; quand il crée un fichier dans un workspace driven ;
   quand il modifie un RULES.md, CONTRIBUTING.md, CLAUDE.md, SOUL.md, ME.md, VOICE.md
   ou ABOUT.md ; quand il mentionne une entité (personne ou organisation) qui mérite
   un document. Lire RULES local + invariants embarqués. Ne jamais exposer le jargon
@@ -185,13 +186,14 @@ Le plugin observe les signaux disponibles dans l'environnement et adapte ses com
 
 ### 6.1 Triggers user (mécanisme de forcing : TaskCreate obligatoire)
 
-Les 3 triggers user activent un TaskCreate `Lire <refs>` AVANT toute action de modification. Cf §7 pour le scan multi-trigger préalable qui peut élargir les refs à charger.
+Les 4 triggers user activent un TaskCreate `Lire <refs>` AVANT toute action de modification. Cf §7 pour le scan multi-trigger préalable qui peut élargir les refs à charger.
 
 | Trigger | Détection | References à charger |
 |---|---|---|
 | **Création de fichier** | `Write` sur path inexistant, workspace driven | `scope-check.md`, `frontmatter.md`, `links.md` si mentions entités |
 | **Demande de retenir une info** | Phrases NL : « retiens ça », « note ça », « garde une trace », « je veux retenir » | `memory.md`, `factualite.md` si shared, `links.md` si mentions |
 | **Modification d'un fichier de règle** | `Edit`/`Write` sur RULES.md, RULES/*.md, CONTRIBUTING.md, CLAUDE.md, SOUL.md, ME.md, VOICE.md, ABOUT.md | `maintenance-fichiers-racines.md` + référence dédiée au type de fichier, `propagation.md` |
+| **Demande de handoff de session** | Phrases NL : « on bascule », « nouvelle session », « fais le récap pour reprendre », « prépare le handoff », OU saturation §6.2 acceptée par user | `session-handoff.md` (forcing additionnel : TaskCreate `Trier infos en 3 catégories` avant production du récap, cf doctrine anti-drift de la ref) |
 
 ### 6.2 Signaux de support (refs ⭐ transverses attachées)
 
@@ -209,7 +211,7 @@ Chaque ref ⭐ transverse a un signal d'activation observable. Quand le signal e
 | Mention d'entité avec rôle structurant + contexte business + non-banalité | `links.md` + `proactivite.md` | Option selon convention de l'espace observée |
 | ≥ 2 signaux conversationnels de capitalisation en fin de session | `capitalise-workflow.md` | 3 options de routage |
 | Fact-drop business (verbe passé sur entité, décision future, opinion, découverte) | `proactivite.md` | Proposition NL de capture |
-| Saturation conversationnelle (> 40 échanges, > 10 tool-heavy, pluri-sujets, agacement) | `session-handoff.md` | Proposition bascule nouvelle session |
+| Saturation conversationnelle (> 40 échanges, > 10 tool-heavy, pluri-sujets, agacement) | `session-handoff.md` | Proposition bascule nouvelle session. Si user accepte → bascule en trigger §6.1 (forcing TaskCreate tri 3 catégories avant wrap-up) |
 | Sensible RH détecté (jugement RH, débauchage, NDA, vie privée tiers, dossier disciplinaire, préférences cachées) | `memory.md` §sensibles + `routage.md` | Routage personal (« ailleurs juste pour toi ») |
 | Cross-author shared (email user ∉ frontmatter `authors`) | `cross-author.md` | Question NL « Ce document est de X. Tu continues ? » |
 
@@ -240,9 +242,11 @@ Avant toute action sur un input user, scanner mentalement les **6 dimensions** s
 
 ### 7.2 Mécanisme de forcing
 
-Sur les 3 triggers user explicites du §6.1 (création fichier / retiens / modif règle), créer un TaskCreate `Lire <refs>` AVANT toute action de modification.
+Sur les 4 triggers user explicites du §6.1 (création fichier / retiens / modif règle / handoff session), créer un TaskCreate `Lire <refs>` AVANT toute action de modification.
 
 Le Task de lecture passe à `completed` SEULEMENT après les Read tool calls effectifs (pas de marquage prématuré).
+
+Pour le trigger handoff, un second TaskCreate `Trier infos en 3 catégories` s'enchaîne après lecture de `session-handoff.md` et avant production du récap (cf doctrine anti-drift de la ref).
 
 Pour les supports auto (§6.2), le scan reste mental sans TaskCreate (pas de pollution TaskList sur petits inputs).
 
