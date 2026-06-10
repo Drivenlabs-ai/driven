@@ -104,6 +104,8 @@ Quand tu écris un markdown normatif (CLAUDE.md, RULES.md, fichier de règle d'u
 
 **Anti-pattern** : sous-utiliser `@` sur un fichier de doctrine essentielle → Claude redécouvre les principes à chaque lecture du parent, drift comportemental.
 
+Fondement chiffré de cette doctrine — mécanique réelle de chargement (coût du `@`, lazy loading, compaction, cibles de taille officielles, table d'arbitrage de placement) : `references/gestion-contexte.md`.
+
 ---
 
 ## 2bis. Doctrine AskUserQuestion par défaut
@@ -208,6 +210,7 @@ Chaque ref ⭐ transverse a un signal d'activation observable. Quand le signal e
 | Convention scopée à un dossier (universel + intemporel dans le scope) | `lessons.md` | Section Lessons dans CLAUDE.md du dossier |
 | Proposition stratégique sur sujet avec mémoires antérieures (« je pense », « on pourrait », « tu devrais ») | `challenge-anti-recidive.md` | Cascade lessons + mémoires |
 | Pattern fichier `*(<n>).md` détecté | `drive-conflicts.md` | 3 options résolution NL |
+| Découpage / extraction / refonte structurelle d'un fichier normatif, audit de bloat, ou arbitrage de chargement (`@` vs lien vs skill vs règle scopée) | `gestion-contexte.md` | Arbitrer le placement avec la mécanique réelle de chargement (table §5 de la ref) |
 | Mention d'entité avec rôle structurant + contexte business + non-banalité | `links.md` + `proactivite.md` | Option selon convention de l'espace observée |
 | ≥ 2 signaux conversationnels de capitalisation en fin de session | `capitalise-workflow.md` | 3 options de routage |
 | Fact-drop business (verbe passé sur entité, décision future, opinion, découverte) | `proactivite.md` | Proposition NL de capture |
@@ -283,7 +286,7 @@ Afficher un récap du contexte courant :
 | Argument | Action | Reference principale |
 |---|---|---|
 | `search` | Recherche BM25 dans les mémoires | `interface-cli.md` + invocation `scripts/search_memories.py` |
-| `audit` | Audit holistique du CLAUDE.md racine et de ses sections | `audit-sections.md` |
+| `audit` | Audit holistique du CLAUDE.md racine et de ses sections | `audit-sections.md` + `gestion-contexte.md` |
 | `migrate` | Migration d'une note du personal vers un shared | `cross-author.md`, `factualite.md` |
 | `setup-doc` | Création guidée d'un nouveau document structuré | `frontmatter.md`, `routage.md` |
 
@@ -362,6 +365,7 @@ Toutes les references vivent dans `${CLAUDE_PLUGIN_ROOT}/skills/driven/reference
 - `capitalise-workflow.md` — Charger en fin de session si ≥ 2 signaux de capitalisation (signal §6.2).
 - `askuserquestion.md` — Charger DÈS qu'une décision user-facing existe OU ≥ 2 actions proposées dans la même réponse (signal §6.2).
 - `routage.md` — Charger AVANT toute décision de placement d'info ambiguë (signal §6.2).
+- `gestion-contexte.md` — Charger AVANT tout arbitrage de structure de chargement : découpage, `@` vs lien, extraction vers skill, audit de bloat (signal §6.2).
 - `maintenance-fichiers-racines.md` — Charger AVANT toute modif de fichier normatif (trigger user §6.1).
 - `lessons.md` — Charger AVANT toute création de section Lessons scopée (signal §6.2).
 - `challenge-anti-recidive.md` — Charger AVANT toute proposition stratégique sur sujet avec mémoires antérieures (signal §6.2).
