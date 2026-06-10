@@ -17,7 +17,7 @@ Activé quand user dit :
 Le user ne tape jamais le frontmatter. Claude infère silencieusement :
 
 1. **Scope**, perso vs shared, et lequel. Voir `scope-check.md`.
-2. **Dossier cible**, chercher le `memory/` du dossier thématique pertinent (ex `Clients/Olenbee/memory/`). Si absent → créer le dossier. Si le sujet est transverse → choisir le dossier qui colle le mieux ou demander en NL. Dans un projet code (repo git hors workspace driven), pas de choix : `memory/` à la racine du repo, cf `memoire-projet-code.md`.
+2. **Dossier cible**, chercher le `memory/` du dossier thématique pertinent (ex `Clients/Olenbee/memory/`). Si absent → créer le dossier. Si le sujet est transverse → choisir le dossier qui colle le mieux ou demander en NL. Dans un projet code (repo git hors workspace driven), pas de choix : `.memory/` à la racine du repo, cf `memoire-projet-code.md`.
 3. **Lecture proactive des dernières mémoires du dossier cible**, par souci de cohérence. Claude juge le volume selon l'activité du dossier :
    - Dossier neuf (< 5 mémoires) → toutes lues.
    - Dossier modéré (5-30 mémoires) → 5 plus récentes (tri lexico = tri chrono).
