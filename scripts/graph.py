@@ -74,3 +74,48 @@ def infer_kind(path: Path, fm: dict[str, Any]) -> str:
     if path.stem.isupper():
         return "normative"
     return "content"
+
+
+# Lien markdown [texte](cible) — cible capturée jusqu'à la première parenthèse.
+_LINK_RE = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
+# Référence @ : début de ligne ou précédée d'un espace, cible se terminant par .md.
+# Le lookbehind sur un non-espace exclut les emails (alex@domaine.md n'existe pas,
+# mais la borne gauche garantit qu'on ne capte pas le @ au milieu d'un mot).
+_AT_RE = re.compile(r"(?:^|(?<=\s))@([^\s)#]+\.md)")
+
+_EXTERNAL_PREFIXES = ("http://", "https://", "mailto:")
+
+
+def is_external(raw: str) -> bool:
+    """True si la cible est une URL externe (jamais un nœud du workspace)."""
+    return raw.strip().lower().startswith(_EXTERNAL_PREFIXES)
+
+
+def extract_links(text: str) -> list[tuple[str, int]]:
+    """
+    Retourne les liens markdown [(cible_brute, numéro_de_ligne)].
+
+    Ne garde que les cibles externes (filtrées plus tard) ou se terminant par
+    '.md' (après suppression d'une éventuelle ancre #...). Les liens vers un
+    dossier sans .md sont ignorés (jamais une arête, jamais un cassé).
+    """
+    out: list[tuple[str, int]] = []
+    for lineno, line in enumerate(text.split("\n"), start=1):
+        for m in _LINK_RE.finditer(line):
+            raw = m.group(1).strip()
+            if is_external(raw):
+                out.append((raw, lineno))
+                continue
+            target = raw.split("#", 1)[0].strip()
+            if target.lower().endswith(".md"):
+                out.append((raw, lineno))
+    return out
+
+
+def extract_at_refs(text: str) -> list[tuple[str, int]]:
+    """Retourne les références @fichier.md [(cible_brute, numéro_de_ligne)]."""
+    out: list[tuple[str, int]] = []
+    for lineno, line in enumerate(text.split("\n"), start=1):
+        for m in _AT_RE.finditer(line):
+            out.append((m.group(1).strip(), lineno))
+    return out
