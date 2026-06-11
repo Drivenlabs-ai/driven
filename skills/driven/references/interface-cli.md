@@ -33,6 +33,8 @@ Adapté au workspace détecté (perso vs shared, fichiers présents).
 | Argument | Action |
 |---|---|
 | `/driven search "query"` | Recherche BM25 dans les mémoires du scope courant. Invocation du script Python. |
+| `/driven explain "entité"` | Fiche d'une entité : ses liens, arêtes et mémoires connexes. Invocation de `scripts/graph.py explain`. |
+| `/driven path "A" "B"` | Plus court chemin entre deux entités du workspace. Invocation de `scripts/graph.py path`. |
 | `/driven audit` | Audit holistique du CLAUDE.md racine et de ses sections (cf `audit-sections.md`). |
 | `/driven audit [fichier]` | Audit d'un fichier spécifique. |
 | `/driven migrate` | Migration d'une note du personal vers un shared (cross-author simplified, factualité proposée). |
@@ -100,6 +102,17 @@ J'ai trouvé 5 mémoires pertinentes sur le pricing Olenbee :
 
 Tu veux que je détaille une mémoire en particulier ?
 ```
+
+## `/driven explain` et `/driven path` : invocation du script graphe
+
+Mapping vers `scripts/graph.py` (cf `graphe.md` pour le détail des sous-commandes et le format de restitution) :
+
+```
+/driven explain "Olenbee"      → python "${CLAUDE_PLUGIN_ROOT}/scripts/graph.py" explain "Olenbee" --scope=<racine>
+/driven path "Olenbee" "Acme"  → python "${CLAUDE_PLUGIN_ROOT}/scripts/graph.py" path "Olenbee" "Acme" --scope=<racine>
+```
+
+Restitution en NL (jamais le JSON brut) : fiche lisible avec liens markdown pour `explain`, chaîne de connexions pour `path`. Si le résultat est ambigu (plusieurs candidats), demander en NL lequel.
 
 ## Comportement quand workspace non-driven
 

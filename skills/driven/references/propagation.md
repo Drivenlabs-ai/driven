@@ -34,13 +34,13 @@ Une seule question, langage naturel, jamais de menu technique. Si user dit oui, 
 Le cas le plus fréquent. Workflow :
 
 1. User demande de renommer un fichier ou un dossier (ex `Clients/Olenbee/` → `Clients/Olenbee-Mature/`).
-2. Plugin scanne tout le workspace pour les liens markdown qui pointent vers l'ancien path.
+2. Invoquer `scripts/graph.py impact <ancien-path>` pour obtenir les liens entrants typés (cf `graphe.md`). Si le script échoue, retomber sur un grep du path littéral.
 3. Avec ≤ 50 liens à regénérer : cascade silencieuse, recap minimal.
 4. Avec > 50 liens : demande de validation en NL avant exécution (volume = risque).
-5. Renommage effectif.
+5. Renommage effectif + regen des liens vers le nouveau path.
 6. Memory entry créée dans le `memory/` du parent commun, documentant le renommage et la liste des fichiers impactés.
 
-Le scan se fait via grep sur le path littéral. Pour éviter les faux positifs sur les sous-strings : pattern strict avec `(` avant et `)` après.
+Le recap distingue les types d'arête : un lien `at-ref` (`@fichier`) cassé est un chargement transitif rompu, signalé plus fortement qu'un lien markdown simple. Exemple : *« renommé Olenbee, mis à jour 2 chargements obligatoires et 12 liens. »*
 
 ## Cascade vers les memory entries
 
