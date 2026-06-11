@@ -260,6 +260,36 @@ def _add_edge_or_broken(
     g.broken.append({"source": source_rel, "target": raw, "line": line, "ref_type": ref_type})
 
 
+def _keywords_set(fm: dict[str, Any]) -> set[str]:
+    """Normalise le champ keywords en set de chaînes minuscules."""
+    raw = fm.get("keywords", [])
+    if isinstance(raw, str):
+        raw = [raw]
+    elif not isinstance(raw, list):
+        raw = []
+    return {str(k).strip().lower() for k in raw if str(k).strip()}
+
+
 def compute_affinity(nodes: dict[str, dict[str, Any]]) -> list[Edge]:
-    """Arêtes faibles entre mémoires d'un même sujet. Implémenté en Task 5."""
-    return []
+    """
+    Arêtes 'affinity' (non orientées) entre mémoires d'un même sujet.
+
+    Critère (alternatif) : même topic non vide, OU au moins 2 keywords communs.
+    Une seule arête par paire, ordre canonique source < target.
+    """
+    memories = sorted(
+        rel for rel, n in nodes.items() if n.get("kind") == "memory"
+    )
+    out: list[Edge] = []
+    for i, a in enumerate(memories):
+        fm_a = nodes[a]["frontmatter"]
+        topic_a = str(fm_a.get("topic", "")).strip().lower()
+        kw_a = _keywords_set(fm_a)
+        for b in memories[i + 1:]:
+            fm_b = nodes[b]["frontmatter"]
+            topic_b = str(fm_b.get("topic", "")).strip().lower()
+            same_topic = bool(topic_a) and topic_a == topic_b
+            shared_kw = len(kw_a & _keywords_set(fm_b)) >= 2
+            if same_topic or shared_kw:
+                out.append(Edge(a, b, "affinity", None))
+    return out

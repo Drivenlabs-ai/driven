@@ -78,3 +78,39 @@ def test_build_lien_vers_fichier_exclu_ni_arete_ni_casse(tmp_path):
     g = graph.build_graph(root, root)
     assert all(".claude/note.md" not in e.target for e in g.edges)
     assert all(".claude/note.md" not in b["target"] for b in g.broken)
+
+
+def test_affinity_meme_topic(workspace):
+    g = graph.build_graph(workspace, workspace)
+    aff = _edges(g, "affinity")
+    a = "Clients/Olenbee/memory/2026-05-11-1430-mael-decision-pricing.md"
+    b = "Clients/Olenbee/memory/2026-05-14-0900-mael-revision-pricing.md"
+    assert any({e.source, e.target} == {a, b} for e in aff)
+
+
+def test_affinity_pas_de_lien_sujets_distincts(workspace):
+    g = graph.build_graph(workspace, workspace)
+    aff = _edges(g, "affinity")
+    rdv = "Clients/Olenbee/memory/2026-06-01-1000-alex-rdv.md"
+    pricing = "Clients/Olenbee/memory/2026-05-11-1430-mael-decision-pricing.md"
+    # rdv (topic laurent, 0 keyword commun) n'a pas d'affinité avec le pricing.
+    assert not any({e.source, e.target} == {rdv, pricing} for e in aff)
+
+
+def test_affinity_declenchee_par_keywords_seuls():
+    nodes = {
+        "a.md": {"kind": "memory", "frontmatter": {"topic": "x", "keywords": ["k1", "k2", "k3"]}, "title": "", "path": "a.md"},
+        "b.md": {"kind": "memory", "frontmatter": {"topic": "y", "keywords": ["k1", "k2", "k9"]}, "title": "", "path": "b.md"},
+    }
+    aff = graph.compute_affinity(nodes)
+    # Topics différents (x vs y) mais 2 keywords communs (k1, k2) → affinité.
+    assert len(aff) == 1
+    assert {aff[0].source, aff[0].target} == {"a.md", "b.md"}
+
+
+def test_affinity_un_seul_keyword_commun_insuffisant():
+    nodes = {
+        "a.md": {"kind": "memory", "frontmatter": {"topic": "x", "keywords": ["k1", "k2"]}, "title": "", "path": "a.md"},
+        "b.md": {"kind": "memory", "frontmatter": {"topic": "y", "keywords": ["k1", "k9"]}, "title": "", "path": "b.md"},
+    }
+    assert graph.compute_affinity(nodes) == []
