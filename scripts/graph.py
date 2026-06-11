@@ -119,3 +119,42 @@ def extract_at_refs(text: str) -> list[tuple[str, int]]:
         for m in _AT_RE.finditer(line):
             out.append((m.group(1).strip(), lineno))
     return out
+
+
+def resolve_target(raw: str, source: Path, root: Path) -> Path | None:
+    """
+    Résout une cible de lien/at-ref en chemin absolu existant.
+
+    Essaie d'abord relatif au dossier du fichier source, puis relatif à la
+    racine du workspace. Retourne None si aucune cible existante (lien cassé).
+    L'ancre #fragment est ignorée.
+    """
+    target = raw.split("#", 1)[0].strip()
+    if not target:
+        return None
+    candidate = (source.parent / target).resolve()
+    if candidate.is_file():
+        return candidate
+    candidate = (root / target).resolve()
+    if candidate.is_file():
+        return candidate
+    return None
+
+
+def find_workspace_root(scope: Path) -> Path | None:
+    """
+    Remonte depuis scope jusqu'à un CLAUDE.md portant un frontmatter space-type.
+
+    Retourne la racine résolue, ou None si aucune racine driven trouvée.
+    """
+    current = scope.resolve()
+    for candidate in [current, *current.parents]:
+        claude = candidate / "CLAUDE.md"
+        if claude.is_file():
+            try:
+                fm, _ = parse_frontmatter(claude.read_text(encoding="utf-8"))
+            except (OSError, UnicodeDecodeError):
+                fm = {}
+            if "space-type" in fm:
+                return candidate
+    return None
