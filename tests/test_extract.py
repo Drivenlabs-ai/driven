@@ -1,0 +1,49 @@
+"""Tests des fonctions pures de parsing et d'inférence de graph.py."""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+import graph
+
+
+def test_parse_frontmatter_valid():
+    content = "---\ntopic: pricing\n---\n\n# Titre\n\nCorps.\n"
+    fm, body = graph.parse_frontmatter(content)
+    assert fm == {"topic": "pricing"}
+    assert body.startswith("# Titre")
+
+
+def test_parse_frontmatter_absent():
+    content = "# Pas de frontmatter\n"
+    fm, body = graph.parse_frontmatter(content)
+    assert fm == {}
+    assert body == content
+
+
+def test_parse_frontmatter_corrompu_ne_leve_pas():
+    content = "---\ntopic: [unclosed\n---\n\n# Titre\n"
+    fm, body = graph.parse_frontmatter(content)
+    assert fm == {}
+    assert body == content
+
+
+def test_extract_h1():
+    assert graph.extract_h1("Intro\n\n# Mon Titre\n\n## Section\n") == "Mon Titre"
+    assert graph.extract_h1("Pas de titre.\n") == ""
+
+
+def test_infer_kind_memory():
+    p = Path("Clients/Olenbee/memory/2026-05-11-1430-mael-decision.md")
+    assert graph.infer_kind(p, {"date": "2026-05-11"}) == "memory"
+
+
+def test_infer_kind_normative():
+    assert graph.infer_kind(Path("RULES.md"), {}) == "normative"
+    assert graph.infer_kind(Path("Clients/Acme/CLAUDE.md"), {}) == "normative"
+
+
+def test_infer_kind_content():
+    assert graph.infer_kind(Path("Drivenlabs/positioning.md"), {}) == "content"
+    # Un fichier dans memory/ SANS date n'est pas une mémoire.
+    assert graph.infer_kind(Path("x/memory/draft.md"), {}) == "content"
