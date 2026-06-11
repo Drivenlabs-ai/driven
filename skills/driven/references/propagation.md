@@ -11,7 +11,7 @@ Réservée aux changements qui ne portent pas de jugement de fond :
 | Write/Edit sur un fichier shared | Update du `last-updated` dans le frontmatter |
 | Cross-author validé | Ajout de l'email user dans `authors` du fichier édité |
 | Création / suppression / renommage d'un fichier dans un dossier | Regen de la section `## Index` du `CLAUDE.md` racine ou du dossier parent qui maintient l'index |
-| Renommage de fichier | Scan des liens entrants dans le workspace + regen automatique vers le nouveau path |
+| Renommage de fichier | `scripts/graph.py impact` pour les liens entrants + regen automatique vers le nouveau path |
 | Création d'une memory entry | Auto cross-link vers mémoires connexes du voisinage (cf `references/links.md`) |
 
 Le user voit le recap minimal : *« OK, j'ai renommé Olenbee et mis à jour les 14 liens. »* Pas de validation par cascade, le user attend ce comportement par défaut.

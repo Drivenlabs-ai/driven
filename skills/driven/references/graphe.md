@@ -27,7 +27,7 @@ python "${CLAUDE_PLUGIN_ROOT}/scripts/graph.py" <commande> [args] --scope "<raci
 
 ## Résolution ambiguë
 
-Si `explain` ou `path` retourne `resolved: null` (ou `ambiguous: true`) avec une liste de `candidates`, le script n'a pas tranché. Choisir selon le contexte de la tâche, ou demander en NL au user (« Tu parles du contact Laurent ou de la note du RDV ? »). Ne jamais deviner en silence.
+Si `explain` retourne `resolved: null` avec une liste `candidates`, ou si `path` retourne `ambiguous: true` avec `candidates_a` / `candidates_b`, le script n'a pas tranché. Choisir selon le contexte de la tâche, ou demander en NL au user (« Tu parles du contact Laurent ou de la note du RDV ? »). Ne jamais deviner en silence.
 
 ## Restitution NL
 
