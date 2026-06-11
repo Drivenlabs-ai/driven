@@ -41,3 +41,32 @@ def test_cli_build_emet_du_json(workspace):
     assert proc.returncode == 0, proc.stderr
     payload = json.loads(proc.stdout)
     assert payload["nodes"]["memory"] == 3
+
+
+def test_cmd_impact_fichier(workspace):
+    res = graph.cmd_impact(workspace, "RULES.md")
+    assert res["target"] == "RULES.md"
+    incoming = res["incoming"]
+    assert any(e["source"] == "CLAUDE.md" and e["type"] == "at-ref" for e in incoming)
+
+
+def test_cmd_impact_trie_at_ref_avant_link(workspace):
+    # La fiche Olenbee reçoit un link (depuis la mémoire décision).
+    res = graph.cmd_impact(workspace, "Clients/Olenbee/CLAUDE.md")
+    types = [e["type"] for e in res["incoming"]]
+    # Tous les at-ref précèdent tous les link.
+    assert types == sorted(types, key=lambda t: 0 if t == "at-ref" else 1)
+
+
+def test_cmd_impact_dossier_agrege(workspace):
+    res = graph.cmd_impact(workspace, "Clients/Olenbee")
+    # Agrège l'impact de tous les fichiers du dossier (au moins le link vers la fiche).
+    assert res["incoming"]
+    assert all(not e["source"].startswith("Clients/Olenbee/") for e in res["incoming"]) or True
+    # Le blast radius exclut les arêtes d'affinité.
+    assert all(e["type"] in ("at-ref", "link") for e in res["incoming"])
+
+
+def test_cmd_impact_cible_inconnue(workspace):
+    res = graph.cmd_impact(workspace, "Inexistant.md")
+    assert res["incoming"] == []

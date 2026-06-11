@@ -348,6 +348,36 @@ def cmd_build(scope: Path) -> dict[str, Any]:
     }
 
 
+_TYPE_ORDER = {"at-ref": 0, "link": 1, "affinity": 2}
+
+
+def cmd_impact(scope: Path, target: str) -> dict[str, Any]:
+    """
+    Liens entrants vers `target` (fichier ou dossier). Le blast radius.
+
+    Exclut les arêtes d'affinité (seules les références structurelles cassent au
+    renommage). Tri : at-ref avant link, puis par source. Pour un dossier, agrège
+    l'impact de tous les fichiers qu'il contient.
+    """
+    root = _resolve_root(scope)
+    g = build_graph(scope, root)
+    target = target.strip("/")
+    is_dir_target = not target.lower().endswith(".md")
+
+    def matches(edge_target: str) -> bool:
+        if is_dir_target:
+            return edge_target == target or edge_target.startswith(target + "/")
+        return edge_target == target
+
+    incoming = [
+        {"source": e.source, "type": e.type, "line": e.line, "to": e.target}
+        for e in g.edges
+        if e.type != "affinity" and matches(e.target)
+    ]
+    incoming.sort(key=lambda e: (_TYPE_ORDER[e["type"]], e["source"]))
+    return {"target": target, "incoming": incoming, "count": len(incoming)}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Index de graphe structurel d'un workspace driven.",
@@ -359,12 +389,18 @@ def main() -> None:
     p_build = sub.add_parser("build", help="Construit le graphe et écrit le cache.")
     p_build.add_argument("--scope", type=Path, default=Path.cwd())
 
+    p_impact = sub.add_parser("impact", help="Liens entrants vers un fichier/dossier.")
+    p_impact.add_argument("target")
+    p_impact.add_argument("--scope", type=Path, default=Path.cwd())
+
     args = parser.parse_args()
     scope = args.scope.resolve()
 
     if args.command == "build":
         result = cmd_build(scope)
-    else:  # pragma: no cover — sous-commandes ajoutées aux tasks suivantes
+    elif args.command == "impact":
+        result = cmd_impact(scope, args.target)
+    else:  # pragma: no cover
         parser.error(f"unknown command: {args.command}")
 
     print(json.dumps(result, ensure_ascii=False, indent=2, default=_json_default))
