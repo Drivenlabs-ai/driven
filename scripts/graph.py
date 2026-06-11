@@ -443,6 +443,71 @@ def cmd_explain(scope: Path, query: str) -> dict[str, Any]:
     }
 
 
+def _resolve_single(g: Graph, query: str) -> tuple[str | None, list[str]]:
+    """Résout query en un nœud unique. Retourne (path|None, candidats)."""
+    if query in g.nodes:
+        return query, [query]
+    matches = resolve_name(g, query)
+    if len(matches) == 1:
+        return matches[0], matches
+    return None, matches
+
+
+def cmd_path(scope: Path, a: str, b: str) -> dict[str, Any]:
+    """
+    Plus court chemin (BFS non orienté) entre deux nœuds, tous types d'arêtes.
+
+    Si une extrémité est ambiguë ou introuvable, retourne connected=False avec
+    les candidats. Sinon, le chemin de nœuds et la séquence d'arêtes traversées.
+    """
+    root = _resolve_root(scope)
+    g = build_graph(scope, root)
+    start, cand_a = _resolve_single(g, a)
+    end, cand_b = _resolve_single(g, b)
+
+    if start is None or end is None:
+        return {
+            "connected": False, "path": [], "hops": [], "ambiguous": True,
+            "candidates_a": cand_a, "candidates_b": cand_b,
+        }
+
+    # Adjacence non orientée : voisin → type d'arête.
+    adj: dict[str, list[tuple[str, str]]] = {rel: [] for rel in g.nodes}
+    for e in g.edges:
+        adj[e.source].append((e.target, e.type))
+        adj[e.target].append((e.source, e.type))
+
+    # BFS, en mémorisant le prédécesseur et le type d'arête emprunté.
+    prev: dict[str, tuple[str, str]] = {}
+    queue = [start]
+    seen = {start}
+    while queue:
+        node = queue.pop(0)
+        if node == end:
+            break
+        for neighbor, etype in adj[node]:
+            if neighbor not in seen:
+                seen.add(neighbor)
+                prev[neighbor] = (node, etype)
+                queue.append(neighbor)
+
+    if end != start and end not in prev:
+        return {"connected": False, "path": [], "hops": []}
+
+    # Reconstruction du chemin.
+    chain = [end]
+    hops: list[dict[str, str]] = []
+    cur = end
+    while cur != start:
+        parent, etype = prev[cur]
+        hops.append({"from": parent, "to": cur, "type": etype})
+        chain.append(parent)
+        cur = parent
+    chain.reverse()
+    hops.reverse()
+    return {"connected": True, "path": chain, "hops": hops}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Index de graphe structurel d'un workspace driven.",
@@ -462,6 +527,11 @@ def main() -> None:
     p_explain.add_argument("query")
     p_explain.add_argument("--scope", type=Path, default=Path.cwd())
 
+    p_path = sub.add_parser("path", help="Plus court chemin entre deux nœuds.")
+    p_path.add_argument("node_a")
+    p_path.add_argument("node_b")
+    p_path.add_argument("--scope", type=Path, default=Path.cwd())
+
     args = parser.parse_args()
     scope = args.scope.resolve()
 
@@ -471,6 +541,8 @@ def main() -> None:
         result = cmd_impact(scope, args.target)
     elif args.command == "explain":
         result = cmd_explain(scope, args.query)
+    elif args.command == "path":
+        result = cmd_path(scope, args.node_a, args.node_b)
     else:  # pragma: no cover
         parser.error(f"unknown command: {args.command}")
 

@@ -113,3 +113,29 @@ def test_resolve_name_requete_vide(workspace):
     g = graph.build_graph(workspace, workspace)
     assert graph.resolve_name(g, "") == []
     assert graph.resolve_name(g, "   ") == []
+
+
+def test_cmd_path_connecte(workspace):
+    res = graph.cmd_path(
+        workspace,
+        "Clients/Olenbee/memory/2026-05-11-1430-mael-decision-pricing.md",
+        "Contacts/laurent.md",
+    )
+    # Chemin attendu : décision → fiche Olenbee → rdv → contact laurent.
+    assert res["connected"] is True
+    assert res["path"][0] == "Clients/Olenbee/memory/2026-05-11-1430-mael-decision-pricing.md"
+    assert res["path"][-1] == "Contacts/laurent.md"
+    assert len(res["hops"]) == len(res["path"]) - 1
+
+
+def test_cmd_path_non_connecte(workspace):
+    res = graph.cmd_path(workspace, "Drivenlabs/positioning.md", "Contacts/laurent.md")
+    assert res["connected"] is False
+    assert res["path"] == []
+
+
+def test_cmd_path_extremite_ambigue(workspace):
+    res = graph.cmd_path(workspace, "laurent", "RULES.md")
+    # "laurent" est ambigu → candidats retournés, pas de chemin.
+    assert res["connected"] is False
+    assert res.get("ambiguous")
