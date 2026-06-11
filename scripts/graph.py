@@ -293,3 +293,82 @@ def compute_affinity(nodes: dict[str, dict[str, Any]]) -> list[Edge]:
             if same_topic or shared_kw:
                 out.append(Edge(a, b, "affinity", None))
     return out
+
+
+def graph_to_dict(g: Graph) -> dict[str, Any]:
+    """Sérialise le graphe en structure JSON."""
+    return {
+        "root": g.root,
+        "nodes": g.nodes,
+        "edges": [{"source": e.source, "target": e.target, "type": e.type, "line": e.line} for e in g.edges],
+        "broken": g.broken,
+    }
+
+
+def _json_default(o: Any) -> Any:
+    """Sérialise les types non-JSON-natifs (date, datetime) en chaîne ISO."""
+    if hasattr(o, "isoformat"):
+        return o.isoformat()
+    raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
+
+
+def write_cache(g: Graph, root: Path) -> None:
+    """Écrit le graphe à <root>/.claude/driven/graph.json. No-op si écriture impossible."""
+    cache = root / ".claude" / "driven" / "graph.json"
+    try:
+        cache.parent.mkdir(parents=True, exist_ok=True)
+        text = json.dumps(graph_to_dict(g), ensure_ascii=False, indent=2, default=_json_default)
+        cache.write_text(text, encoding="utf-8")
+    except OSError as e:
+        print(f"WARN: cache not written ({e})", file=sys.stderr)
+
+
+def _resolve_root(scope: Path) -> Path:
+    """Racine du workspace si détectée, sinon le scope lui-même."""
+    return find_workspace_root(scope) or scope.resolve()
+
+
+def cmd_build(scope: Path) -> dict[str, Any]:
+    """Construit le graphe, écrit le cache, retourne les stats."""
+    root = _resolve_root(scope)
+    g = build_graph(scope, root)
+    write_cache(g, root)
+    node_kinds = {"memory": 0, "normative": 0, "content": 0}
+    for n in g.nodes.values():
+        node_kinds[n["kind"]] = node_kinds.get(n["kind"], 0) + 1
+    edge_types = {"at-ref": 0, "link": 0, "affinity": 0}
+    for e in g.edges:
+        edge_types[e.type] = edge_types.get(e.type, 0) + 1
+    return {
+        "root": g.root,
+        "nodes": node_kinds,
+        "edges": edge_types,
+        "broken_count": len(g.broken),
+        "broken": g.broken,
+    }
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="Index de graphe structurel d'un workspace driven.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=__doc__,
+    )
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    p_build = sub.add_parser("build", help="Construit le graphe et écrit le cache.")
+    p_build.add_argument("--scope", type=Path, default=Path.cwd())
+
+    args = parser.parse_args()
+    scope = args.scope.resolve()
+
+    if args.command == "build":
+        result = cmd_build(scope)
+    else:  # pragma: no cover — sous-commandes ajoutées aux tasks suivantes
+        parser.error(f"unknown command: {args.command}")
+
+    print(json.dumps(result, ensure_ascii=False, indent=2, default=_json_default))
+
+
+if __name__ == "__main__":
+    main()
