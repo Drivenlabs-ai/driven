@@ -70,3 +70,46 @@ def test_cmd_impact_dossier_agrege(workspace):
 def test_cmd_impact_cible_inconnue(workspace):
     res = graph.cmd_impact(workspace, "Inexistant.md")
     assert res["incoming"] == []
+
+
+def test_resolve_name_par_titre(workspace):
+    g = graph.build_graph(workspace, workspace)
+    # "Olenbee" matche le H1 de la fiche client uniquement.
+    assert graph.resolve_name(g, "Olenbee") == ["Clients/Olenbee/CLAUDE.md"]
+
+
+def test_resolve_name_ambigu(workspace):
+    g = graph.build_graph(workspace, workspace)
+    # "laurent" matche le contact (stem) ET la mémoire rdv (topic).
+    matches = set(graph.resolve_name(g, "laurent"))
+    assert matches == {
+        "Contacts/laurent.md",
+        "Clients/Olenbee/memory/2026-06-01-1000-alex-rdv.md",
+    }
+
+
+def test_cmd_explain_noeud_unique(workspace):
+    res = graph.cmd_explain(workspace, "Clients/Olenbee/CLAUDE.md")
+    assert res["resolved"] == "Clients/Olenbee/CLAUDE.md"
+    # Arête entrante (link depuis la décision pricing) et sortante (link vers le rdv).
+    assert any(e["type"] == "link" for e in res["incoming"])
+    assert any(e["type"] == "link" for e in res["outgoing"])
+
+
+def test_cmd_explain_candidats_multiples(workspace):
+    res = graph.cmd_explain(workspace, "laurent")
+    assert res["resolved"] is None
+    assert len(res["candidates"]) == 2
+
+
+def test_cmd_explain_memoires_liees_triees(workspace):
+    res = graph.cmd_explain(workspace, "Clients/Olenbee/memory/2026-05-11-1430-mael-decision-pricing.md")
+    # La mémoire de révision est liée (affinité + link) ; présente dans linked_memories.
+    linked = [m["path"] for m in res["linked_memories"]]
+    assert "Clients/Olenbee/memory/2026-05-14-0900-mael-revision-pricing.md" in linked
+
+
+def test_resolve_name_requete_vide(workspace):
+    g = graph.build_graph(workspace, workspace)
+    assert graph.resolve_name(g, "") == []
+    assert graph.resolve_name(g, "   ") == []

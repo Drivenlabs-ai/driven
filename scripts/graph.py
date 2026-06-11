@@ -378,6 +378,71 @@ def cmd_impact(scope: Path, target: str) -> dict[str, Any]:
     return {"target": target, "incoming": incoming, "count": len(incoming)}
 
 
+def resolve_name(g: Graph, query: str) -> list[str]:
+    """
+    Résout un nom ou chemin en liste de paths de nœuds.
+
+    Matche (insensible à la casse) sur : chemin exact, stem du fichier, titre H1,
+    ou topic du frontmatter. Retourne tous les nœuds correspondants (≥ 0).
+    """
+    q = query.strip().lower()
+    if not q:
+        return []
+    matches: list[str] = []
+    for rel, node in g.nodes.items():
+        stem = Path(rel).stem.lower()
+        title = str(node.get("title", "")).lower()
+        topic = str(node.get("frontmatter", {}).get("topic", "")).lower()
+        if q in (rel.lower(), stem, title, topic):
+            matches.append(rel)
+    return matches
+
+
+def cmd_explain(scope: Path, query: str) -> dict[str, Any]:
+    """
+    Fiche d'une entité : nœud résolu, arêtes entrantes/sortantes, mémoires liées.
+
+    Si le nom matche 0 ou plusieurs nœuds, retourne {"resolved": None, "candidates": [...]}
+    (clés node/outgoing/incoming/linked_memories absentes). Si exactement 1 nœud,
+    retourne la fiche complète. Les arêtes entrantes/sortantes incluent l'affinité
+    (contrairement à impact, qui ne compte que les références structurelles).
+    """
+    root = _resolve_root(scope)
+    g = build_graph(scope, root)
+    matches = resolve_name(g, query)
+
+    if len(matches) != 1:
+        candidates = [{"path": m, "kind": g.nodes[m]["kind"]} for m in matches]
+        return {"resolved": None, "candidates": candidates}
+
+    target = matches[0]
+    outgoing = [
+        {"target": e.target, "type": e.type, "line": e.line}
+        for e in g.edges if e.source == target
+    ]
+    incoming = [
+        {"source": e.source, "type": e.type, "line": e.line}
+        for e in g.edges if e.target == target
+    ]
+
+    linked_paths = {e.target for e in g.edges if e.source == target}
+    linked_paths |= {e.source for e in g.edges if e.target == target}
+    linked_memories = [
+        {"path": p, "date": str(g.nodes[p]["frontmatter"].get("date", ""))}
+        for p in linked_paths
+        if p in g.nodes and g.nodes[p]["kind"] == "memory"
+    ]
+    linked_memories.sort(key=lambda m: m["date"], reverse=True)
+
+    return {
+        "resolved": target,
+        "node": g.nodes[target],
+        "outgoing": outgoing,
+        "incoming": incoming,
+        "linked_memories": linked_memories,
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Index de graphe structurel d'un workspace driven.",
@@ -393,6 +458,10 @@ def main() -> None:
     p_impact.add_argument("target")
     p_impact.add_argument("--scope", type=Path, default=Path.cwd())
 
+    p_explain = sub.add_parser("explain", help="Fiche d'une entité + ses arêtes.")
+    p_explain.add_argument("query")
+    p_explain.add_argument("--scope", type=Path, default=Path.cwd())
+
     args = parser.parse_args()
     scope = args.scope.resolve()
 
@@ -400,6 +469,8 @@ def main() -> None:
         result = cmd_build(scope)
     elif args.command == "impact":
         result = cmd_impact(scope, args.target)
+    elif args.command == "explain":
+        result = cmd_explain(scope, args.query)
     else:  # pragma: no cover
         parser.error(f"unknown command: {args.command}")
 
