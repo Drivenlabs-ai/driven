@@ -35,6 +35,25 @@ except ImportError:
     sys.exit(1)
 
 
+EXCLUDED_DIRS = {".claude", ".tmp", ".git", "_legacy"}
+
+
+@dataclass
+class Edge:
+    source: str   # path relatif POSIX
+    target: str   # path relatif POSIX (ou cible brute pour affinity entre mémoires)
+    type: str     # "at-ref" | "link" | "affinity"
+    line: int | None = None
+
+
+@dataclass
+class Graph:
+    root: str
+    nodes: dict[str, dict[str, Any]] = field(default_factory=dict)
+    edges: list[Edge] = field(default_factory=list)
+    broken: list[dict[str, Any]] = field(default_factory=list)
+
+
 def parse_frontmatter(content: str) -> tuple[dict[str, Any], str]:
     """Extrait le frontmatter YAML. Retourne ({}, content) si absent ou invalide."""
     if not content.startswith("---"):
@@ -158,3 +177,89 @@ def find_workspace_root(scope: Path) -> Path | None:
             if "space-type" in fm:
                 return candidate
     return None
+
+
+def collect_md_files(scope: Path) -> list[Path]:
+    """Liste les .md sous scope, en excluant les dossiers techniques et _legacy."""
+    if not scope.exists() or not scope.is_dir():
+        return []
+    out: list[Path] = []
+    for md in scope.rglob("*.md"):
+        if any(p.name in EXCLUDED_DIRS for p in md.parents):
+            continue
+        out.append(md)
+    return out
+
+
+def _rel(path: Path, root: Path) -> str | None:
+    """Path relatif POSIX à la racine, ou None si hors racine."""
+    try:
+        return path.resolve().relative_to(root).as_posix()
+    except ValueError:
+        return None
+
+
+def build_graph(scope: Path, root: Path) -> Graph:
+    """
+    Construit le graphe : nœuds (fichiers .md), arêtes at-ref/link, cassés.
+
+    Les arêtes d'affinité sont ajoutées séparément (cf compute_affinity), appelé
+    en fin de fonction. Un fichier illisible est ignoré (WARN stderr). Un
+    frontmatter invalide donne un nœud de kind 'content' (parse_frontmatter
+    retourne {} sans lever).
+    """
+    root = root.resolve()
+    scope = scope.resolve()
+    g = Graph(root=root.as_posix())
+    sources: list[tuple[str, Path, str]] = []  # (rel, abs_path, content)
+
+    for f in collect_md_files(scope):
+        rel = _rel(f, root)
+        if rel is None:
+            continue
+        try:
+            content = f.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError) as e:
+            print(f"WARN: skipped {f} ({e})", file=sys.stderr)
+            continue
+        fm, body = parse_frontmatter(content)
+        g.nodes[rel] = {
+            "path": rel,
+            "kind": infer_kind(f, fm),
+            "frontmatter": fm,
+            "title": extract_h1(body),
+        }
+        sources.append((rel, f, content))
+
+    for rel, f, content in sources:
+        for raw, line in extract_at_refs(content):
+            _add_edge_or_broken(g, rel, f, root, raw, line, "at-ref")
+        for raw, line in extract_links(content):
+            if is_external(raw):
+                continue
+            _add_edge_or_broken(g, rel, f, root, raw, line, "link")
+
+    g.edges.extend(compute_affinity(g.nodes))
+    return g
+
+
+def _add_edge_or_broken(
+    g: Graph, source_rel: str, source_abs: Path, root: Path,
+    raw: str, line: int, ref_type: str,
+) -> None:
+    """Ajoute une arête si la cible est un nœud, sinon l'enregistre comme cassée."""
+    resolved = resolve_target(raw, source_abs, root)
+    if resolved is not None:
+        target_rel = _rel(resolved, root)
+        if target_rel is not None and target_rel in g.nodes:
+            g.edges.append(Edge(source_rel, target_rel, ref_type, line))
+            return
+        # Cible sous la racine mais exclue du graphe (.claude, .tmp, _legacy) : ignorer.
+        if target_rel is not None:
+            return
+    g.broken.append({"source": source_rel, "target": raw, "line": line, "ref_type": ref_type})
+
+
+def compute_affinity(nodes: dict[str, dict[str, Any]]) -> list[Edge]:
+    """Arêtes faibles entre mémoires d'un même sujet. Implémenté en Task 5."""
+    return []
