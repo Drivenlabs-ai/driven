@@ -104,6 +104,7 @@ authors:
   - mael@drivenlabs.ai
 type: decision
 topic: rdv-olenbee
+confidence: verbatim
 keywords:
   - olenbee
   - pricing
@@ -118,6 +119,7 @@ keywords:
 - `authors`, liste, omise en personal space (mono-user implicite).
 - `type` ∈ {`memory`, `decision`, `interaction`, `insight`, `other`}.
 - `topic`, slug kebab-case court (2-4 mots), résumé du sujet de la mémoire.
+- `confidence` (optionnel) ∈ {`verbatim`, `inferred`, `mixed`} : `verbatim` = reformulation factuelle de ce que l'user a dit ou décidé ; `inferred` = déduction de Claude non énoncée explicitement ; `mixed` = les deux. Inféré silencieusement à la création, jamais demandé au user, jamais inscrit dans le corps (clean slate). Les mémoires sans le champ sont traitées comme `verbatim`. Exploité par `challenge-anti-recidive.md` pour pondérer les signaux de rejet.
 - `keywords`, liste de 5 à 10 mots-clés, couvrant variantes morphologiques + synonymes implicites. Critique pour la recherche BM25 (pondération ×3). Claude les infère silencieusement, pas un champ user-facing.
 
 ## Corps d'une memory entry
@@ -141,7 +143,7 @@ Le préambule `## Contexte` est obligatoire en shared parce que les memory entri
 
 - Toujours quoter les valeurs string qui pourraient être parsées comme nombre ou date (`time: "0930"`, jamais `time: 0930`).
 - Les listes plates uniquement (pas de nested dicts dans `authors` ou `keywords`).
-- L'ordre des champs n'est pas imposé mais reste consistant pour les memory entries (date, time, authors, type, topic, keywords).
+- L'ordre des champs n'est pas imposé mais reste consistant pour les memory entries (date, time, authors, type, topic, confidence, keywords).
 - Pas de champs custom ad-hoc, si un besoin émerge, le proposer comme évolution du format, pas comme exception locale.
 
 ## Append-only par construction
