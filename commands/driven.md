@@ -1,6 +1,6 @@
 ---
 description: "Maintient un workspace driven, capture, cross-author, propagation, routage, structure. Activé automatiquement dans un workspace dont le CLAUDE.md racine porte space-type dans son frontmatter."
-argument-hint: "[intention en langage naturel] | [search | audit | migrate | setup-doc | setup-dossier | workflow]"
+argument-hint: "[intention en langage naturel] | [search | explain | path | audit | migrate | setup-doc | setup-dossier | workflow]"
 ---
 
 # /driven

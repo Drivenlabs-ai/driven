@@ -135,7 +135,7 @@ Pas de menu technique. Le user choisit en NL.
 Le frontmatter de `commands/driven.md` déclare :
 
 ```
-argument-hint: "[intention en langage naturel] | [search | audit | migrate | setup-doc]"
+argument-hint: "[intention en langage naturel] | [search | explain | path | audit | migrate | setup-doc]"
 ```
 
 Le user voit cette hint en tapant `/driven`. Suggère les actions principales sans forcer.

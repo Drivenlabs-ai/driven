@@ -16,7 +16,7 @@ description: >
   un document. Activer aussi sur signaux d'universalité ('désormais',
   'à partir de maintenant', 'à chaque fois', 'toujours', 'par défaut') qui
   marquent une convention durable plutôt qu'un événement ponctuel.
-argument-hint: "[intention en langage naturel] | [search | audit | migrate | setup-doc]"
+argument-hint: "[intention en langage naturel] | [search | explain | path | audit | migrate | setup-doc]"
 license: Proprietary — Drivenlabs
 ---
 
