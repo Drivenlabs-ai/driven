@@ -139,3 +139,20 @@ def test_cmd_path_extremite_ambigue(workspace):
     # "laurent" est ambigu → candidats retournés, pas de chemin.
     assert res["connected"] is False
     assert res.get("ambiguous")
+
+
+def test_cmd_check_liens_casses(workspace):
+    res = graph.cmd_check(workspace)
+    targets = [b["target"] for b in res["broken"]]
+    assert any("TOOLS.md" in t for t in targets)
+    assert any("brief.md" in t for t in targets)
+
+
+def test_cmd_check_orphelins(workspace):
+    res = graph.cmd_check(workspace)
+    # positioning.md n'a aucune arête entrante → orphelin.
+    assert "Drivenlabs/positioning.md" in res["orphans"]
+    # La racine normative CLAUDE.md n'est jamais signalée orpheline.
+    assert "CLAUDE.md" not in res["orphans"]
+    # Le contact est lié par la mémoire rdv → pas orphelin.
+    assert "Contacts/laurent.md" not in res["orphans"]

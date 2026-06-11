@@ -508,6 +508,26 @@ def cmd_path(scope: Path, a: str, b: str) -> dict[str, Any]:
     return {"connected": True, "path": chain, "hops": hops}
 
 
+def cmd_check(scope: Path) -> dict[str, Any]:
+    """
+    Liens cassés + fichiers orphelins.
+
+    Orphelin = aucune arête entrante structurelle (at-ref ou link ; l'affinité
+    ne compte pas), et kind != 'normative' (les fichiers racine sont attendus
+    sans entrant).
+    """
+    root = _resolve_root(scope)
+    g = build_graph(scope, root)
+    referenced = {
+        e.target for e in g.edges if e.type in ("at-ref", "link")
+    }
+    orphans = sorted(
+        rel for rel, node in g.nodes.items()
+        if node["kind"] != "normative" and rel not in referenced
+    )
+    return {"broken": g.broken, "broken_count": len(g.broken), "orphans": orphans}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Index de graphe structurel d'un workspace driven.",
@@ -532,6 +552,9 @@ def main() -> None:
     p_path.add_argument("node_b")
     p_path.add_argument("--scope", type=Path, default=Path.cwd())
 
+    p_check = sub.add_parser("check", help="Liens cassés + orphelins.")
+    p_check.add_argument("--scope", type=Path, default=Path.cwd())
+
     args = parser.parse_args()
     scope = args.scope.resolve()
 
@@ -543,6 +566,8 @@ def main() -> None:
         result = cmd_explain(scope, args.query)
     elif args.command == "path":
         result = cmd_path(scope, args.node_a, args.node_b)
+    elif args.command == "check":
+        result = cmd_check(scope)
     else:  # pragma: no cover
         parser.error(f"unknown command: {args.command}")
 
