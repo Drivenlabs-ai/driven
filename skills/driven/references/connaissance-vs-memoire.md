@@ -62,7 +62,7 @@ Driven a déjà les deux mondes structurellement :
 - **Fichiers normatifs** (CLAUDE.md, RULES.md, ME.md, SOUL.md, VOICE.md, ABOUT.md, CONTRIBUTING.md, documents métier) — chargés automatiquement par cascade, source de vérité stable.
 - **Dossiers `memory/`** — entrées timestampées append-only, lues à la demande, historique factuel.
 
-La table de `routage.md` (10 cas) est la **déclinaison opérationnelle** du test pivot pour les situations courantes. Quand un cas n'est pas dans la table ou semble ambigu, revenir au test pivot.
+La table de `routage.md` est la **déclinaison opérationnelle** du test pivot pour les situations courantes. Quand un cas n'est pas dans la table ou semble ambigu, revenir au test pivot.
 
 ## Anti-patterns
 
@@ -91,7 +91,7 @@ Workflow répétable activé automatiquement → skill custom via `/skill-creato
 
 ## Liens
 
-- `routage.md` — table à 10 cas, déclinaison opérationnelle du test pivot.
+- `routage.md` — table de routage, déclinaison opérationnelle du test pivot.
 - `memory.md` — workflow de création d'une mémoire timestampée quand le test pivot pointe vers `memory/`.
 - `scope-check.md` — perso vs shared avant d'écrire (orthogonal au test pivot mais toujours combiné).
 - `skill-creator-routing.md` — quand router vers `/skill-creator` plutôt qu'un fichier.

@@ -49,7 +49,7 @@ Charger la reference correspondante et exécuter.
 `/driven crée un doc pour Pierre Martin`
 `/driven le SOUL.md est trop strict, refonds-le`
 
-Inférer l'action depuis `references/routage.md` (table des 10 cas), charger les références pertinentes, exécuter.
+Inférer l'action depuis `references/routage.md`, charger les références pertinentes, exécuter.
 
 Pas de parsing strict, l'intention est lue en NL et Claude raisonne. Si ambigu, demander une question NL.
 
@@ -124,7 +124,7 @@ Si user dit oui : créer un CLAUDE.md minimal avec frontmatter `space-type: pers
 
 ## Comportement quand argument ambigu
 
-Si l'argument NL ne mappe clairement sur aucune des 10 cas de `routage.md`, demande NL :
+Si l'argument NL ne mappe clairement sur aucun cas de `routage.md`, demande NL :
 
 > Tu veux que je note ça comme une décision ponctuelle, ou comme une règle qui s'applique partout ?
 
