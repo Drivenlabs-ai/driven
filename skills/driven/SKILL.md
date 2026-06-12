@@ -210,6 +210,7 @@ Chaque ref ⭐ transverse a un signal d'activation observable. Quand le signal e
 | Pattern fichier `*(<n>).md` détecté | `drive-conflicts.md` | 3 options résolution NL |
 | Découpage / extraction / refonte structurelle d'un fichier normatif, audit de bloat, ou arbitrage de chargement (`@` vs lien vs skill vs règle scopée) | `gestion-contexte.md` | Arbitrer le placement avec la mécanique réelle de chargement (table §5 de la ref) |
 | Renommage / suppression de fichier, proposition stratégique sur entité, demande « explique-moi X » / « lien entre A et B », audit de cohérence des liens | `graphe.md` | Invoquer `scripts/graph.py` (impact / explain / path / check), restituer en NL |
+| Lecture d'un normatif dont une section contredit l'état connu (autre section, mémoire datée du scope, ou fait établi en session) | `audit-sections.md` (mode lecture) | Signaler la contradiction en NL, proposer la mise à jour |
 | Mention d'entité avec rôle structurant + contexte business + non-banalité | `links.md` + `proactivite.md` | Option selon convention de l'espace observée |
 | ≥ 2 signaux conversationnels de capitalisation en fin de session | `capitalise-workflow.md` | 3 options de routage |
 | Fact-drop business (verbe passé sur entité, décision future, opinion, découverte) | `proactivite.md` | Proposition NL de capture |
