@@ -23,7 +23,10 @@ Avant d'émettre la proposition, Claude consulte cette ref et applique le workfl
 1. **Identifier le sujet** de la proposition (mots-clés principaux).
 2. **Cascade de consultation** :
    - **Section « Lessons »** de tous les CLAUDE.md remontés (racine + sous-dossiers concernés)
+   - **Mémoires liées par arête** au sujet, via `scripts/graph.py explain <entité>` (`linked_memories`) — capte les mémoires connexes même sans mot-clé commun (cf `graphe.md`)
    - **Mémoires** du dossier concerné (search BM25 sur les mots-clés du sujet, top 5 hits)
+
+   Le champ `confidence` des mémoires pondère le signal : un rejet dans une mémoire `verbatim` (dicté par l'user) bloque ; un signal dans une mémoire `inferred` (déduction de Claude) se mentionne avec réserve. Si `graph.py` échoue, se limiter aux Lessons + BM25.
 3. **Détecter les signaux** de rejet, pivot, ou critique sur le sujet :
    - Phrases-clés : « non », « pas envie », « pas pour moi », « on a déjà essayé », « ça marche pas », « j'ai changé d'avis »
    - Pivots explicites : « finalement on fait », « plutôt »
@@ -53,7 +56,7 @@ Si le sujet apparaît dans une mémoire avec patterns sensibles (cf `memory.md` 
 - **Sur-alerte** : signaler un rejet sur tout sujet vaguement proche. Le seuil de pertinence reste haut.
 - **Sous-alerte** : ignorer un signal clair de rejet récent. Le pattern doit être strict.
 - **Reproche déguisé** : « tu m'avais dit non, je te le rappelle ». Ton neutre, factuel, pas culpabilisant.
-- **Cascade infinie** : limiter la consultation à 5 mémoires + lessons des CLAUDE.md immédiatement remontés. Pas de récursion profonde.
+- **Cascade infinie** : limiter la consultation à 5 mémoires au total (toutes sources confondues : arêtes + BM25) + lessons des CLAUDE.md immédiatement remontés. Pas de récursion profonde.
 
 ## Recap user (silencieux par défaut)
 

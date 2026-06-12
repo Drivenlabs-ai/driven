@@ -60,7 +60,7 @@ L'historique reste lisible. Pas de réécriture qui efface le passé.
 
 Au moment de la création, Claude scanne le voisinage pour les mémoires connexes :
 
-1. Scan du `memory/` courant pour mémoires sur le même `topic` ou avec mots-clés en commun.
+1. Pour chaque entité mentionnée dans la nouvelle mémoire, invoquer `scripts/graph.py explain <entité>` (cf `graphe.md`) : les arêtes entrantes/sortantes donnent les candidats de liens markdown pertinents. À défaut (script indisponible), scan du `memory/` courant pour les mémoires de même `topic` ou mots-clés communs.
 2. Scan du contexte conversationnel pour les fichiers Write/Edit récents pertinents (positioning.md, brief.md, devis.xlsx, etc.).
 3. Insertion de liens markdown standards inline dans le corps `## Notes`.
 

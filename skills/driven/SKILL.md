@@ -13,12 +13,10 @@ description: >
   reprendre', 'prépare le handoff' ; quand il crée un fichier dans un workspace driven ;
   quand il modifie un RULES.md, CONTRIBUTING.md, CLAUDE.md, SOUL.md, ME.md, VOICE.md
   ou ABOUT.md ; quand il mentionne une entité (personne ou organisation) qui mérite
-  un document. Lire RULES local + invariants embarqués. Ne jamais exposer le jargon
-  technique au user (memory, frontmatter, factualité, etc.) : parler en langage
-  naturel uniquement. Activer aussi sur signaux d'universalité ('désormais',
+  un document. Activer aussi sur signaux d'universalité ('désormais',
   'à partir de maintenant', 'à chaque fois', 'toujours', 'par défaut') qui
   marquent une convention durable plutôt qu'un événement ponctuel.
-argument-hint: "[intention en langage naturel] | [search | audit | migrate | setup-doc]"
+argument-hint: "[intention en langage naturel] | [search | explain | path | audit | migrate | setup-doc]"
 license: Proprietary — Drivenlabs
 ---
 
@@ -211,6 +209,7 @@ Chaque ref ⭐ transverse a un signal d'activation observable. Quand le signal e
 | Proposition stratégique sur sujet avec mémoires antérieures (« je pense », « on pourrait », « tu devrais ») | `challenge-anti-recidive.md` | Cascade lessons + mémoires |
 | Pattern fichier `*(<n>).md` détecté | `drive-conflicts.md` | 3 options résolution NL |
 | Découpage / extraction / refonte structurelle d'un fichier normatif, audit de bloat, ou arbitrage de chargement (`@` vs lien vs skill vs règle scopée) | `gestion-contexte.md` | Arbitrer le placement avec la mécanique réelle de chargement (table §5 de la ref) |
+| Renommage / suppression de fichier, proposition stratégique sur entité, demande « explique-moi X » / « lien entre A et B », audit de cohérence des liens | `graphe.md` | Invoquer `scripts/graph.py` (impact / explain / path / check), restituer en NL |
 | Mention d'entité avec rôle structurant + contexte business + non-banalité | `links.md` + `proactivite.md` | Option selon convention de l'espace observée |
 | ≥ 2 signaux conversationnels de capitalisation en fin de session | `capitalise-workflow.md` | 3 options de routage |
 | Fact-drop business (verbe passé sur entité, décision future, opinion, découverte) | `proactivite.md` | Proposition NL de capture |
@@ -245,9 +244,7 @@ Avant toute action sur un input user, scanner mentalement les **6 dimensions** s
 
 ### 7.2 Mécanisme de forcing
 
-Sur les 4 triggers user explicites du §6.1 (création fichier / retiens / modif règle / handoff session), créer un TaskCreate `Lire <refs>` AVANT toute action de modification.
-
-Le Task de lecture passe à `completed` SEULEMENT après les Read tool calls effectifs (pas de marquage prématuré).
+Le TaskCreate `Lire <refs>` des 4 triggers user est défini en §6.1. Le Task de lecture passe à `completed` SEULEMENT après les Read tool calls effectifs (pas de marquage prématuré).
 
 Pour le trigger handoff, un second TaskCreate `Trier infos en 3 catégories` s'enchaîne après lecture de `session-handoff.md` et avant production du récap (cf doctrine anti-drift de la ref).
 
@@ -328,17 +325,17 @@ Détail complet : `references/maintenance-fichiers-racines.md`.
 | Read / Write / Edit / Grep / Glob | Oui | Oui (approbation user) | Identique |
 | Bash tool | Oui (sandbox) | Oui (sandbox Ubuntu 22.04) | `scripts/search_memories.py` tourne dans les deux |
 | Python | Oui | Oui via Bash | Pas de fallback à coder |
-| Hooks (PreToolUse, etc.) | Oui | Non supportés | **Pas de hooks V1**, préserve bivalence |
-| MCP custom local | Oui | Oui via config | Pas utilisé V1 |
+| Hooks (PreToolUse, etc.) | Oui | Non supportés | Pas de hooks : préserve la bivalence |
+| MCP custom local | Oui | Oui via config | Non utilisé |
 | Project Instructions Cowork | N/A | Indispensables | Pointent vers le CLAUDE.md racine du workspace |
 
-Aucune asymétrie majeure à coder. Détail : Spec 5 + `references/lecture-arborescente.md` (orchestration manuelle de la cascade en Cowork).
+Aucune asymétrie majeure à coder. Détail : `references/lecture-arborescente.md` (orchestration manuelle de la cascade en Cowork).
 
 ---
 
 ## 11. Setup checks non-bloquants
 
-À la première activation dans un workspace driven, vérifier silencieusement :
+À la détection d'un workspace driven, vérifier silencieusement (une fois suffit, pas de re-check à chaque tour) :
 
 | Check | Workspace concerné | Action si manquant |
 |---|---|---|
@@ -371,6 +368,7 @@ Toutes les references vivent dans `${CLAUDE_PLUGIN_ROOT}/skills/driven/reference
 - `challenge-anti-recidive.md` — Charger AVANT toute proposition stratégique sur sujet avec mémoires antérieures (signal §6.2).
 - `drive-conflicts.md` — Charger AVANT toute action si pattern fichier `*(<n>).md` détecté (signal §6.2).
 - `proactivite.md` — Charger DÈS qu'un signal proactif latent existe : fact-drop, mention d'entité sans fiche, doute sur proposer (signal §6.2).
+- `graphe.md` — Charger AVANT d'invoquer `scripts/graph.py` (renommage, suppression, proposition stratégique, requête de graphe, audit de liens — signal §6.2).
 
 ### Triggers user et opérationnelles
 
