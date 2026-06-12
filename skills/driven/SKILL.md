@@ -190,7 +190,7 @@ Les 4 triggers user activent un TaskCreate `Lire <refs>` AVANT toute action de m
 
 | Trigger | Détection | References à charger |
 |---|---|---|
-| **Création de fichier** | `Write` sur path inexistant, workspace driven | `scope-check.md`, `frontmatter.md`, `links.md` si mentions entités |
+| **Création de fichier** | `Write` sur path inexistant, workspace driven | `scope-check.md`, `frontmatter.md`, `links.md` si mentions entités, `gestion-contexte.md` (test d'altitude) si CLAUDE.md |
 | **Demande de retenir une info** | Phrases NL : « retiens ça », « note ça », « garde une trace », « je veux retenir » | `memory.md`, `factualite.md` si shared, `links.md` si mentions, `memoire-projet-code.md` si repo git hors workspace driven |
 | **Modification d'un fichier de règle** | `Edit`/`Write` sur RULES.md, RULES/*.md, CONTRIBUTING.md, CLAUDE.md, SOUL.md, ME.md, VOICE.md, ABOUT.md | `maintenance-fichiers-racines.md` + référence dédiée au type de fichier, `propagation.md` |
 | **Demande de handoff de session** | Phrases NL : « on bascule », « nouvelle session », « fais le récap pour reprendre », « prépare le handoff », OU saturation §6.2 acceptée par user | `session-handoff.md` (forcing additionnel : TaskCreate `Trier infos en 3 catégories` avant production du récap, cf doctrine anti-drift de la ref) |
