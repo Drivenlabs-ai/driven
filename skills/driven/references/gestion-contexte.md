@@ -42,7 +42,17 @@ L'heuristique `@` vs lien de la doctrine de référencement (§2ter du SKILL.md)
 | Description de skill | Cas d'usage clé en premier ; cap dur 1 536 caractères | Tronquée dans le listing |
 | Fichier `references/` > 100 lignes | Table des matières en tête | — |
 
-Quand un fichier normatif dépasse sa cible, c'est un signal d'extraction (workflow : `decoupage-progressif.md`) — en privilégiant les cibles qui sortent du chargement permanent : skill pour une procédure répétable, CLAUDE.md de sous-dossier pour une convention de domaine, lien textuel pour un référentiel volumineux.
+Le dépassement d'une cible de taille est un signal secondaire, pas un déclencheur : il invite à appliquer le test d'altitude ci-dessous. L'extraction (workflow : `decoupage-progressif.md`) privilégie les cibles qui sortent du chargement permanent : skill pour une procédure répétable, CLAUDE.md de sous-dossier pour une convention de domaine, lien textuel pour un référentiel volumineux.
+
+### Test d'altitude — quelle information vit à quel niveau
+
+Avant d'écrire une ligne dans un CLAUDE.md, lui appliquer le test : **aide-t-elle à choisir le bon sous-niveau sans l'ouvrir ?** Si oui, c'est de l'information de routage, elle reste à ce niveau. Si elle décrit comment faire quelque chose à l'intérieur de ce niveau, c'est du détail : il vit dans le fichier ou le sous-dossier concerné, atteint par un pointeur. Un lecteur froid d'un CLAUDE.md à la bonne altitude sait où aller chercher sans absorber ce qu'il y trouvera ; la taille n'est pas le critère.
+
+Sous-CLAUDE.md d'un dossier client, bonne altitude — il route sans dupliquer :
+
+`Les comptes-rendus de RDV vivent dans memory/, le positioning dans positioning.md, les devis dans devis/.`
+
+Le tarif négocié, son historique de révision, les préférences de paiement du client descendent d'un niveau : ils vivent dans la mémoire ou le doc pricing, le CLAUDE.md y pointe.
 
 ## 4. Compaction : ce qui survit, ce qui se perd
 

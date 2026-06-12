@@ -4,6 +4,18 @@ Quand un fichier normatif (CLAUDE.md, RULES.md, CONTRIBUTING.md, SOUL.md, ABOUT.
 
 L'audit est explicitement invoqué par user via `/driven audit` ou en NL (« audite SOUL.md », « regarde si RULES.md est encore cohérent »).
 
+## Mode lecture (passif, léger)
+
+Distinct de l'audit on-demand ci-dessous. Le mode lecture s'applique aux normatifs que driven lit pour la tâche courante, jamais à un scan préventif de l'espace.
+
+Quand une section d'un normatif lu contredit l'état connu, le signaler en langage naturel et proposer la mise à jour. Jamais bloquant. Trois conditions de contradiction :
+
+- Une autre section du même fichier dit l'inverse.
+- Une mémoire datée du même scope dit l'inverse.
+- Un fait établi dans la session courante dit l'inverse.
+
+Le champ `confidence` des mémoires pondère le signal : une mémoire `verbatim` qui contredit un normatif est un signal fort, l'utilisateur l'a dicté ; une mémoire `inferred` se mentionne avec réserve. Un signalement par contradiction et par session, silencieux si rien ne contredit. La proposition de mise à jour passe par la validation habituelle avant tout write sur un normatif.
+
 ## Workflow d'audit
 
 1. **Lire le fichier intégralement**, sans skim.
@@ -37,6 +49,12 @@ Une section qui dépasse 30-50 lignes ou qui pourrait vivre dans un fichier déd
 > La section Conventions fait 80 lignes, ça mériterait d'extraire en `RULES.md`. OK ?
 
 Détail extraction : `references/decoupage-progressif.md`.
+
+### Mauvaise altitude
+
+Une section qui décrit comment faire quelque chose à l'intérieur du niveau là où on attend du routage vers le bon sous-niveau. Distincte de « gonflée » : une section peut être à la mauvaise altitude sans dépasser aucun seuil de taille. Test : `gestion-contexte.md` (test d'altitude).
+
+> Cette partie du CLAUDE.md détaille le pricing client ; ça appartient à la mémoire ou au doc pricing, le CLAUDE.md devrait juste y pointer. Je déplace ?
 
 ### Stacks de patchs
 

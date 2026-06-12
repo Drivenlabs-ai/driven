@@ -4,11 +4,11 @@ Quand une section d'un fichier normatif grossit, elle mérite extraction vers un
 
 ## Quand extraire
 
-Pas de seuil chiffré strict, Claude raisonne au cas par cas. Signaux qui justifient extraction :
+Le critère premier est l'altitude, pas la taille : une section qui décrit comment faire à l'intérieur du niveau (détail) s'extrait, une section qui aide à router vers le bon sous-niveau reste. Test complet : `gestion-contexte.md` (test d'altitude). Les signaux ci-dessous confirment, ils ne décident pas seuls :
 
 | Signal | Action |
 |---|---|
-| Section dépasse 30-50 lignes dans le CLAUDE.md racine | Extraire vers fichier dédié, garder résumé 3 lignes dans CLAUDE.md |
+| Section qui gonfle (> 30-50 lignes) | Vérifier l'altitude (cf `gestion-contexte.md`) ; extraire si c'est du détail, garder résumé 3 lignes + pointeur |
 | Plusieurs sous-thèmes émergent dans une même section | Extraire chacun dans son fichier dédié |
 | Le contenu de la section a une audience naturelle distincte du reste du CLAUDE.md (ex : conventions techniques vs stratégie) | Extraire vers le fichier qui correspond à l'audience |
 | Plus de 3 modifications récentes touchent la même section | Extraire pour rendre la maintenance plus locale |

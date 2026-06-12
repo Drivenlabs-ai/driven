@@ -146,7 +146,7 @@ Mise à jour proposée par Claude en fin de session structurante via doctrine Q5
 | Workflows particuliers | `CONTRIBUTING.md` à la racine ou par sous-dossier |
 | Règles thématiques (ex politique de naming, sécurité, voix) | `RULES/<thème>.md` |
 
-Pas de seuil chiffré strict, Claude raisonne au cas par cas selon la densité et la pertinence audience. Détail : `references/decoupage-progressif.md`.
+Le seuil de lignes est un signal secondaire ; le critère est l'altitude (`gestion-contexte.md`, test d'altitude) : extraire le détail, garder le routage. Détail : `references/decoupage-progressif.md`.
 
 ## Personal space : variation
 
@@ -163,7 +163,7 @@ Pas de frontmatter `authors` (mono-user implicite). `last-updated` reste utile.
 
 Les sous-dossiers (`Clients/Olenbee/CLAUDE.md`, `Drivenlabs/Driven-Sales/CLAUDE.md`) suivent une structure plus libre, adaptée au domaine. Le pattern 4-sections est la **valeur par défaut** pour la racine d'un shared/personal space, pas une obligation universelle.
 
-Claude juge la structure contextuelle selon les principes (SSOT, progressive disclosure). Chaque domaine a ses contraintes et son audience naturelle.
+Claude juge la structure contextuelle selon les principes (SSOT, progressive disclosure) et le test d'altitude (`gestion-contexte.md`) : un sous-CLAUDE.md route vers ses fichiers et sous-dossiers, il n'inline pas leur détail. Chaque domaine a ses contraintes et son audience naturelle.
 
 ## Création initiale (au SETUP du shared)
 
