@@ -33,7 +33,7 @@ Les deux sont signalés par un CLAUDE.md racine portant un frontmatter `space-ty
 
 ## 0. Principe pivot : connaissance vs mémoire
 
-Avant tout routage, un test universel : **est-ce que c'est vrai demain ?** Si oui → fichier local (connaissance stable). Sinon → mémoire timestampée (épisodique). Exception : si c'est un workflow répétable → skill custom. Trois principes fondateurs détaillés (Vrai demain ? / SAVOIR vs FAIRE / Text > Brain) : `references/connaissance-vs-memoire.md`. La table de `routage.md` décline ce principe pour les 10 cas courants.
+Avant tout routage, un test universel : **est-ce que c'est vrai demain ?** Si oui → fichier local (connaissance stable). Sinon → mémoire timestampée (épisodique). Exception : si c'est un workflow répétable → skill custom. Trois principes fondateurs détaillés (Vrai demain ? / SAVOIR vs FAIRE / Text > Brain) : `references/connaissance-vs-memoire.md`. La table de `routage.md` décline ce principe pour les cas courants.
 
 ---
 
@@ -190,7 +190,7 @@ Les 4 triggers user activent un TaskCreate `Lire <refs>` AVANT toute action de m
 
 | Trigger | Détection | References à charger |
 |---|---|---|
-| **Création de fichier** | `Write` sur path inexistant, workspace driven | `scope-check.md`, `frontmatter.md`, `links.md` si mentions entités |
+| **Création de fichier** | `Write` sur path inexistant, workspace driven | `scope-check.md`, `frontmatter.md`, `links.md` si mentions entités, `gestion-contexte.md` (test d'altitude) si CLAUDE.md |
 | **Demande de retenir une info** | Phrases NL : « retiens ça », « note ça », « garde une trace », « je veux retenir » | `memory.md`, `factualite.md` si shared, `links.md` si mentions, `memoire-projet-code.md` si repo git hors workspace driven |
 | **Modification d'un fichier de règle** | `Edit`/`Write` sur RULES.md, RULES/*.md, CONTRIBUTING.md, CLAUDE.md, SOUL.md, ME.md, VOICE.md, ABOUT.md | `maintenance-fichiers-racines.md` + référence dédiée au type de fichier, `propagation.md` |
 | **Demande de handoff de session** | Phrases NL : « on bascule », « nouvelle session », « fais le récap pour reprendre », « prépare le handoff », OU saturation §6.2 acceptée par user | `session-handoff.md` (forcing additionnel : TaskCreate `Trier infos en 3 catégories` avant production du récap, cf doctrine anti-drift de la ref) |
@@ -202,7 +202,7 @@ Chaque ref ⭐ transverse a un signal d'activation observable. Quand le signal e
 | Signal observable | Ref ⭐ à charger | Action attendue |
 |---|---|---|
 | ≥ 2 actions distinctes proposées dans la même réponse OU décision user-facing à valider | `askuserquestion.md` | Format batch d'options pré-rédigées |
-| Ambiguïté NL sur destination de l'info OU demande qui touche plusieurs cibles | `routage.md` | Table 10 cas + cas tordus |
+| Ambiguïté NL sur destination de l'info OU demande qui touche plusieurs cibles | `routage.md` | Table de routage + cas tordus |
 | cwd ou cible dans dossier sans CLAUDE.md | `setup-dossier.md` | Mini-interview + outputs |
 | Signal d'universalité (« désormais », « à partir de », « toujours », « par défaut », « doit », « cadence ») | `connaissance-vs-memoire.md` + `lessons.md` | Test « vrai demain ? » + lesson scopée |
 | Convention scopée à un dossier (universel + intemporel dans le scope) | `lessons.md` | Section Lessons dans CLAUDE.md du dossier |
@@ -290,7 +290,7 @@ Afficher un récap du contexte courant :
 
 ### Intention en langage naturel
 
-Inférer l'action depuis `references/routage.md` (table des 10 types de demande user → cible + garde-fous), charger les références pertinentes, exécuter.
+Inférer l'action depuis `references/routage.md` (table des types de demande user → cible + garde-fous), charger les références pertinentes, exécuter.
 
 **Ambiguïté** → demande NL à l'user, pas un menu technique : *« Je peux mettre ça comme une note ponctuelle, ou tu veux que ce soit une règle qui s'applique à chaque session ? »*.
 

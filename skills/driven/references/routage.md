@@ -17,7 +17,7 @@ Test « vrai demain ? » + 3 principes fondateurs : `connaissance-vs-memoire.md`
 
 Claude raisonne sur la **nature** de la demande user (événement ponctuel ? convention durable ? posture Claude ? identité user ? contenu produit ?) et route vers la cible appropriée. Si ambigu : une question NL, jamais un menu technique.
 
-## Table de routage (10 cas)
+## Table de routage (12 cas)
 
 | # | Nature de la demande | Cible | Exemples | Garde-fous |
 |---|---|---|---|---|
@@ -31,6 +31,8 @@ Claude raisonne sur la **nature** de la demande user (événement ponctuel ? con
 | 8 | Contenu produit pour le travail (80 % des cas) | Markdown simple dans le dossier thématique | Brief client, positioning, deck, fiche produit, lead magnet, post draft, devis | Scope-check perso vs shared. Authors liste si shared. Pas de RULE factualité (c'est du contenu produit, pas une mémoire). |
 | 9 | Mention d'une personne / organisation sans document | (a) Pas de lien si ponctuel ; (b) Création réelle si entité importante | « comme l'a dit John dans son post » → pas de lien ; « j'ai rencontré Pierre Martin, prospect » → propose création doc | Seuil de pertinence. Détail : `links.md`. **Jamais de stub**. |
 | 10 | Modif d'un fichier RULES / CONTRIBUTING / CLAUDE racine team | RULES.md / CONTRIBUTING.md / CLAUDE.md du shared | « ajoute cette règle à notre fonctionnement », « le CLAUDE.md du dossier Olenbee doit aussi mentionner X » | Criticité élevée. Alerte pédagogique avant modif. Validation explicite. Maintenance holistique. |
+| 11 | Demande exhaustive sur une entité connue | Vue assemblée via `explain` : fiche + arêtes + mémoires liées, pas une recherche de mots | « qu'est-ce qu'on sait sur Olenbee », « montre tout sur X », « fais-moi une fiche sur Pierre » → `explain <entité>` | `graphe.md`. Restituer en NL, jamais le JSON. |
+| 12 | Demande de lien entre deux entités | Plus court chemin via `path` | « quel est le lien entre Olenbee et Laurent », « comment A et B sont liés » → `path <A> <B>` | `graphe.md`. Si ambigu, demander lequel. |
 
 ## Principes en prose
 
