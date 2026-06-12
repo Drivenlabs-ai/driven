@@ -25,6 +25,7 @@ Réservée aux changements qui touchent à la cohérence du système ou aux conv
 | Update d'une convention dans `RULES.md` racine | *« Cette nouvelle convention impacte aussi le `RULES.md` de Drivenlabs/. Je le mets à jour ? »* |
 | Modification d'une fiche contact qui apparaît dans plusieurs dossiers business | *« Pierre Martin apparaît aussi dans Clients/Acme/. Je propage ? »* |
 | Décision documentée dans une memory qui contredit un fichier normatif | *« Cette décision contredit ce qui est écrit dans `positioning.md`. Tu veux que je rafraîchisse le positioning ? »* |
+| Lecture d'un normatif dont une section contredit une mémoire datée du scope | *« Ce que dit `positioning.md` contredit la décision du 14/05. On tranche ? »* (détection : `audit-sections.md`, mode lecture) |
 | Refonte holistique d'un fichier qui pourrait casser des références | *« Cette refonte change la structure des sections de `SOUL.md`. 4 docs liés pourraient être impactés. Je propose un audit ? »* |
 
 Une seule question, langage naturel, jamais de menu technique. Si user dit oui, exécution. Si non, abandon de la cascade, le fichier principal a été modifié, point.

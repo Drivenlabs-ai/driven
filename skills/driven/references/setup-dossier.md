@@ -78,7 +78,7 @@ Si user accepte mais que la mini-interview reste floue (réponses ambiguës, *«
 
 Selon les réponses, création **minimale** :
 
-- `CLAUDE.md` du dossier — toujours créé. Vue stratégique courte (1-2 paragraphes) + Index local des sous-dossiers/fichiers attendus. Reste ouvert, à enrichir au fil de l'usage.
+- `CLAUDE.md` du dossier — toujours créé. À l'altitude de routage (`gestion-contexte.md`, test d'altitude) : ce qu'un futur Claude doit savoir pour viser le bon sous-dossier ou fichier sans l'ouvrir, plus l'index local. Reste ouvert, à enrichir au fil de l'usage.
 - `memory/.gitkeep` — uniquement si la réponse à la question 3 est positive. Le dossier `memory/` lui-même se peuplera au fil des mémoires.
 
 Pas de fichiers vides au-delà. Pas de `RULES.md` placeholder, pas de sous-dossiers anticipés, pas de templates non remplis. Ces éléments émergent au fil de l'usage par découpage progressif quand le besoin se manifeste — pas avant.
