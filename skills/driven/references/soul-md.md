@@ -45,23 +45,9 @@ Cohérent avec la séparation des rôles. Évite que SOUL.md devienne un mix ide
 
 ## Maintenance holistique critique
 
-SOUL.md est **le** fichier où la maintenance holistique compte le plus. Les inputs user sont souvent de la forme *« tu es trop X »* / *« sois moins Y »* → refonte plutôt qu'ajout.
+SOUL.md est **le** fichier où la maintenance holistique compte le plus. Les inputs user sont souvent de la forme *« tu es trop X »* / *« sois moins Y »* → refonte plutôt qu'ajout. Le risque sans refonte : une accumulation de directives de ton contradictoires (cf `maintenance-fichiers-racines.md`).
 
-Anti-pattern à bannir :
-
-```
-[SOUL.md, accumulation au fil des sessions]
-
-## Voice
-- Sois familier.
-- Ne sois pas trop familier.
-- En fait, garde un ton neutre.
-- Mais reste un peu chaleureux.
-```
-
-→ Stack incohérente. Claude raisonne sur la dernière ligne en pratique. À 6 mois, le fichier est ingérable.
-
-Pattern attendu :
+Pattern attendu — refonte holistique chaque fois qu'un input modifie le ton :
 
 ```
 [SOUL.md, refondu]
@@ -71,8 +57,6 @@ Pattern attendu :
 Ton neutre et précis. Pas familier, pas distant. Direct au point.
 Tutoiement par défaut. Pas de politesses superflues.
 ```
-
-Refonte holistique chaque fois qu'un input modifie le ton. Détail : `maintenance-fichiers-racines.md`.
 
 ## Garde-fous anti-complaisance
 

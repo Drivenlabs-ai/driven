@@ -16,6 +16,8 @@ Selon l'argument :
 - **Aucun argument** → afficher récap contexte courant + actions pertinentes en langage naturel.
 - **Nom d'action explicite** → charger la référence correspondante :
   - `search` → recherche mémoire
+  - `explain` → fiche d'une entité (liens + mémoires connexes ; charge `graphe.md`)
+  - `path` → plus court chemin entre deux entités (charge `graphe.md`)
   - `audit` → audit du workspace
   - `migrate` → migration de structure
   - `setup-doc` → mise en place d'un document normatif

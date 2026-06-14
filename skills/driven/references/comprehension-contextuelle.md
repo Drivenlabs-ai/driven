@@ -56,7 +56,7 @@ User dit *« je veux faire un truc pour aider les PME à choisir leurs outils IA
 
 ### 5. Avant proposition stratégique
 
-Toute proposition stratégique (positioning, pricing, structure, etc.) sur un sujet déjà abordé → search BM25 d'abord, puis proposition informée par l'historique.
+Workflow canonique dans `challenge-anti-recidive.md` (consultation Lessons + mémoires avant toute proposition sur un sujet déjà abordé).
 
 ## Workflow du pré-trigger
 

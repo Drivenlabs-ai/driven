@@ -43,7 +43,7 @@ Production de la mémoire et du prompt **après** complétion du tri uniquement.
 
 ## Exclusion : mode routine
 
-Cette ref **ne s'active jamais en mode routine**. En routine, Claude est un agent autonome qui exécute une tâche et termine — il n'y a pas d'utilisateur en interaction à qui recommander quoi que ce soit, et proposer briserait l'autonomie.
+Cette ref **ne s'active jamais en mode routine** (Claude lancé en `/loop`, `/schedule` ou comme sub-agent). En routine, Claude est un agent autonome qui exécute une tâche et termine — il n'y a pas d'utilisateur en interaction à qui recommander quoi que ce soit, et proposer briserait l'autonomie.
 
 Mode routine détecté en Code via :
 
@@ -51,7 +51,7 @@ Mode routine détecté en Code via :
 - Tool `ScheduleWakeup` ou `CronCreate` disponible dans la liste des tools.
 - Section « Autonomous loop check » ou « Autonomous loop persistence guidance » dans le system prompt.
 
-Mode routine en Cowork : pas de signal observable documenté. Cowork est traité comme toujours interactif. Les scheduled tasks Cowork sont indistinguables d'une session normale côté Claude — accepté comme limitation V1.
+Mode routine en Cowork : pas de signal observable documenté — les scheduled tasks Cowork sont indistinguables d'une session normale côté Claude. Cowork est traité comme toujours interactif.
 
 ## Workflow
 
@@ -181,13 +181,10 @@ Pas plus. Le user voit la mémoire créée, le prompt prêt, et sait quoi faire 
 
 ## Anti-patterns
 
-- **Re-proposer trop souvent** : strictement 10 échanges entre relances, pas plus serré.
 - **Forcer la décision** : c'est une proposition, pas une obligation. Si user refuse définitivement, respecter.
 - **Inventer une saturation** : si aucun des 4 signaux n'est présent, ne pas proposer. Pas de paranoïa préventive.
 - **Prompt verbeux** : > 40 lignes = échec. Lisible en 15 secondes max par user.
 - **Wrap-up générique** : la mémoire de récap doit capturer ce qui s'est passé en session de manière factuelle et précise, pas un résumé corporate vague.
-- **Proposer en mode routine** : violation absolue. Si Claude tourne en /loop, /schedule ou comme sub-agent, jamais de proposition.
-- **Skipper le TaskCreate de tri** : forcing aligné §7.2 SKILL.md. Produire le wrap-up sans tri préalable contamine la nouvelle session avec des inférences présentées comme des faits.
 - **Mélanger C1 et C2 dans « Faits »** : inscrire une inférence comme un fait crée un drift silencieux dans la nouvelle session. Le tri est strict ; en cas de doute → C2.
 - **Fait sans pointeur source** : un fait dans « Faits 100% certains » doit pouvoir être vérifié par la nouvelle session. Si pas de path / Message-ID / URL / ID / output tool listable → ce n'est pas un C1, bascule en « NON inscrit volontairement ».
 - **Omettre « NON inscrit volontairement »** : sans cette section, la nouvelle session ignore qu'elle hérite d'un contexte tronqué. La section explicite le trou et donne l'instruction de comblement.
