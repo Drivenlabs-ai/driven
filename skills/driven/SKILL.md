@@ -16,7 +16,7 @@ description: >
   un document. Activer aussi sur signaux d'universalité ('désormais',
   'à partir de maintenant', 'à chaque fois', 'toujours', 'par défaut') qui
   marquent une convention durable plutôt qu'un événement ponctuel.
-argument-hint: "[intention en langage naturel] | [search | explain | path | audit | migrate | setup-doc]"
+argument-hint: "[intention en langage naturel] | [search | explain | path | audit | migrate | setup-doc | setup-dossier | workflow]"
 license: Proprietary — Drivenlabs
 ---
 
@@ -115,8 +115,6 @@ Toute phase Q&R avec l'utilisateur passe **obligatoirement** par `AskUserQuestio
 Format : 1 à 4 questions max par batch, 2 à 4 options par question, recommandation marquée « (Recommandé) » sur la première option si claire, contexte décisionnel intégré dans chaque description d'option.
 
 Exceptions : demandes triviales déterministes, exploration libre, texte libre substantiel attendu, confirmation simple binaire qui suit naturellement la conversation.
-
-**Anti-pattern récurrent observé** : enchaîner 2-3 questions NL inline en pensant que c'est plus naturel. C'est faux côté UX user — il préfère sélectionner que rédiger.
 
 Détail complet : `references/askuserquestion.md`.
 
@@ -284,9 +282,13 @@ Afficher un récap du contexte courant :
 | Argument | Action | Reference principale |
 |---|---|---|
 | `search` | Recherche BM25 dans les mémoires | `interface-cli.md` + invocation `scripts/search_memories.py` |
+| `explain` | Fiche d'une entité : liens, arêtes, mémoires connexes | `graphe.md` |
+| `path` | Plus court chemin entre deux entités du workspace | `graphe.md` |
 | `audit` | Audit holistique du CLAUDE.md racine et de ses sections | `audit-sections.md` + `gestion-contexte.md` |
 | `migrate` | Migration d'une note du personal vers un shared | `cross-author.md`, `factualite.md` |
 | `setup-doc` | Création guidée d'un nouveau document structuré | `frontmatter.md`, `routage.md` |
+| `setup-dossier` | Mise en place proactive d'un dossier nu | `setup-dossier.md` |
+| `workflow` | Sauvegarde du workflow de la session courante | `capitalise-workflow.md` |
 
 ### Intention en langage naturel
 
@@ -406,11 +408,3 @@ Toutes les references vivent dans `${CLAUDE_PLUGIN_ROOT}/skills/driven/reference
 - `skill-creator-routing.md` — Quand router vers `/skill-creator`.
 - `stop-slop-routing.md` — Invoquer `/stop-slop` avant contenu à partage externe.
 - `session-handoff.md` — Proposition proactive de basculer en nouvelle session (signal §6.2).
-
----
-
-## Pour finir
-
-Toujours préférer la question NL en langage naturel à l'action présomptueuse. Toujours valider avant de toucher un fichier normatif. Toujours appliquer le clean slate à l'édition. Toujours rapporter en deux lignes maximum.
-
-Le user n'a pas besoin de connaître l'existence de ce plugin. Il a besoin que son workspace tienne dans le temps sans qu'il ait à y penser.
