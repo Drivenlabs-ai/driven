@@ -114,6 +114,17 @@ Mapping vers `scripts/graph.py` (cf `graphe.md` pour le détail des sous-command
 
 Restitution en NL (jamais le JSON brut) : fiche lisible avec liens markdown pour `explain`, chaîne de connexions pour `path`. Si le résultat est ambigu (plusieurs candidats), demander en NL lequel.
 
+## Mémoire d'un repo code
+
+`search`, `explain` et `path` acceptent `--project <repo>` à la place de `--scope` pour cibler la mémoire native d'un repo code (`~/.claude/projects/<slug>/memory/`) :
+
+```bash
+python "${CLAUDE_PLUGIN_ROOT}/scripts/search_memories.py" "query" --project <repo>
+python "${CLAUDE_PLUGIN_ROOT}/scripts/graph.py" explain "entité" --project <repo>
+```
+
+Résolution du chemin et contexte : `memoire-projet-code.md`. Résultat vide si le repo n'a pas encore de mémoire native.
+
 ## Comportement quand workspace non-driven
 
 Si `/driven` est tapé dans un dossier sans CLAUDE.md `space-type` ancêtre :

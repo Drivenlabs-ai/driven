@@ -43,6 +43,10 @@ Pour les 5 dernières memory entries du dossier :
 
 Si le dossier a beaucoup de memory entries et que la tâche est ciblée (ex « cherche les mémoires sur le pricing »), invoquer le script `scripts/search_memories.py` (BM25) plutôt que lire les dernières chronologiques. Détail : `references/interface-cli.md` + `scripts/search_memories.py`.
 
+## Cascade vers la mémoire native d'un repo associé
+
+Quand le CLAUDE.md ou le doc d'un projet porte un champ `code-repo` (`frontmatter.md`), lire aussi la mémoire native de ce repo : le contexte technique rejoint le contexte business. Résolution du dossier et lecture : `memoire-projet-code.md`.
+
 ## Cascade vers les fichiers normatifs racine
 
 Quand on travaille dans un sous-dossier d'un shared, on suit la chaîne :

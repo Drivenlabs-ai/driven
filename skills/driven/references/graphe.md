@@ -14,6 +14,8 @@ python "${CLAUDE_PLUGIN_ROOT}/scripts/graph.py" <commande> [args] --scope "<raci
 
 `--scope` par défaut = cwd. Toujours passer la racine du workspace courant. Filtrer le préfixe stdout éventuel avant de parser le JSON.
 
+Pour un projet code, `--project <repo>` remplace `--scope` et cible la mémoire native du repo (`memoire-projet-code.md`).
+
 ## Sous-commandes et quand les utiliser
 
 | Situation | Commande | Lecture du résultat |

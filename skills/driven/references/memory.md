@@ -17,7 +17,7 @@ Activé quand user dit :
 Le user ne tape jamais le frontmatter. Claude infère silencieusement :
 
 1. **Scope**, perso vs shared, et lequel. Voir `scope-check.md`.
-2. **Dossier cible**, chercher le `memory/` du dossier thématique pertinent (ex `Clients/Olenbee/memory/`). Si absent → créer le dossier. Si le sujet est transverse → choisir le dossier qui colle le mieux ou demander en NL. Dans un projet code (repo git hors workspace driven), pas de choix : `.memory/` à la racine du repo, cf `memoire-projet-code.md`.
+2. **Dossier cible**, chercher le `memory/` du dossier thématique pertinent (ex `Clients/Olenbee/memory/`). Si absent → créer le dossier. Si le sujet est transverse → choisir le dossier qui colle le mieux ou demander en NL. Dans un projet code (repo git hors workspace driven), pas de choix : la mémoire native du repo, cf `memoire-projet-code.md`.
 3. **Lecture proactive des dernières mémoires du dossier cible**, par souci de cohérence. Claude juge le volume selon l'activité du dossier :
    - Dossier neuf (< 5 mémoires) → toutes lues.
    - Dossier modéré (5-30 mémoires) → 5 plus récentes (tri lexico = tri chrono).
@@ -61,10 +61,21 @@ L'historique reste lisible. Pas de réécriture qui efface le passé.
 Au moment de la création, Claude scanne le voisinage pour les mémoires connexes :
 
 1. Pour chaque entité mentionnée dans la nouvelle mémoire, invoquer `scripts/graph.py explain <entité>` (cf `graphe.md`) : les arêtes entrantes/sortantes donnent les candidats de liens markdown pertinents. À défaut (script indisponible), scan du `memory/` courant pour les mémoires de même `topic` ou mots-clés communs.
-2. Scan du contexte conversationnel pour les fichiers Write/Edit récents pertinents (positioning.md, brief.md, devis.xlsx, etc.).
-3. Insertion de liens markdown standards inline dans le corps `## Notes`.
+2. Insertion de liens markdown standards inline dans le corps `## Notes`.
 
 Pas de section « Liens » dédiée, les liens vivent dans le texte au moment naturel de la mention. Format `[Texte](path/relatif)`. Détail : `references/links.md`.
+
+## Trace des actions de la session
+
+Une mémoire fige un événement et ce qui en a découlé concrètement. Six mois plus tard, le lecteur doit savoir ce qui a été produit, supprimé et envoyé sans rouvrir la session. Une mémoire consigne donc, sans en omettre, les actions conséquentes de la session qu'elle documente :
+
+- **Fichiers du workspace créés ou modifiés pendant la session** (positioning.md, brief.md, devis.xlsx, etc.) → liens markdown inline dans le corps ; format et placement cf `Auto cross-link`.
+- **Fichiers supprimés, déplacés ou renommés** → mention factuelle dans le corps : un fichier disparu ne se linke pas, on nomme quoi, et la cible si déplacé.
+- **Éléments envoyés ou partagés vers l'extérieur** — mail, message, document partagé, invitation, ou tout autre élément sortant → ligne factuelle dans le corps : l'élément, le destinataire, la date, et un lien vers l'élément s'il a une référence stable (URL Drive, thread). Le contenu envoyé n'est pas recopié verbatim ; seuls l'élément, le destinataire et la référence sont consignés.
+
+Les lectures et recherches sans effet ne sont pas tracées : seules les mutations et les actions sortantes le sont.
+
+En shared space, ces lignes passent le filtre de `factualite.md` comme le reste du corps ; une action sortante y est par nature factuelle (« devis envoyé à laurent@olenbee.com le 11/05 »).
 
 ## Détection sensibles → routage perso
 
@@ -108,10 +119,6 @@ En tech-level haut (cf `verbosity-tech-level.md`), recap peut être un peu plus 
 Pas de cleanup automatique. Une mémoire ne disparaît jamais d'elle-même.
 
 Si user demande explicitement *« supprime cette mémoire »* : confirmer avant suppression (mention du fichier en NL). Si user dit *« corrige le typo dans cette mémoire »* : édition ponctuelle autorisée pour erreur factuelle évidente (date erronée, faute de frappe). Pas de réécriture de fond, utiliser une nouvelle mémoire (append-only).
-
-## Mémoires liées à des fichiers session (Code spécifique)
-
-Quand une mémoire référence des fichiers édités dans la même session (ex `Drivenlabs/positioning.md` mis à jour pendant le RDV documenté), les inclure dans les liens markdown du corps. La traçabilité avant-après reste lisible plus tard.
 
 ## Volume et longévité
 

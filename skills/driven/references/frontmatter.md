@@ -72,6 +72,18 @@ last-updated: 2026-05-12
 ---
 ```
 
+## Projet avec repo code associé
+
+Un projet dont le travail technique vit dans un repo code déclare ce repo via un champ optionnel `code-repo`, dans le frontmatter du doc du projet (son CLAUDE.md ou le doc qui le porte) :
+
+```yaml
+---
+code-repo: /Users/alexandrebouchez/Code/olenbee-app
+---
+```
+
+- `code-repo`, chemin absolu du repo. Lu pour résoudre et lire la mémoire native du repo quand on travaille sur le projet (`memoire-projet-code.md` §pont).
+
 ## CONTRIBUTING.md (sous-dossier sélectif, shared)
 
 Même frontmatter que `CLAUDE.md` shared :

@@ -176,7 +176,7 @@ Le plugin observe les signaux disponibles dans l'environnement et adapte ses com
 
 **Algorithme** : remontée d'arborescence depuis cwd, lecture des frontmatter, observation des signaux, application des profils correspondants. Détail : `references/scope-check.md`.
 
-**Fallback** : hors workspace driven, comportements de base actifs (patterns proactifs setup-dossier, capitalise-workflow, doctrine AskUserQuestion). Dans un repo git hors workspace driven, les mémoires suivent `memoire-projet-code.md` (dossier `.memory/` unique à la racine du repo, gitignored). Pas de blocage.
+**Fallback** : hors workspace driven, comportements de base actifs (patterns proactifs setup-dossier, capitalise-workflow, doctrine AskUserQuestion). Dans un repo git hors workspace driven, les mémoires suivent `memoire-projet-code.md` (mémoire native du repo, dans `~/.claude/projects/<slug>/memory/`, hors du repo). Pas de blocage.
 
 ---
 
@@ -378,7 +378,7 @@ Toutes les references vivent dans `${CLAUDE_PLUGIN_ROOT}/skills/driven/reference
 - `scope-check.md` — Détection workspace + distinction perso / shared (trigger user §6.1).
 - `frontmatter.md` — Formats YAML par type de fichier (trigger user §6.1).
 - `memory.md` — Création d'une memory entry, naming, append-only, cross-link (trigger user §6.1).
-- `memoire-projet-code.md` — Emplacement des mémoires dans un projet code : `.memory/` unique à la racine du repo, init + gitignore systématiques (trigger user §6.1).
+- `memoire-projet-code.md` — Mémoire d'un projet code dans la mémoire native du repo (`~/.claude/projects/<slug>/memory/`), résolution du chemin, pont avec un projet d'espace driven (trigger user §6.1).
 - `links.md` — Liens markdown standards, pas de stub, saillance contextuelle des entités (signal §6.2).
 - `propagation.md` — Cascades silencieuses + proposées (trigger user §6.1).
 - `factualite.md` — 4 heuristiques + reformulation silencieuse (signal shared §6.2).

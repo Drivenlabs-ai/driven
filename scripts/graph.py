@@ -28,6 +28,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+import native_memory_dir
+
 try:
     import yaml
 except ImportError:
@@ -180,12 +182,19 @@ def find_workspace_root(scope: Path) -> Path | None:
 
 
 def collect_md_files(scope: Path) -> list[Path]:
-    """Liste les .md sous scope, en excluant les dossiers techniques et _legacy."""
+    """Liste les .md sous scope, en excluant les dossiers techniques et _legacy.
+
+    L'exclusion porte sur les dossiers SOUS le scope, pas sur ses ancêtres : un
+    scope lui-même situé sous `.claude` (cas du dossier de mémoire native
+    `~/.claude/projects/<slug>/memory/`) reste parcouru normalement.
+    """
     if not scope.exists() or not scope.is_dir():
         return []
+    scope = scope.resolve()
     out: list[Path] = []
     for md in scope.rglob("*.md"):
-        if any(p.name in EXCLUDED_DIRS for p in md.parents):
+        rel = md.resolve().relative_to(scope)
+        if any(part in EXCLUDED_DIRS for part in rel.parts[:-1]):
             continue
         out.append(md)
     return out
@@ -253,10 +262,10 @@ def _add_edge_or_broken(
         target_rel = _rel(resolved, root)
         if target_rel is not None and target_rel in g.nodes:
             g.edges.append(Edge(source_rel, target_rel, ref_type, line))
-            return
-        # Cible sous la racine mais exclue du graphe (.claude, .tmp, _legacy) : ignorer.
-        if target_rel is not None:
-            return
+        # Cible résolue mais hors graphe — dossier exclu (.claude, .tmp, _legacy)
+        # ou fichier hors racine (lien absolu vers un repo depuis une mémoire
+        # native) : ni arête ni cassé.
+        return
     g.broken.append({"source": source_rel, "target": raw, "line": line, "ref_type": ref_type})
 
 
@@ -326,6 +335,19 @@ def write_cache(g: Graph, root: Path) -> None:
 def _resolve_root(scope: Path) -> Path:
     """Racine du workspace si détectée, sinon le scope lui-même."""
     return find_workspace_root(scope) or scope.resolve()
+
+
+def _project_scope(repo_path: str) -> Path:
+    """Scope = dossier de mémoire native d'un repo (cf native_memory_dir).
+
+    Si la mémoire native n'existe pas encore, retourne la cible canonique : le
+    graphe se construit alors vide, sans erreur.
+    """
+    memory_dir = native_memory_dir.resolve(repo_path)
+    if memory_dir is not None:
+        return memory_dir
+    project_dir, _ = native_memory_dir.resolve_project_dir(repo_path)
+    return project_dir / "memory"
 
 
 def cmd_build(scope: Path) -> dict[str, Any]:
@@ -536,27 +558,37 @@ def main() -> None:
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
+    project_help = (
+        "Code repo path: graph its native memory dir "
+        "(~/.claude/projects/<slug>/memory/) instead of --scope."
+    )
+
     p_build = sub.add_parser("build", help="Construit le graphe et écrit le cache.")
     p_build.add_argument("--scope", type=Path, default=Path.cwd())
+    p_build.add_argument("--project", default=None, help=project_help)
 
     p_impact = sub.add_parser("impact", help="Liens entrants vers un fichier/dossier.")
     p_impact.add_argument("target")
     p_impact.add_argument("--scope", type=Path, default=Path.cwd())
+    p_impact.add_argument("--project", default=None, help=project_help)
 
     p_explain = sub.add_parser("explain", help="Fiche d'une entité + ses arêtes.")
     p_explain.add_argument("query")
     p_explain.add_argument("--scope", type=Path, default=Path.cwd())
+    p_explain.add_argument("--project", default=None, help=project_help)
 
     p_path = sub.add_parser("path", help="Plus court chemin entre deux nœuds.")
     p_path.add_argument("node_a")
     p_path.add_argument("node_b")
     p_path.add_argument("--scope", type=Path, default=Path.cwd())
+    p_path.add_argument("--project", default=None, help=project_help)
 
     p_check = sub.add_parser("check", help="Liens cassés + orphelins.")
     p_check.add_argument("--scope", type=Path, default=Path.cwd())
+    p_check.add_argument("--project", default=None, help=project_help)
 
     args = parser.parse_args()
-    scope = args.scope.resolve()
+    scope = _project_scope(args.project) if args.project else args.scope.resolve()
 
     if args.command == "build":
         result = cmd_build(scope)
