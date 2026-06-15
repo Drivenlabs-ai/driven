@@ -1,8 +1,8 @@
 # session-handoff : Reprendre la conversation dans une nouvelle session quand elle sature
 
-Une conversation trop longue brouille le contexte et dégrade la précision de Claude. Le plugin détecte proactivement les signaux de saturation et propose à l'user de reprendre dans une nouvelle session, avec une mémoire de récap qui préserve le contexte et un prompt de reprise dense pour relancer rapidement.
+Une conversation trop longue brouille le contexte et dégrade la précision de Claude. Le plugin détecte proactivement les signaux de saturation et propose de reprendre dans une nouvelle session. Le handoff est l'étape de reprise — optionnelle — d'une clôture de session (`cloture-session.md`) : la mémoire de session est créée par la clôture (phase prise de mémoire), le handoff produit le prompt de reprise dense qui la cite. Cette ref couvre la détection de saturation et le format de ce prompt.
 
-Le risque structurel d'un wrap-up de session : la nouvelle instance Claude n'a pas vécu la session précédente. Si le récap contient des inférences non vérifiables présentées comme des faits, la nouvelle session hérite d'un **drift silencieux** — elle agit sur la base de déductions qu'elle ne peut pas retracer. La doctrine anti-drift (§Doctrine ci-dessous) impose un tri strict avant toute inscription dans le récap ou le prompt de reprise.
+Le risque structurel d'un wrap-up de session : la nouvelle instance Claude n'a pas vécu la session précédente. Si le prompt de reprise contient des inférences non vérifiables présentées comme des faits, la nouvelle session hérite d'un **drift silencieux** — elle agit sur la base de déductions qu'elle ne peut pas retracer. La doctrine anti-drift (§Doctrine ci-dessous) impose un tri strict avant toute inscription dans le prompt de reprise.
 
 ## Quand cette ref s'active
 
@@ -12,16 +12,16 @@ Trigger 4 — saturation conversationnelle. Quatre signaux possibles, n'importe 
 |---|---|
 | Volume échanges | Plus de 40 échanges user dans la conversation courante |
 | Tool-heavy | Plus de 10 actions tool-intensives cumulées (Read sur gros fichiers, Bash longs, Agent lancés, etc.) |
-| Pluri-sujets | La conversation a couvert 3+ sujets structurellement distincts (ex : pricing Olenbee, puis design Webflow, puis prospection LinkedIn) |
+| Pluri-sujets | La conversation a couvert 3+ sujets structurellement distincts (ex : pricing Acme, puis design Webflow, puis prospection LinkedIn) |
 | Agacement user | Phrases : « je m'y perds », « tu te répètes », « c'est bordélique », « fait court », « trop d'infos », « j'ai du mal à suivre », « tu deviens confus » |
 
 Claude n'a pas accès direct au compteur de tokens en Code ni en Cowork. L'estimation est qualitative.
 
-La ref s'active aussi sur demande explicite user : « on bascule », « nouvelle session », « fais le récap pour reprendre », « prépare le handoff ». Dans ce cas, pas de proposition préalable — Claude enchaîne directement sur le forcing TaskCreate.
+La ref s'active aussi sur demande explicite user : « on bascule », « nouvelle session », « fais le récap pour reprendre », « prépare le handoff ». Dans ce cas, la clôture (`cloture-session.md`) passe d'abord, puis ce handoff produit le prompt de reprise — pas de proposition préalable.
 
 ## Doctrine anti-drift : tri en 3 catégories
 
-Toute info candidate à l'inscription dans la mémoire de récap ou dans le prompt de reprise passe par un tri en 3 catégories.
+Toute info candidate à l'inscription dans le prompt de reprise passe par un tri en 3 catégories.
 
 | Catégorie | Définition | Action |
 |---|---|---|
@@ -33,13 +33,13 @@ Toute info candidate à l'inscription dans la mémoire de récap ou dans le prom
 
 **Distinction faits vs décisions actées** : un fait C1 décrit un état du monde vérifiable techniquement (version dans plugin.json, contenu d'un fichier, output d'un tool). Une décision actée est un arbitrage explicite tranché par user au cours de la session, qui n'existe pas ailleurs que dans la conversation. Les deux vont dans le prompt de reprise mais dans deux blocs distincts (cf format §Format).
 
-## Forcing : TaskCreate avant wrap-up
+## Forcing : tri avant le prompt de reprise
 
-Dès que la bascule est engagée (user accepte la proposition saturation, ou demande explicite de handoff), Claude crée un TaskCreate `Trier infos en 3 catégories` AVANT toute production du récap ou du prompt de reprise.
+Dès que le handoff est engagé, Claude crée un TaskCreate `Trier infos en 3 catégories` AVANT toute production du prompt de reprise.
 
 Le Task passe à `completed` seulement après application effective du tri sur chaque info candidate (pas de marquage prématuré). Aligné sur §7.2 du SKILL.md (mécanisme de forcing TaskCreate pour les triggers user §6.1).
 
-Production de la mémoire et du prompt **après** complétion du tri uniquement.
+Production du prompt **après** complétion du tri uniquement.
 
 ## Exclusion : mode routine
 
@@ -71,22 +71,15 @@ Si signal d'agacement détecté, adapter le phrasing :
 
 ### 3. Si user accepte (ou demande explicitement le handoff)
 
-a. **TaskCreate forcing du tri** : Claude crée un TaskCreate `Trier infos en 3 catégories` (doctrine anti-drift §Doctrine). Aucune production du récap ou du prompt avant complétion.
+a. **TaskCreate forcing du tri** : Claude crée un TaskCreate `Trier infos en 3 catégories` (doctrine anti-drift §Doctrine). Aucune production du prompt avant complétion.
 
 b. **Application du tri** : Claude scanne mentalement chaque info candidate (décisions, faits, locks, pointeurs, actions identifiées) et les classe C1 / C2 / C3 selon la doctrine. Pour chaque C1, identifier le pointeur source exact (path:section, Message-ID, URL, output tool daté).
 
-c. **Création de la mémoire de récap** dans le `memory/` du dossier projet dominant.
+c. **Mémoire de session** : déjà créée par la clôture (phase prise de mémoire, `memory.md`) dans le `memory/` du dossier projet dominant. Le handoff n'en crée pas de seconde — il la cite comme source pivot du prompt. Le tri C1 / C2 / C3 alimente les blocs du prompt (§Format), pas un fichier séparé.
 
-   - Mémoire **standard**, suit `memory.md`. Pas de type spécial.
-   - Topic descriptif : `recap-pricing-olenbee`, `recap-design-plugin-driven`, etc.
-   - `type` adapté : `decision` si arbitrages tranchés en session, `insight` si apprentissages, `memory` par défaut.
-   - Préambule `## Contexte` : 2-3 phrases self-contained résumant ce sur quoi on a travaillé.
-   - Corps `## Notes` : seulement du C1, chaque ligne avec son pointeur source. Décisions actées avec date et porteur de validation. Fichiers touchés via liens markdown.
-   - Section `## NON inscrit volontairement` : ce qui était candidat mais classé C2 / C3, avec instruction d'action pour la nouvelle session (re-déduire, re-vérifier par lecture directe, escalader à user).
+d. **Multi-projet** : si la session a touché plusieurs projets distincts, le prompt de reprise cible le projet dominant (celui qui a concentré l'essentiel des décisions), cohérent avec le dossier où la clôture a placé la mémoire de session. Si vraiment ambigu, demande NL :
 
-d. **Multi-projet** : si la session a touché plusieurs projets distincts, Claude infère le projet dominant (celui qui a concentré l'essentiel des décisions). Si vraiment ambigu, demande NL :
-
-   > On a touché Olenbee et le plugin driven. Je mets le récap dans Olenbee (dominant) ou je fais un récap par projet ?
+   > On a touché Acme et le plugin driven. Je prépare la reprise sur Acme (dominant) ou un prompt par projet ?
 
 e. **Génération du prompt de reprise** : 6 blocs denses (cf section suivante). Présenté à l'user en fin de message dans un code block, prêt à copier-coller.
 
@@ -120,7 +113,7 @@ User lance un nouveau `claude` dans le terminal (ou nouveau pane / nouveau termi
 On reprend [Nom du projet].
 
 ## Sources à lire en priorité (paths réels)
-- [path/mémoire-récap.md] — tri C1 détaillé de la session précédente
+- [path/mémoire-session.md] — capture de la session précédente
 - [path/fichier-touché.md] — [raison concise]
 - [autre source vérifiable : Message-ID Gmail, URL, ID document, output tool]
 
@@ -150,7 +143,7 @@ On reprend [Nom du projet].
 ### Règles d'écriture
 
 - **Identification** : nom court du projet, pas de jargon technique.
-- **Sources à lire en priorité** : 2 à 5 paths / IDs concrets, chacun vérifiable directement par la nouvelle session. La mémoire de récap est citée en premier — c'est le pivot qui contient le tri C1 complet.
+- **Sources à lire en priorité** : 2 à 5 paths / IDs concrets, chacun vérifiable directement par la nouvelle session. La mémoire de session est citée en premier — c'est le pivot de la reprise.
 - **Faits 100% certains** : exclusivement du C1. Chaque ligne porte son pointeur source entre parenthèses. Pas de fait sans source. Si pas de pointeur listable → le fait bascule en « NON inscrit volontairement ».
 - **Décisions actées** : arbitrages explicitement tranchés par user au cours de la session, avec date si possible. Distinct des faits C1 car porte un acte de validation conversationnelle, pas une vérifiabilité technique d'état du monde.
 - **NON inscrit volontairement** : explicite ce qui était candidat mais classé C2 / C3. Sans cette section, la nouvelle session ignore qu'elle hérite d'un contexte tronqué et peut prendre les inférences précédentes pour acquises. Chaque ligne porte une instruction d'action concrète (re-déduire, re-vérifier par lecture, escalader).
@@ -169,7 +162,7 @@ Le prompt est un **raccourci de contexte vérifiable**, pas un onboarding comple
 
 ## Recap user après wrap-up
 
-Une fois la mémoire de récap écrite et le prompt généré, recap minimal :
+Une fois la clôture faite et le prompt généré, recap minimal :
 
 > OK, j'ai mis le récap dans [dossier projet]. Voilà ton prompt de reprise :
 >

@@ -41,7 +41,7 @@ Avant tout routage, un test universel : **est-ce que c'est vrai demain ?** Si ou
 
 Le user n'est pas tech. Il fait, il parle, il décide. La structure (mémoires, frontmatter, authors, scope, factualité) se construit sans qu'il ait à y penser. Le plugin pose strictement les questions nécessaires, en langage naturel, sans jargon, et rapporte les actions en deux lignes maximum.
 
-Ne jamais exposer la machinerie. Ne pas dire « je vais créer une memory entry dans le dossier `memory/` avec un frontmatter YAML qui inclut authors, type, topic et keywords ». Dire « OK, j'ai noté ça dans Olenbee. »
+Ne jamais exposer la machinerie. Ne pas dire « je vais créer une memory entry dans le dossier `memory/` avec un frontmatter YAML qui inclut authors, type, topic et keywords ». Dire « OK, j'ai noté ça dans Acme. »
 
 ---
 
@@ -132,7 +132,7 @@ retenir, noter, document, ailleurs juste pour toi, le doc de [X], on aligne, on 
 
 ### Cas perso / partagé
 
-Préférer « espace perso » plutôt que « perso » seul. Préférer « espace partagé » plutôt que « shared space ». Si plusieurs espaces partagés sont actifs en même temps, préciser le nom (« espace partagé Drivenlabs Team », « le partagé Olenbee »).
+Préférer « espace perso » plutôt que « perso » seul. Préférer « espace partagé » plutôt que « shared space ». Si plusieurs espaces partagés sont actifs en même temps, préciser le nom (« espace partagé Drivenlabs Team », « le partagé Acme »).
 
 ### Garde-fou anti-git absolu
 
@@ -191,7 +191,7 @@ Les 4 triggers user activent un TaskCreate `Lire <refs>` AVANT toute action de m
 | **Création de fichier** | `Write` sur path inexistant, workspace driven | `scope-check.md`, `frontmatter.md`, `links.md` si mentions entités, `gestion-contexte.md` (test d'altitude) si CLAUDE.md |
 | **Demande de retenir une info** | Phrases NL : « retiens ça », « note ça », « garde une trace », « je veux retenir » | `memory.md`, `factualite.md` si shared, `links.md` si mentions, `memoire-projet-code.md` si repo git hors workspace driven |
 | **Modification d'un fichier de règle** | `Edit`/`Write` sur RULES.md, RULES/*.md, CONTRIBUTING.md, CLAUDE.md, SOUL.md, ME.md, VOICE.md, ABOUT.md | `maintenance-fichiers-racines.md` + référence dédiée au type de fichier, `propagation.md` |
-| **Demande de handoff de session** | Phrases NL : « on bascule », « nouvelle session », « fais le récap pour reprendre », « prépare le handoff », OU saturation §6.2 acceptée par user | `session-handoff.md` (forcing additionnel : TaskCreate `Trier infos en 3 catégories` avant production du récap, cf doctrine anti-drift de la ref) |
+| **Clôture de session** | Phrases NL de fin : « on ferme », « clôture la session », « on s'arrête là », « j'ai fini », « prépare le handoff », « nouvelle session », OU saturation §6.2 acceptée par user | `cloture-session.md` (forcing : TaskCreate `Clôture : revue des 4 phases`) ; `session-handoff.md` pour l'étape handoff optionnelle |
 
 ### 6.2 Signaux de support (refs ⭐ transverses attachées)
 
@@ -212,7 +212,7 @@ Chaque ref ⭐ transverse a un signal d'activation observable. Quand le signal e
 | Mention d'entité avec rôle structurant + contexte business + non-banalité | `links.md` + `proactivite.md` | Option selon convention de l'espace observée |
 | ≥ 2 signaux conversationnels de capitalisation en fin de session | `capitalise-workflow.md` | 3 options de routage |
 | Fact-drop business (verbe passé sur entité, décision future, opinion, découverte) | `proactivite.md` | Proposition NL de capture |
-| Saturation conversationnelle (> 40 échanges, > 10 tool-heavy, pluri-sujets, agacement) | `session-handoff.md` | Proposition bascule nouvelle session. Si user accepte → bascule en trigger §6.1 (forcing TaskCreate tri 3 catégories avant wrap-up) |
+| Saturation conversationnelle (> 40 échanges, > 10 tool-heavy, pluri-sujets, agacement) | `session-handoff.md` | Proposition bascule nouvelle session. Si user accepte → trigger Clôture §6.1 (`cloture-session.md`), puis handoff |
 | Sensible RH détecté (jugement RH, débauchage, NDA, vie privée tiers, dossier disciplinaire, préférences cachées) | `memory.md` §sensibles + `routage.md` | Routage personal (« ailleurs juste pour toi ») |
 | Cross-author shared (email user ∉ frontmatter `authors`) | `cross-author.md` | Question NL « Ce document est de X. Tu continues ? » |
 
@@ -245,7 +245,7 @@ Avant toute action sur un input user, scanner mentalement les **6 dimensions** s
 
 Le TaskCreate `Lire <refs>` des 4 triggers user est défini en §6.1. Le Task de lecture passe à `completed` SEULEMENT après les Read tool calls effectifs (pas de marquage prématuré).
 
-Pour le trigger handoff, un second TaskCreate `Trier infos en 3 catégories` s'enchaîne après lecture de `session-handoff.md` et avant production du récap (cf doctrine anti-drift de la ref).
+Pour le trigger clôture, le TaskCreate `Clôture : revue des 4 phases` s'enchaîne après lecture de `cloture-session.md` ; si un handoff suit, un second TaskCreate `Trier infos en 3 catégories` précède le prompt de reprise (`session-handoff.md`).
 
 Pour les supports auto (§6.2), le scan reste mental sans TaskCreate (pas de pollution TaskList sur petits inputs).
 
@@ -253,7 +253,7 @@ Pour les supports auto (§6.2), le scan reste mental sans TaskCreate (pas de pol
 
 Si l'input matche plusieurs dimensions, charger les refs de toutes les dimensions concernées avant action. Ne pas s'arrêter au trigger primaire.
 
-Exemple : « On a fait un kickoff avec Sarah de Acme, et désormais on les facture en €. » →
+Exemple : « On a fait un kickoff avec Jane Doe d'Acme, et désormais on les facture en €. » →
 
 - Dimension 1 (création) si dossier Acme à créer
 - Dimension 2 (entité) → `links.md` + `proactivite.md`
@@ -383,6 +383,7 @@ Toutes les references vivent dans `${CLAUDE_PLUGIN_ROOT}/skills/driven/reference
 - `propagation.md` — Cascades silencieuses + proposées (trigger user §6.1).
 - `factualite.md` — 4 heuristiques + reformulation silencieuse (signal shared §6.2).
 - `cross-author.md` — Flow 1 question, ajout co-auteur (signal §6.2).
+- `cloture-session.md` — Clôture de fin de session : prise de mémoire, consolidation, structuration, audit, handoff optionnel (trigger user §6.1).
 
 ### Découpage progressif
 
@@ -407,4 +408,4 @@ Toutes les references vivent dans `${CLAUDE_PLUGIN_ROOT}/skills/driven/reference
 - `verbosity-tech-level.md` — Inférence tech-level + verbosité recap.
 - `skill-creator-routing.md` — Quand router vers `/skill-creator`.
 - `stop-slop-routing.md` — Invoquer `/stop-slop` avant contenu à partage externe.
-- `session-handoff.md` — Proposition proactive de basculer en nouvelle session (signal §6.2).
+- `session-handoff.md` — Détection de saturation + prompt de reprise, étape handoff optionnelle de la clôture (signal §6.2).
