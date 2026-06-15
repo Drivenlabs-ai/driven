@@ -1,0 +1,7 @@
+# Mémoires de session driven — personnelles, jamais committées
+.memory/
+
+# Python / uv
+__pycache__/
+.venv/
+.pytest_cache/

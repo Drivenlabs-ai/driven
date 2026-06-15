@@ -21,6 +21,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+import native_memory_dir
+
 try:
     import yaml
 except ImportError:
@@ -276,6 +278,13 @@ def main() -> None:
         help="Directory to scan recursively for memory/*.md files (default: cwd).",
     )
     parser.add_argument(
+        "--project",
+        default=None,
+        help="Code repo path: search its native memory dir "
+        "(~/.claude/projects/<slug>/memory/) instead of --scope. "
+        "Empty result if the repo has no native memory yet.",
+    )
+    parser.add_argument(
         "--top",
         type=int,
         default=20,
@@ -294,7 +303,14 @@ def main() -> None:
         # argparse exits with 2 on usage errors — preserve
         sys.exit(2 if e.code == 2 else 0)
 
-    scope = args.scope.resolve()
+    if args.project:
+        memory_dir = native_memory_dir.resolve(args.project)
+        if memory_dir is None:
+            print(json.dumps([], ensure_ascii=False, indent=2))
+            return
+        scope = memory_dir
+    else:
+        scope = args.scope.resolve()
     results = search(scope, args.query, args.top)
     print(json.dumps(results, ensure_ascii=False, indent=2))
 

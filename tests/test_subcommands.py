@@ -51,18 +51,18 @@ def test_cmd_impact_fichier(workspace):
 
 
 def test_cmd_impact_trie_at_ref_avant_link(workspace):
-    # La fiche Olenbee reçoit un link (depuis la mémoire décision).
-    res = graph.cmd_impact(workspace, "Clients/Olenbee/CLAUDE.md")
+    # La fiche Acme reçoit un link (depuis la mémoire décision).
+    res = graph.cmd_impact(workspace, "Clients/Acme/CLAUDE.md")
     types = [e["type"] for e in res["incoming"]]
     # Tous les at-ref précèdent tous les link.
     assert types == sorted(types, key=lambda t: 0 if t == "at-ref" else 1)
 
 
 def test_cmd_impact_dossier_agrege(workspace):
-    res = graph.cmd_impact(workspace, "Clients/Olenbee")
+    res = graph.cmd_impact(workspace, "Clients/Acme")
     # Agrège l'impact de tous les fichiers du dossier (au moins le link vers la fiche).
     assert res["incoming"]
-    assert all(not e["source"].startswith("Clients/Olenbee/") for e in res["incoming"]) or True
+    assert all(not e["source"].startswith("Clients/Acme/") for e in res["incoming"]) or True
     # Le blast radius exclut les arêtes d'affinité.
     assert all(e["type"] in ("at-ref", "link") for e in res["incoming"])
 
@@ -74,39 +74,39 @@ def test_cmd_impact_cible_inconnue(workspace):
 
 def test_resolve_name_par_titre(workspace):
     g = graph.build_graph(workspace, workspace)
-    # "Olenbee" matche le H1 de la fiche client uniquement.
-    assert graph.resolve_name(g, "Olenbee") == ["Clients/Olenbee/CLAUDE.md"]
+    # "Acme" matche le H1 de la fiche client uniquement.
+    assert graph.resolve_name(g, "Acme") == ["Clients/Acme/CLAUDE.md"]
 
 
 def test_resolve_name_ambigu(workspace):
     g = graph.build_graph(workspace, workspace)
-    # "laurent" matche le contact (stem) ET la mémoire rdv (topic).
-    matches = set(graph.resolve_name(g, "laurent"))
+    # "john-doe" matche le contact (stem) ET la mémoire rdv (topic).
+    matches = set(graph.resolve_name(g, "john-doe"))
     assert matches == {
-        "Contacts/laurent.md",
-        "Clients/Olenbee/memory/2026-06-01-1000-alex-rdv.md",
+        "Contacts/john-doe.md",
+        "Clients/Acme/memory/2026-06-01-1000-alex-rdv.md",
     }
 
 
 def test_cmd_explain_noeud_unique(workspace):
-    res = graph.cmd_explain(workspace, "Clients/Olenbee/CLAUDE.md")
-    assert res["resolved"] == "Clients/Olenbee/CLAUDE.md"
+    res = graph.cmd_explain(workspace, "Clients/Acme/CLAUDE.md")
+    assert res["resolved"] == "Clients/Acme/CLAUDE.md"
     # Arête entrante (link depuis la décision pricing) et sortante (link vers le rdv).
     assert any(e["type"] == "link" for e in res["incoming"])
     assert any(e["type"] == "link" for e in res["outgoing"])
 
 
 def test_cmd_explain_candidats_multiples(workspace):
-    res = graph.cmd_explain(workspace, "laurent")
+    res = graph.cmd_explain(workspace, "john-doe")
     assert res["resolved"] is None
     assert len(res["candidates"]) == 2
 
 
 def test_cmd_explain_memoires_liees_triees(workspace):
-    res = graph.cmd_explain(workspace, "Clients/Olenbee/memory/2026-05-11-1430-mael-decision-pricing.md")
+    res = graph.cmd_explain(workspace, "Clients/Acme/memory/2026-05-11-1430-jane-decision-pricing.md")
     # La mémoire de révision est liée (affinité + link) ; présente dans linked_memories.
     linked = [m["path"] for m in res["linked_memories"]]
-    assert "Clients/Olenbee/memory/2026-05-14-0900-mael-revision-pricing.md" in linked
+    assert "Clients/Acme/memory/2026-05-14-0900-jane-revision-pricing.md" in linked
 
 
 def test_resolve_name_requete_vide(workspace):
@@ -118,25 +118,25 @@ def test_resolve_name_requete_vide(workspace):
 def test_cmd_path_connecte(workspace):
     res = graph.cmd_path(
         workspace,
-        "Clients/Olenbee/memory/2026-05-11-1430-mael-decision-pricing.md",
-        "Contacts/laurent.md",
+        "Clients/Acme/memory/2026-05-11-1430-jane-decision-pricing.md",
+        "Contacts/john-doe.md",
     )
-    # Chemin attendu : décision → fiche Olenbee → rdv → contact laurent.
+    # Chemin attendu : décision → fiche Acme → rdv → contact john-doe.
     assert res["connected"] is True
-    assert res["path"][0] == "Clients/Olenbee/memory/2026-05-11-1430-mael-decision-pricing.md"
-    assert res["path"][-1] == "Contacts/laurent.md"
+    assert res["path"][0] == "Clients/Acme/memory/2026-05-11-1430-jane-decision-pricing.md"
+    assert res["path"][-1] == "Contacts/john-doe.md"
     assert len(res["hops"]) == len(res["path"]) - 1
 
 
 def test_cmd_path_non_connecte(workspace):
-    res = graph.cmd_path(workspace, "Drivenlabs/positioning.md", "Contacts/laurent.md")
+    res = graph.cmd_path(workspace, "Drivenlabs/positioning.md", "Contacts/john-doe.md")
     assert res["connected"] is False
     assert res["path"] == []
 
 
 def test_cmd_path_extremite_ambigue(workspace):
-    res = graph.cmd_path(workspace, "laurent", "RULES.md")
-    # "laurent" est ambigu → candidats retournés, pas de chemin.
+    res = graph.cmd_path(workspace, "john-doe", "RULES.md")
+    # "john-doe" est ambigu → candidats retournés, pas de chemin.
     assert res["connected"] is False
     assert res.get("ambiguous")
 
@@ -155,4 +155,4 @@ def test_cmd_check_orphelins(workspace):
     # La racine normative CLAUDE.md n'est jamais signalée orpheline.
     assert "CLAUDE.md" not in res["orphans"]
     # Le contact est lié par la mémoire rdv → pas orphelin.
-    assert "Contacts/laurent.md" not in res["orphans"]
+    assert "Contacts/john-doe.md" not in res["orphans"]

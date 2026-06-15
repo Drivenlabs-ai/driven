@@ -4,7 +4,7 @@
 
 - Convention scopée à un dossier (universel dans le scope + intemporel + contextuellement neutre).
 - Demande d'ajouter une règle qui s'applique partout sous un dossier précis.
-- Énoncé d'apprentissage durable lié à un domaine (ex : « pour tous les devis Olenbee, valider avec Laurent »).
+- Énoncé d'apprentissage durable lié à un domaine (ex : « pour tous les devis Acme, valider avec John Doe »).
 - Doute sur le scope d'une lesson (globale RULES vs local CLAUDE.md de dossier).
 
 ## Doctrine
@@ -17,13 +17,13 @@ Le plugin a 3 surfaces de capture distinctes. Une lesson est le type intermédia
 | Lesson (section CLAUDE.md du dossier) | Apprentissage durable scopé au dossier | Universel dans le scope, intemporel |
 | Fichier normatif racine (RULES.md, SOUL.md, etc.) | Convention globale du workspace | Universel partout |
 
-Sans `lessons`, les apprentissages durables scopés à un dossier (« pour Olenbee, toujours valider les devis avec Marie ») se diluent dans les mémoires ou polluent les RULES racine.
+Sans `lessons`, les apprentissages durables scopés à un dossier (« pour Acme, toujours valider les devis avec Marie ») se diluent dans les mémoires ou polluent les RULES racine.
 
 ## Les 3 critères stricts
 
 Une lesson valide doit satisfaire **les 3 simultanément** :
 
-1. **Universelle dans son scope** — vraie pour 100% des cas dans le dossier où vit le CLAUDE.md hébergeur. Une lesson dans `Clients/Olenbee/CLAUDE.md` est universelle dans le contexte Olenbee, pas globalement.
+1. **Universelle dans son scope** — vraie pour 100% des cas dans le dossier où vit le CLAUDE.md hébergeur. Une lesson dans `Clients/Acme/CLAUDE.md` est universelle dans le contexte Acme, pas globalement.
 2. **Intemporelle** — pas liée à un moment précis. Pas « cette semaine on évite X », mais « X est toujours à éviter dans ce scope ».
 3. **Contextuellement neutre dans son scope** — pas dépendante d'une humeur ou d'un état de session particulier.
 
@@ -98,6 +98,6 @@ Pas plus de 5-7 lessons par CLAUDE.md. Au-delà, signe que certaines sont trop s
 
 ## Recap user après capture
 
-> OK, j'ai noté que pour Olenbee, on valide toujours avec Marie.
+> OK, j'ai noté que pour Acme, on valide toujours avec Marie.
 
 NL pur, pas de jargon. Cohérent avec doctrine d'invisibilité (SKILL.md §1).

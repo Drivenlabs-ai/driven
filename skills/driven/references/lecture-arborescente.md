@@ -16,7 +16,7 @@ Pour explorer un dossier nouveau ou commencer une tâche sur un sujet :
 2. **`CONTRIBUTING.md` du dossier si présent**, workflows et règles locales.
 3. **5 dernières memory entries du `memory/` local**, contexte récent.
 4. **Fichiers thématiques pertinents** (si tâche le justifie), positioning, brief, etc.
-5. **Sous-dossiers concernés**, `Clients/Olenbee/` si on bosse sur Olenbee.
+5. **Sous-dossiers concernés**, `Clients/Acme/` si on bosse sur Acme.
 
 Le tri lexicographique des memory entries (naming `YYYY-MM-DD-HHMM-...`) = tri chronologique. Les 5 plus récentes par ordre alphabétique inversé.
 
@@ -42,6 +42,10 @@ Pour les 5 dernières memory entries du dossier :
 3. Lire les 5 plus récents, préambule `## Contexte` suffit en général. Le corps `## Notes` se lit si la mémoire est directement pertinente.
 
 Si le dossier a beaucoup de memory entries et que la tâche est ciblée (ex « cherche les mémoires sur le pricing »), invoquer le script `scripts/search_memories.py` (BM25) plutôt que lire les dernières chronologiques. Détail : `references/interface-cli.md` + `scripts/search_memories.py`.
+
+## Cascade vers la mémoire native d'un repo associé
+
+Quand le CLAUDE.md ou le doc d'un projet porte un champ `code-repo` (`frontmatter.md`), lire aussi la mémoire native de ce repo : le contexte technique rejoint le contexte business. Résolution du dossier et lecture : `memoire-projet-code.md`.
 
 ## Cascade vers les fichiers normatifs racine
 
@@ -83,8 +87,8 @@ Pas de logique automatique sur le « workspace courant ». Chaque action vérifi
 
 La lecture arborescente est silencieuse par construction. Pas de mention au user *« je lis le CLAUDE.md »*. Le user voit le résultat, Claude qui répond avec le contexte chargé.
 
-Si user demande explicitement *« regarde dans le dossier Olenbee »*, alors mention en NL :
+Si user demande explicitement *« regarde dans le dossier Acme »*, alors mention en NL :
 
-> J'ai lu les conventions et les dernières mémoires d'Olenbee. Voilà ce que je vois...
+> J'ai lu les conventions et les dernières mémoires d'Acme. Voilà ce que je vois...
 
 Sinon, silence. La machinerie de lecture ne se commente pas.

@@ -19,7 +19,7 @@ Ce fichier verbalise le principe que driven applique implicitement partout. Sa l
 
 Une connaissance est **stable** : elle décrit une convention, une identité, un état durable du monde. Une mémoire est **épisodique** : elle fige un événement, une décision, une interaction à un instant T.
 
-Le test est universel. Une convention de pricing applicable à chaque devis est vraie demain (fichier). Un accord pricing passé avec Laurent sur un projet précis ne l'est pas (mémoire — il documente que cette décision a été prise ce jour-là, pas qu'elle régit toujours).
+Le test est universel. Une convention de pricing applicable à chaque devis est vraie demain (fichier). Un accord pricing passé avec John Doe sur un projet précis ne l'est pas (mémoire — il documente que cette décision a été prise ce jour-là, pas qu'elle régit toujours).
 
 ## Trois principes fondateurs
 
@@ -27,7 +27,7 @@ Le test est universel. Une convention de pricing applicable à chaque devis est 
 
 Test universel pour router connaissance vs mémoire. Quand Claude est sur le point d'écrire quelque chose, il se pose la question avant de choisir la cible. Si l'information décrit un comportement durable du système ou du user, c'est de la connaissance. Si elle décrit un événement révolu ou une décision contextuelle, c'est une mémoire.
 
-Cas tordu courant : « on a décidé que désormais tous les devis Olenbee suivent la structure X ». Deux faits cohabitent. La décision (« on a décidé ce jour-là ») est une mémoire timestampée. La convention (« désormais on fait X ») est une connaissance qui va dans le RULES ou CONTRIBUTING du dossier. Faire les deux. Pas de choix forcé.
+Cas tordu courant : « on a décidé que désormais tous les devis Acme suivent la structure X ». Deux faits cohabitent. La décision (« on a décidé ce jour-là ») est une mémoire timestampée. La convention (« désormais on fait X ») est une connaissance qui va dans le RULES ou CONTRIBUTING du dossier. Faire les deux. Pas de choix forcé.
 
 ### 2. SAVOIR vs FAIRE
 
@@ -77,9 +77,9 @@ La table de `routage.md` est la **déclinaison opérationnelle** du test pivot p
 
 Signal d'universalité (« désormais »). C'est une convention durable du user → fichier (ME.md ou un sous-fichier de préférences outils). Une mémoire timestampée peut être créée en complément pour tracer le moment du changement de préférence, avec lien vers le fichier mis à jour.
 
-### « On a parlé avec Laurent du pricing, il valide 8K »
+### « On a parlé avec John Doe du pricing, il valide 8K »
 
-Événement timestampé → mémoire dans `Clients/Olenbee/memory/`. Le fait que le pricing soit à 8K est une donnée qui appartient à ce projet précis, pas une convention générale.
+Événement timestampé → mémoire dans `Clients/Acme/memory/`. Le fait que le pricing soit à 8K est une donnée qui appartient à ce projet précis, pas une convention générale.
 
 ### « Pour tous les devis désormais on utilise Dougs »
 

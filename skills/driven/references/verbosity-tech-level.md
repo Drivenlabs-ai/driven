@@ -51,7 +51,7 @@ Le défaut est **ajustable** dès le premier signal explicite de la narrative ou
 
 | Action | Recap type |
 |---|---|
-| Mémoire créée | *« OK, j'ai noté ça dans Olenbee. »* |
+| Mémoire créée | *« OK, j'ai noté ça dans Acme. »* |
 | Fichier édité | *« OK, c'est mis à jour. »* |
 | Cross-author validé | *« OK, j'ai mis à jour le doc et je t'ai ajouté en co-auteur. »* |
 | Refonte SOUL.md | *« OK, j'ai ajusté le ton dans SOUL.md. »* |
@@ -63,9 +63,9 @@ Vocabulaire : pas de « memory », « frontmatter », « refactor », « scope �
 
 | Action | Recap type |
 |---|---|
-| Mémoire créée | *« OK, ajouté une décision dans `Clients/Olenbee/memory/2026-05-11-1430-alex-pricing-pack.md` avec liens vers le pricing et le brief. »* |
-| Fichier édité | *« OK, mis à jour `Clients/Olenbee/brief.md`, section pricing refondue, lien vers la nouvelle décision. »* |
-| Cross-author validé | *« OK, mis à jour le doc, ajouté `mael@drivenlabs.ai` à `authors`, créé une mémoire. »* |
+| Mémoire créée | *« OK, ajouté une décision dans `Clients/Acme/memory/2026-05-11-1430-alex-pricing-pack.md` avec liens vers le pricing et le brief. »* |
+| Fichier édité | *« OK, mis à jour `Clients/Acme/brief.md`, section pricing refondue, lien vers la nouvelle décision. »* |
+| Cross-author validé | *« OK, mis à jour le doc, ajouté `jane@drivenlabs.ai` à `authors`, créé une mémoire. »* |
 | Refonte SOUL.md | *« OK, refonte de SOUL.md, sections Voice & Tone et Interaction Style alignées sur le ton neutre. 3 passages familiers supprimés. »* |
 | Recherche BM25 | Top 5 hits avec préambule, score si pertinent (« score 8.42 »), paths complets |
 

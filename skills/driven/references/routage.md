@@ -21,18 +21,18 @@ Claude raisonne sur la **nature** de la demande user (événement ponctuel ? con
 
 | # | Nature de la demande | Cible | Exemples | Garde-fous |
 |---|---|---|---|---|
-| 1 | Événement timestampé (RDV, call, décision ponctuelle) | Memory entry dans `memory/` du dossier thématique | « RDV avec Laurent », « on a décidé de pricer à 8K », « j'ai eu un appel avec Olenbee » | Factualité active si shared. Naming `YYYY-MM-DD-HHMM-author-topic.md`. Contexte 2-3 phrases obligatoire. |
+| 1 | Événement timestampé (RDV, call, décision ponctuelle) | Memory entry dans `memory/` du dossier thématique | « RDV avec John Doe », « on a décidé de pricer à 8K », « j'ai eu un appel avec Acme » | Factualité active si shared. Naming `YYYY-MM-DD-HHMM-author-topic.md`. Contexte 2-3 phrases obligatoire. |
 | 2 | Convention durable du team / dossier | `RULES.md` ou `CONTRIBUTING.md` du dossier shared | « on bosse toujours par sprints de 2 semaines », « pour les briefs client on suit la structure X », « tous les devis passent par Dougs » | Validation explicite. Maintenance holistique (cf `maintenance-fichiers-racines.md`). Critère criticité élevée si RULES racine. |
 | 3 | Posture / interaction Claude | `SOUL.md` du personal space | « tu es trop familier », « challenge plus mes idées », « ne me complimente pas » | Refonte holistique du ton, pas ajout d'une ligne. Détail : `soul-md.md`. |
-| 4 | Identité user (rôle, contexte business, situation) | `ME.md` (ou sous-dossier `ME/`) | « j'ai un nouveau rôle », « Drivenlabs change de positionnement », « j'ai recruté Maël comme assistant » | Propose mise à jour narrative, propose refonte si changement structurel. |
+| 4 | Identité user (rôle, contexte business, situation) | `ME.md` (ou sous-dossier `ME/`) | « j'ai un nouveau rôle », « Drivenlabs change de positionnement », « j'ai recruté Jane Doe comme assistant » | Propose mise à jour narrative, propose refonte si changement structurel. |
 | 5 | Voix sortante de l'user (comment l'user écrit) | `VOICE/voice-perso.md` ou `VOICE/surfaces/<surface>.md` | « pour LinkedIn préfère du court », « n'utilise plus tel mot dans mes mails », « registre plus direct sur les DMs » | Maintenance holistique de la surface concernée. Détail : `voice-md.md`. |
 | 6 | Brand voice du team | `Brand/voice/` ou équivalent du shared | « le ton Drivenlabs sur le site est trop corporate », « notre voix devrait être plus directe » | Maintenance holistique. Validation explicite (touche un fichier normatif du shared). |
 | 7 | Workflow répétitif automatisable | Nouveau skill custom (route vers `/skill-creator`) | « je veux automatiser la prospection LinkedIn chaque semaine », « à chaque devis envoyé, j'aimerais que tu fasses X automatiquement » | Rare. Ton pédagogique sans infantiliser. Détail : `skill-creator-routing.md`. |
 | 8 | Contenu produit pour le travail (80 % des cas) | Markdown simple dans le dossier thématique | Brief client, positioning, deck, fiche produit, lead magnet, post draft, devis | Scope-check perso vs shared. Authors liste si shared. Pas de RULE factualité (c'est du contenu produit, pas une mémoire). |
-| 9 | Mention d'une personne / organisation sans document | (a) Pas de lien si ponctuel ; (b) Création réelle si entité importante | « comme l'a dit John dans son post » → pas de lien ; « j'ai rencontré Pierre Martin, prospect » → propose création doc | Seuil de pertinence. Détail : `links.md`. **Jamais de stub**. |
-| 10 | Modif d'un fichier RULES / CONTRIBUTING / CLAUDE racine team | RULES.md / CONTRIBUTING.md / CLAUDE.md du shared | « ajoute cette règle à notre fonctionnement », « le CLAUDE.md du dossier Olenbee doit aussi mentionner X » | Criticité élevée. Alerte pédagogique avant modif. Validation explicite. Maintenance holistique. |
-| 11 | Demande exhaustive sur une entité connue | Vue assemblée via `explain` : fiche + arêtes + mémoires liées, pas une recherche de mots | « qu'est-ce qu'on sait sur Olenbee », « montre tout sur X », « fais-moi une fiche sur Pierre » → `explain <entité>` | `graphe.md`. Restituer en NL, jamais le JSON. |
-| 12 | Demande de lien entre deux entités | Plus court chemin via `path` | « quel est le lien entre Olenbee et Laurent », « comment A et B sont liés » → `path <A> <B>` | `graphe.md`. Si ambigu, demander lequel. |
+| 9 | Mention d'une personne / organisation sans document | (a) Pas de lien si ponctuel ; (b) Création réelle si entité importante | « comme l'a dit John Doe dans son post » → pas de lien ; « j'ai rencontré John Doe, prospect » → propose création doc | Seuil de pertinence. Détail : `links.md`. **Jamais de stub**. |
+| 10 | Modif d'un fichier RULES / CONTRIBUTING / CLAUDE racine team | RULES.md / CONTRIBUTING.md / CLAUDE.md du shared | « ajoute cette règle à notre fonctionnement », « le CLAUDE.md du dossier Acme doit aussi mentionner X » | Criticité élevée. Alerte pédagogique avant modif. Validation explicite. Maintenance holistique. |
+| 11 | Demande exhaustive sur une entité connue | Vue assemblée via `explain` : fiche + arêtes + mémoires liées, pas une recherche de mots | « qu'est-ce qu'on sait sur Acme », « montre tout sur X », « fais-moi une fiche sur John Doe » → `explain <entité>` | `graphe.md`. Restituer en NL, jamais le JSON. |
+| 12 | Demande de lien entre deux entités | Plus court chemin via `path` | « quel est le lien entre Acme et John Doe », « comment A et B sont liés » → `path <A> <B>` | `graphe.md`. Si ambigu, demander lequel. |
 
 ## Principes en prose
 
@@ -44,7 +44,7 @@ Quand le routage est ambigu, Claude demande en langage naturel, jamais par caté
 
 > Je crée un doc pour ça ou je le mentionne juste sans créer ?
 
-> Tu veux que je note la décision dans Olenbee, ou que ça remonte dans le RULES de Drivenlabs ?
+> Tu veux que je note la décision dans Acme, ou que ça remonte dans le RULES de Drivenlabs ?
 
 Le user choisit en deux mots, pas en parcourant un menu.
 
@@ -71,7 +71,7 @@ Pas d'infantilisation. Si user dit non, abandon. Détail : `skill-creator-routin
 Le recap au user après routage suit le tech-level inféré (cf `verbosity-tech-level.md`) :
 
 - **Tech bas** (défaut Cowork, user non-tech) : *« OK, j'ai retenu. »*
-- **Tech haut** (défaut Code, user dev) : *« OK, ajouté une décision dans `Clients/Olenbee/memory/` avec liens vers le pricing et le brief. »*
+- **Tech haut** (défaut Code, user dev) : *« OK, ajouté une décision dans `Clients/Acme/memory/` avec liens vers le pricing et le brief. »*
 
 Pas de description verbeuse de la mécanique de routage dans aucun cas.
 
@@ -79,11 +79,11 @@ Pas de description verbeuse de la mécanique de routage dans aucun cas.
 
 ### Demande qui touche plusieurs cibles
 
-Si une demande user touche plusieurs cibles (ex : « on a décidé que désormais tous les devis Olenbee suivent la structure X » → memory entry pour la décision + update du `CONTRIBUTING.md` Olenbee pour la convention), faire les deux. Pas de choix forcé.
+Si une demande user touche plusieurs cibles (ex : « on a décidé que désormais tous les devis Acme suivent la structure X » → memory entry pour la décision + update du `CONTRIBUTING.md` Acme pour la convention), faire les deux. Pas de choix forcé.
 
 Recap unifié au user :
 
-> OK, j'ai noté la décision dans Olenbee et mis à jour la convention dans le doc du dossier.
+> OK, j'ai noté la décision dans Acme et mis à jour la convention dans le doc du dossier.
 
 ### Demande qui pourrait être obsolète
 
@@ -105,6 +105,6 @@ Si user confond : reformuler en NL la nature de ce qu'on s'apprête à écrire :
 
 ## Quand le user introduit explicitement la cible
 
-Si user dit « ajoute ça au CLAUDE.md d'Olenbee » ou « note dans le SOUL.md que tu dois être plus direct », pas de routage à inférer, exécuter directement, après validation explicite si fichier normatif (cf principes ci-dessus).
+Si user dit « ajoute ça au CLAUDE.md d'Acme » ou « note dans le SOUL.md que tu dois être plus direct », pas de routage à inférer, exécuter directement, après validation explicite si fichier normatif (cf principes ci-dessus).
 
 L'inférence ne sert qu'en absence de cible explicite.

@@ -34,7 +34,7 @@ def test_extract_h1():
 
 
 def test_infer_kind_memory():
-    p = Path("Clients/Olenbee/memory/2026-05-11-1430-mael-decision.md")
+    p = Path("Clients/Acme/memory/2026-05-11-1430-jane-decision.md")
     assert graph.infer_kind(p, {"date": "2026-05-11"}) == "memory"
 
 
@@ -65,10 +65,10 @@ def test_extract_links_avec_lignes():
 
 def test_extract_links_ignore_non_md():
     # Une cible sans extension .md n'est pas une arête candidate.
-    text = "[dossier](Clients/Olenbee) et [doc](notes.md)\n"
+    text = "[dossier](Clients/Acme) et [doc](notes.md)\n"
     targets = [t for t, _ in graph.extract_links(text)]
     assert "notes.md" in targets
-    assert "Clients/Olenbee" not in targets
+    assert "Clients/Acme" not in targets
 
 
 def test_extract_at_refs():
@@ -82,15 +82,15 @@ def test_extract_at_refs():
 
 
 def test_resolve_target_relatif_au_fichier(workspace):
-    source = workspace / "Clients/Olenbee/memory/2026-05-14-0900-mael-revision-pricing.md"
-    resolved = graph.resolve_target("2026-05-11-1430-mael-decision-pricing.md", source, workspace)
-    assert resolved == (source.parent / "2026-05-11-1430-mael-decision-pricing.md").resolve()
+    source = workspace / "Clients/Acme/memory/2026-05-14-0900-jane-revision-pricing.md"
+    resolved = graph.resolve_target("2026-05-11-1430-jane-decision-pricing.md", source, workspace)
+    assert resolved == (source.parent / "2026-05-11-1430-jane-decision-pricing.md").resolve()
 
 
 def test_resolve_target_relatif_a_la_racine(workspace):
     source = workspace / "CLAUDE.md"
-    resolved = graph.resolve_target("Clients/Olenbee/CLAUDE.md", source, workspace)
-    assert resolved == (workspace / "Clients/Olenbee/CLAUDE.md").resolve()
+    resolved = graph.resolve_target("Clients/Acme/CLAUDE.md", source, workspace)
+    assert resolved == (workspace / "Clients/Acme/CLAUDE.md").resolve()
 
 
 def test_resolve_target_inexistant(workspace):
@@ -105,7 +105,7 @@ def test_resolve_target_ignore_ancre(workspace):
 
 
 def test_find_workspace_root_depuis_sous_dossier(workspace):
-    deep = workspace / "Clients/Olenbee/memory"
+    deep = workspace / "Clients/Acme/memory"
     assert graph.find_workspace_root(deep) == workspace.resolve()
 
 

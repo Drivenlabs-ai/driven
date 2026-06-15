@@ -30,44 +30,44 @@ def workspace(tmp_path: Path) -> Path:
 
     # Racine normative avec un at-ref valide (RULES.md) et un cassé (TOOLS.md absent).
     _write(root / "CLAUDE.md", (
-        "---\nspace-type: shared\nauthors:\n  - mael@drivenlabs.ai\n---\n\n"
+        "---\nspace-type: shared\nauthors:\n  - jane@drivenlabs.ai\n---\n\n"
         "# Workspace\n\nVoir @RULES.md pour les conventions. Voir aussi @TOOLS.md.\n"
     ))
     _write(root / "RULES.md", (
-        "---\nauthors:\n  - mael@drivenlabs.ai\n---\n\n# Règles\n\nConventions.\n"
+        "---\nauthors:\n  - jane@drivenlabs.ai\n---\n\n# Règles\n\nConventions.\n"
     ))
 
-    # Fiche client (normative car CLAUDE.md), titre H1 "Olenbee", lien vers le rdv.
-    _write(root / "Clients/Olenbee/CLAUDE.md", (
-        "---\nauthors:\n  - mael@drivenlabs.ai\n---\n\n# Olenbee\n\n"
+    # Fiche client (normative car CLAUDE.md), titre H1 "Acme", lien vers le rdv.
+    _write(root / "Clients/Acme/CLAUDE.md", (
+        "---\nauthors:\n  - jane@drivenlabs.ai\n---\n\n# Acme\n\n"
         "Client actif. Dernier point : [le RDV](memory/2026-06-01-1000-alex-rdv.md).\n"
     ))
 
     # Deux mémoires même topic → affinité ; la révision linke la décision + un brief cassé.
-    _write(root / "Clients/Olenbee/memory/2026-05-11-1430-mael-decision-pricing.md", (
-        "---\ndate: 2026-05-11\ntime: \"1430\"\nauthors:\n  - mael@drivenlabs.ai\n"
-        "type: decision\ntopic: pricing-olenbee\nkeywords:\n  - olenbee\n  - pricing\n"
+    _write(root / "Clients/Acme/memory/2026-05-11-1430-jane-decision-pricing.md", (
+        "---\ndate: 2026-05-11\ntime: \"1430\"\nauthors:\n  - jane@drivenlabs.ai\n"
+        "type: decision\ntopic: pricing-acme\nkeywords:\n  - acme\n  - pricing\n"
         "  - pack-sales\n  - negociation\n  - devis\n---\n\n# Décision pricing\n\n"
-        "## Contexte\nPricing Olenbee.\n\n## Notes\nVoir [la fiche](../CLAUDE.md).\n"
+        "## Contexte\nPricing Acme.\n\n## Notes\nVoir [la fiche](../CLAUDE.md).\n"
     ))
-    _write(root / "Clients/Olenbee/memory/2026-05-14-0900-mael-revision-pricing.md", (
-        "---\ndate: 2026-05-14\ntime: \"0900\"\nauthors:\n  - mael@drivenlabs.ai\n"
-        "type: decision\ntopic: pricing-olenbee\nkeywords:\n  - olenbee\n  - pricing\n"
+    _write(root / "Clients/Acme/memory/2026-05-14-0900-jane-revision-pricing.md", (
+        "---\ndate: 2026-05-14\ntime: \"0900\"\nauthors:\n  - jane@drivenlabs.ai\n"
+        "type: decision\ntopic: pricing-acme\nkeywords:\n  - acme\n  - pricing\n"
         "  - revision\n  - devis\n---\n\n# Révision pricing\n\n## Contexte\nRévision.\n\n"
-        "## Notes\nRévise [la décision](2026-05-11-1430-mael-decision-pricing.md). "
+        "## Notes\nRévise [la décision](2026-05-11-1430-jane-decision-pricing.md). "
         "Cf [brief](../brief.md). Source : [post](https://example.com/x).\n"
     ))
 
-    # Mémoire RDV : topic "laurent" (collision de nom avec le contact), linke le contact.
-    _write(root / "Clients/Olenbee/memory/2026-06-01-1000-alex-rdv.md", (
+    # Mémoire RDV : topic "john-doe" (collision de nom avec le contact), linke le contact.
+    _write(root / "Clients/Acme/memory/2026-06-01-1000-alex-rdv.md", (
         "---\ndate: 2026-06-01\ntime: \"1000\"\nauthors:\n  - alex@drivenlabs.ai\n"
-        "type: interaction\ntopic: laurent\nkeywords:\n  - laurent\n  - meeting\n"
-        "  - agenda\n---\n\n# RDV Laurent\n\n## Contexte\nPoint.\n\n## Notes\n"
-        "Avec [Laurent](../../../Contacts/laurent.md).\n"
+        "type: interaction\ntopic: john-doe\nkeywords:\n  - john-doe\n  - meeting\n"
+        "  - agenda\n---\n\n# RDV John Doe\n\n## Contexte\nPoint.\n\n## Notes\n"
+        "Avec [John Doe](../../../Contacts/john-doe.md).\n"
     ))
 
-    # Contact (content), stem "laurent" → collision avec le topic de la mémoire rdv.
-    _write(root / "Contacts/laurent.md", "# Laurent Urien\n\nContact Olenbee.\n")
+    # Contact (content), stem "john-doe" → collision avec le topic de la mémoire rdv.
+    _write(root / "Contacts/john-doe.md", "# John Doe\n\nContact Acme.\n")
 
     # Document orphelin (aucune arête entrante).
     _write(root / "Drivenlabs/positioning.md", "# Positioning\n\nSegment PME.\n")

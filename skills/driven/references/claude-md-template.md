@@ -16,8 +16,8 @@ last-updated: 2026-05-12
 members:
   - email: alex@drivenlabs.ai
     name: Alexandre Bouchez
-  - email: mael@drivenlabs.ai
-    name: Maël Urien
+  - email: jane@drivenlabs.ai
+    name: Jane Doe
 ---
 ```
 
@@ -161,7 +161,7 @@ Pas de frontmatter `authors` (mono-user implicite). `last-updated` reste utile.
 
 ## Pas de pattern imposé pour le CLAUDE.md d'un sous-dossier business
 
-Les sous-dossiers (`Clients/Olenbee/CLAUDE.md`, `Drivenlabs/Driven-Sales/CLAUDE.md`) suivent une structure plus libre, adaptée au domaine. Le pattern 4-sections est la **valeur par défaut** pour la racine d'un shared/personal space, pas une obligation universelle.
+Les sous-dossiers (`Clients/Acme/CLAUDE.md`, `Drivenlabs/Driven-Sales/CLAUDE.md`) suivent une structure plus libre, adaptée au domaine. Le pattern 4-sections est la **valeur par défaut** pour la racine d'un shared/personal space, pas une obligation universelle.
 
 Claude juge la structure contextuelle selon les principes (SSOT, progressive disclosure) et le test d'altitude (`gestion-contexte.md`) : un sous-CLAUDE.md route vers ses fichiers et sous-dossiers, il n'inline pas leur détail. Chaque domaine a ses contraintes et son audience naturelle.
 
@@ -187,7 +187,7 @@ partagé regroupe le pilotage de l'agence : business, clients, contenu, prospect
 
 Members :
 - alex@drivenlabs.ai, fondateur
-- mael@drivenlabs.ai, assistant LinkedIn et prospection
+- jane@drivenlabs.ai, assistant LinkedIn et prospection
 
 ## Index
 

@@ -22,11 +22,11 @@ def test_collect_exclut_dossiers_techniques(workspace):
 def test_build_noeuds_et_kinds(workspace):
     g = graph.build_graph(workspace, workspace)
     assert g.nodes["CLAUDE.md"]["kind"] == "normative"
-    assert g.nodes["Clients/Olenbee/CLAUDE.md"]["kind"] == "normative"
+    assert g.nodes["Clients/Acme/CLAUDE.md"]["kind"] == "normative"
     assert g.nodes["Drivenlabs/positioning.md"]["kind"] == "content"
-    assert g.nodes["Clients/Olenbee/memory/2026-05-11-1430-mael-decision-pricing.md"]["kind"] == "memory"
+    assert g.nodes["Clients/Acme/memory/2026-05-11-1430-jane-decision-pricing.md"]["kind"] == "memory"
     # Le titre H1 est capturé.
-    assert g.nodes["Clients/Olenbee/CLAUDE.md"]["title"] == "Olenbee"
+    assert g.nodes["Clients/Acme/CLAUDE.md"]["title"] == "Acme"
 
 
 def test_build_arete_at_ref_valide(workspace):
@@ -43,8 +43,8 @@ def test_build_at_ref_casse_dans_broken(workspace):
 def test_build_arete_link_valide(workspace):
     g = graph.build_graph(workspace, workspace)
     links = _edges(g, "link")
-    src = "Clients/Olenbee/memory/2026-05-14-0900-mael-revision-pricing.md"
-    tgt = "Clients/Olenbee/memory/2026-05-11-1430-mael-decision-pricing.md"
+    src = "Clients/Acme/memory/2026-05-14-0900-jane-revision-pricing.md"
+    tgt = "Clients/Acme/memory/2026-05-11-1430-jane-decision-pricing.md"
     assert any(e.source == src and e.target == tgt for e in links)
 
 
@@ -83,17 +83,17 @@ def test_build_lien_vers_fichier_exclu_ni_arete_ni_casse(tmp_path):
 def test_affinity_meme_topic(workspace):
     g = graph.build_graph(workspace, workspace)
     aff = _edges(g, "affinity")
-    a = "Clients/Olenbee/memory/2026-05-11-1430-mael-decision-pricing.md"
-    b = "Clients/Olenbee/memory/2026-05-14-0900-mael-revision-pricing.md"
+    a = "Clients/Acme/memory/2026-05-11-1430-jane-decision-pricing.md"
+    b = "Clients/Acme/memory/2026-05-14-0900-jane-revision-pricing.md"
     assert any({e.source, e.target} == {a, b} for e in aff)
 
 
 def test_affinity_pas_de_lien_sujets_distincts(workspace):
     g = graph.build_graph(workspace, workspace)
     aff = _edges(g, "affinity")
-    rdv = "Clients/Olenbee/memory/2026-06-01-1000-alex-rdv.md"
-    pricing = "Clients/Olenbee/memory/2026-05-11-1430-mael-decision-pricing.md"
-    # rdv (topic laurent, 0 keyword commun) n'a pas d'affinité avec le pricing.
+    rdv = "Clients/Acme/memory/2026-06-01-1000-alex-rdv.md"
+    pricing = "Clients/Acme/memory/2026-05-11-1430-jane-decision-pricing.md"
+    # rdv (topic john-doe, 0 keyword commun) n'a pas d'affinité avec le pricing.
     assert not any({e.source, e.target} == {rdv, pricing} for e in aff)
 
 
