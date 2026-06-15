@@ -61,7 +61,7 @@ Les noms exacts sont au choix. Claude propose en NL quand un thème mérite extr
 
 | Trigger | Action |
 |---|---|
-| User dit *« retiens que je travaille avec Maël maintenant »* | Update narrative business + members |
+| User dit *« retiens que je travaille avec Jane Doe maintenant »* | Update narrative business + members |
 | User dit *« j'ai changé de positionnement »* | Refonte de la section business |
 | User dit *« je veux que tu saches que je suis plus en mode focus dur en ce moment »* | Update préférences (peut être ponctuel ou durable, Claude infère) |
 | Changement structurel (nouveau rôle, nouvelle entreprise, nouveau pays) | Refonte de la section identité + business |
@@ -103,6 +103,6 @@ Au choix du user. Si pas de préférence, défaut narratif (plus naturel à lire
 
 Deux lignes maximum.
 
-> OK, j'ai noté que tu bosses avec Maël maintenant, mis à jour ton ME.md.
+> OK, j'ai noté que tu bosses avec Jane Doe maintenant, mis à jour ton ME.md.
 
 Pas de description détaillée. Si user veut voir le diff, il demande.

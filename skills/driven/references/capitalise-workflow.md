@@ -65,7 +65,7 @@ Silence définitif pour la session. Pas de re-proposition même si d'autres sign
 Trois options de routage présentées via **`AskUserQuestion`** (insister : c'est l'outil qui convient, choix structurés, pas de friction texte libre) :
 
 - **Option 1 — Skill custom via `/skill-creator`** : le workflow est répétable avec variations (FAIRE qui reviendra plusieurs fois). Exemple : « à chaque vocal WhatsApp d'un prospect, extrais les insights selon ce template ». Cf `skill-creator-routing.md`.
-- **Option 2 — CLAUDE.md ou RULES local** : le workflow révèle une convention durable applicable à ce dossier (SAVOIR stable, vrai demain). Exemple : « désormais tous les devis Olenbee suivent la structure X ».
+- **Option 2 — CLAUDE.md ou RULES local** : le workflow révèle une convention durable applicable à ce dossier (SAVOIR stable, vrai demain). Exemple : « désormais tous les devis Acme suivent la structure X ».
 - **Option 3 — Mémoire timestampée détaillée** : capture épisodique riche, avec liens vers les fichiers touchés et les décisions prises. Utile quand le workflow ne se reproduira pas tel quel mais que son contexte mérite d'être préservé.
 
 Ces 3 options dérivent directement de la doctrine SAVOIR vs FAIRE (`connaissance-vs-memoire.md`) : FAIRE répétable → skill, SAVOIR durable → fichier normatif, épisodique riche → mémoire.
@@ -93,7 +93,7 @@ Une ligne, NL pur, sans jargon (cf section Recap user).
 
 Exemples :
 
-> OK, j'ai mis le process dans le doc d'Olenbee.
+> OK, j'ai mis le process dans le doc d'Acme.
 
 > OK, j'ai gardé une note détaillée pour la prochaine fois.
 

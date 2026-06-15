@@ -24,8 +24,8 @@ Tonalité affective qui colore la mémoire (tendu, stressé, ravi, agacé, frust
 
 | Avant | Après |
 |---|---|
-| « RDV tendu avec Laurent » | « RDV avec Laurent sur le pricing. Désaccord exprimé sur la borne haute (12K), Laurent propose 8K. » |
-| « Réunion super productive avec l'équipe » | « Réunion équipe : 3 décisions prises (pricing pack, timeline Olenbee, embauche stagiaire). » |
+| « RDV tendu avec John Doe » | « RDV avec John Doe sur le pricing. Désaccord exprimé sur la borne haute (12K), John Doe propose 8K. » |
+| « Réunion super productive avec l'équipe » | « Réunion équipe : 3 décisions prises (pricing pack, timeline Acme, embauche stagiaire). » |
 | « J'étais déçu du retour client » | « Retour client : 2 points négatifs (délai, qualité du brief). 1 point positif (réactivité). » |
 
 L'émotion est remplacée par la description du fait qui l'a produite. Plus utile pour la lecture future.
@@ -36,8 +36,8 @@ Contexte personnel, météo, apparence, santé, etc. qui n'apporte rien à la d�
 
 | Avant | Après |
 |---|---|
-| « RDV avec Laurent, il pleuvait, il avait l'air fatigué » | « RDV avec Laurent sur le pricing pack Olenbee. Décision : alignement à 8K. » |
-| « Call avec Maud, je venais juste de finir mon café » | « Call avec Maud sur le brief Acme. Validation des 3 axes. » |
+| « RDV avec John Doe, il pleuvait, il avait l'air fatigué » | « RDV avec John Doe sur le pricing pack Acme. Décision : alignement à 8K. » |
+| « Call avec Jane Doe, je venais juste de finir mon café » | « Call avec Jane Doe sur le brief Acme. Validation des 3 axes. » |
 
 Le hors-scope est supprimé. Pas reformulé, on coupe.
 
@@ -47,9 +47,9 @@ Intention future ou hypothèse présentée comme certitude.
 
 | Avant | Après |
 |---|---|
-| « Laurent va valider le devis » | « Laurent doit confirmer le devis d'ici fin de semaine (échange du 11/05). » |
+| « John Doe va valider le devis » | « John Doe doit confirmer le devis d'ici fin de semaine (échange du 11/05). » |
 | « On va signer avec Acme la semaine prochaine » | « Acme a indiqué une intention de signer la semaine prochaine. Pas de confirmation écrite. » |
-| « Le pricing pack va plaire » | « Le pricing pack répond aux 3 critères exprimés par Olenbee le 11/05. Validation attendue. » |
+| « Le pricing pack va plaire » | « Le pricing pack répond aux 3 critères exprimés par Acme le 11/05. Validation attendue. » |
 
 La spéculation est rendue explicite (« doit confirmer », « a indiqué », « attendue »). Le fait reste, l'extrapolation est tempérée.
 
@@ -90,7 +90,7 @@ Si user demande d'écrire en personal une note qui finira probablement reformul�
 
 Au-delà des 4 catégories explicites, Claude peut détecter d'autres patterns problématiques :
 
-- **Données personnelles d'un tiers** (santé, situation familiale, sexualité), demande NL : *« Ces infos sur Pierre, on les garde dans l'espace perso ou dans l'espace partagé ? »*
+- **Données personnelles d'un tiers** (santé, situation familiale, sexualité), demande NL : *« Ces infos sur John Doe, on les garde dans l'espace perso ou dans l'espace partagé ? »*
 - **Conflit avec un partenaire** : détection contextuelle, propose perso ou reformulation neutre.
 - **Critique implicite de l'équipe** : souvent un mélange jugement + émotion, traiter via 1+2.
 

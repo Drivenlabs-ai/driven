@@ -15,7 +15,7 @@ Sous-commandes :
 
 Usage :
     python graph.py build --scope /path/to/workspace
-    python graph.py impact Clients/Olenbee/CLAUDE.md --scope /path
+    python graph.py impact Clients/Acme/CLAUDE.md --scope /path
 """
 
 from __future__ import annotations

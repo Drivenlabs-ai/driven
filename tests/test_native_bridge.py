@@ -12,8 +12,8 @@ import search_memories
 
 _MEMORY = (
     "---\ndate: 2026-05-11\ntime: \"1430\"\ntype: decision\n"
-    "topic: pricing-olenbee\nkeywords:\n  - olenbee\n  - pricing\n  - devis\n---\n\n"
-    "# Décision pricing\n\n## Contexte\nPricing Olenbee.\n\n## Notes\nAligné à 8K.\n"
+    "topic: pricing-acme\nkeywords:\n  - acme\n  - pricing\n  - devis\n---\n\n"
+    "# Décision pricing\n\n## Contexte\nPricing Acme.\n\n## Notes\nAligné à 8K.\n"
 )
 
 
@@ -53,7 +53,7 @@ def test_search_project_trouve_la_memoire_native(tmp_path, monkeypatch, capsys):
 
     monkeypatch.setattr(
         sys, "argv",
-        ["search_memories.py", "pricing olenbee devis", "--project", str(repo)],
+        ["search_memories.py", "pricing acme devis", "--project", str(repo)],
     )
     search_memories.main()
     results = json.loads(capsys.readouterr().out)

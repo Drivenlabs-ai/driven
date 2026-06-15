@@ -29,13 +29,13 @@ Pour un projet code, `--project <repo>` remplace `--scope` et cible la mémoire 
 
 ## Résolution ambiguë
 
-Si `explain` retourne `resolved: null` avec une liste `candidates`, ou si `path` retourne `ambiguous: true` avec `candidates_a` / `candidates_b`, le script n'a pas tranché. Choisir selon le contexte de la tâche, ou demander en NL au user (« Tu parles du contact Laurent ou de la note du RDV ? »). Ne jamais deviner en silence.
+Si `explain` retourne `resolved: null` avec une liste `candidates`, ou si `path` retourne `ambiguous: true` avec `candidates_a` / `candidates_b`, le script n'a pas tranché. Choisir selon le contexte de la tâche, ou demander en NL au user (« Tu parles du contact John Doe ou de la note du RDV ? »). Ne jamais deviner en silence.
 
 ## Restitution NL
 
 Jamais de JSON brut au user. Reformuler comme `interface-cli.md` le fait pour `search` : phrases naturelles, liens markdown vers les fichiers, deux lignes de recap. Exemple après un `impact` au renommage :
 
-> OK, j'ai renommé Olenbee : 2 chargements obligatoires et 12 liens mis à jour.
+> OK, j'ai renommé Acme : 2 chargements obligatoires et 12 liens mis à jour.
 
 ## Garde-fou bivalence
 

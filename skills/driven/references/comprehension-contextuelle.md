@@ -17,13 +17,13 @@ La pré-trigger contextuelle charge l'historique avant d'agir.
 
 ### 1. Mention d'un contact
 
-User dit *« j'ai un RDV avec Laurent demain »*. Avant de répondre :
+User dit *« j'ai un RDV avec John Doe demain »*. Avant de répondre :
 
-1. Chercher la fiche contact Laurent (dans `Contacts/contacts.jsonl` ou équivalent).
-2. Chercher les memory entries où Laurent apparaît (search BM25 ou scan du `memory/` des dossiers business concernés).
-3. Charger le contexte projet récent (`Clients/Olenbee/` si Laurent = Olenbee).
+1. Chercher la fiche contact John Doe (dans `Contacts/contacts.jsonl` ou équivalent).
+2. Chercher les memory entries où John Doe apparaît (search BM25 ou scan du `memory/` des dossiers business concernés).
+3. Charger le contexte projet récent (`Clients/Acme/` si John Doe = Acme).
 
-Puis répondre avec ce contexte chargé, *« RDV avec Laurent demain, c'est le 4ème sur Olenbee, dernière décision pricing à 8K du 11/05, brief en attente de validation. »*
+Puis répondre avec ce contexte chargé, *« RDV avec John Doe demain, c'est le 4ème sur Acme, dernière décision pricing à 8K du 11/05, brief en attente de validation. »*
 
 ### 2. Mention d'un sujet stratégique
 
@@ -93,7 +93,7 @@ Ils s'enchaînent souvent : exploration arborescente d'abord pour avoir la vue, 
 
 La compréhension contextuelle se rend visible au user dans la synthèse, pas dans la mécanique. Format type :
 
-> RDV avec Laurent demain, 4ème sur Olenbee. Dernière décision : pricing à 8K le 11/05 (cf [mémoire](Clients/Olenbee/memory/2026-05-11-1430-mael-decision-pricing.md)). Brief en attente de validation depuis le 9/05. Tu veux qu'on prépare quelque chose ?
+> RDV avec John Doe demain, 4ème sur Acme. Dernière décision : pricing à 8K le 11/05 (cf [mémoire](Clients/Acme/memory/2026-05-11-1430-jane-decision-pricing.md)). Brief en attente de validation depuis le 9/05. Tu veux qu'on prépare quelque chose ?
 
 Synthétique, factuel, avec liens pour accéder au détail. Pas de description de la machinerie *« j'ai lu 3 mémoires et la fiche contact »*.
 
@@ -109,6 +109,6 @@ Synthèse contextuelle = le récap implicite. Pas de mention de la mécanique de
 
 Si user demande *« qu'est-ce que tu as regardé pour me dire ça »*, restituer explicitement :
 
-> J'ai lu la fiche Laurent, les 3 dernières mémoires d'Olenbee, et le brief actuel.
+> J'ai lu la fiche John Doe, les 3 dernières mémoires d'Acme, et le brief actuel.
 
 Sinon, silencieux.

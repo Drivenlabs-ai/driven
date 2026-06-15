@@ -50,8 +50,8 @@ authors:                          # obligatoire en shared
 members:                          # obligatoire en shared
   - email: alex@drivenlabs.ai
     name: Alexandre Bouchez
-  - email: mael@drivenlabs.ai
-    name: Maël Urien
+  - email: jane@drivenlabs.ai
+    name: Jane Doe
 last-updated: 2026-05-12
 ---
 ```
@@ -78,7 +78,7 @@ Un projet dont le travail technique vit dans un repo code déclare ce repo via u
 
 ```yaml
 ---
-code-repo: /Users/alexandrebouchez/Code/olenbee-app
+code-repo: /Users/alexandrebouchez/Code/acme-app
 ---
 ```
 
@@ -113,15 +113,15 @@ Mêmes champs `authors` + `last-updated`. Sert quand la section « À propos » 
 date: 2026-05-11
 time: "1430"
 authors:
-  - mael@drivenlabs.ai
+  - jane@drivenlabs.ai
 type: decision
-topic: rdv-olenbee
+topic: rdv-acme
 confidence: verbatim
 keywords:
-  - olenbee
+  - acme
   - pricing
   - pack-sales
-  - laurent-urien
+  - john-doe
   - negociation
 ---
 ```
@@ -139,7 +139,7 @@ keywords:
 Après le frontmatter, deux sections obligatoires en shared, recommandées en perso :
 
 ```markdown
-# RDV Olenbee 2026-05-11
+# RDV Acme 2026-05-11
 
 ## Contexte
 [2-3 phrases self-contained : pourquoi cette mémoire existe, quel sujet, qui concerné.]

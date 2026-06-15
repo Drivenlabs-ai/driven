@@ -61,14 +61,14 @@ Format typique :
 ```markdown
 # Registres par contact
 
-## Laurent Urien (Dentalsoft / Olenbee)
-[Comment Alex écrit à Laurent, registre, niveau de familiarité, sujets sensibles.]
+## John Doe (Dentalsoft / Acme)
+[Comment Alex écrit à John Doe, registre, niveau de familiarité, sujets sensibles.]
 
-## Maud Mathiot
+## Jane Doe Mathiot
 [Idem.]
 ```
 
-Mise à jour quand user dit *« avec Pierre Martin, plus direct »* ou similaire. Détail : `maintenance-fichiers-racines.md`.
+Mise à jour quand user dit *« avec John Doe, plus direct »* ou similaire. Détail : `maintenance-fichiers-racines.md`.
 
 ## Workflow d'utilisation par Claude
 

@@ -22,7 +22,7 @@ Langage naturel, zéro jargon, deux issues possibles :
 
 Le nom est récupéré depuis la table `members:` du frontmatter du CLAUDE.md racine du shared space (cf `frontmatter.md`). Le plugin lit ce CLAUDE.md racine en début de session via remontée d'arborescence depuis le fichier ciblé, parse la table `members:`, et résout chaque email d'`authors` vers son `name`.
 
-Si plusieurs auteurs : *« Ce document est d'Alex et Maël. Tu continues ? »*.
+Si plusieurs auteurs : *« Ce document est d'Alex et Jane Doe. Tu continues ? »*.
 
 Si un email d'`authors` n'apparaît pas dans la table `members:` (cas exceptionnel d'un contributeur externe ou retiré), fallback sur l'email tel quel : *« Ce document est de externe@partenaire.com. Tu continues ? »*. Pas bloquant, juste moins lisible.
 
@@ -98,6 +98,6 @@ Le personal space est mono-user implicite. Pas de tracking `authors`, pas de flo
 
 Que la modification soit triviale (correction typo) ou substantielle (refonte d'une section), le recap reste deux lignes maximum.
 
-> OK, j'ai mis à jour le brief Olenbee et je t'ai ajouté en co-auteur.
+> OK, j'ai mis à jour le brief Acme et je t'ai ajouté en co-auteur.
 
 Pas de description de la modification, pas de mention du frontmatter, pas de path complet sauf si la précision sert le user.

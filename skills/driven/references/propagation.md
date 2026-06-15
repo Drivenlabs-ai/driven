@@ -14,7 +14,7 @@ Réservée aux changements qui ne portent pas de jugement de fond :
 | Renommage de fichier | `scripts/graph.py impact` pour les liens entrants + regen automatique vers le nouveau path |
 | Création d'une memory entry | Auto cross-link vers mémoires connexes du voisinage (cf `references/links.md`) |
 
-Le user voit le recap minimal : *« OK, j'ai renommé Olenbee et mis à jour les 14 liens. »* Pas de validation par cascade, le user attend ce comportement par défaut.
+Le user voit le recap minimal : *« OK, j'ai renommé Acme et mis à jour les 14 liens. »* Pas de validation par cascade, le user attend ce comportement par défaut.
 
 ## Cascade proposée (langage naturel, validation user)
 
@@ -23,7 +23,7 @@ Réservée aux changements qui touchent à la cohérence du système ou aux conv
 | Trigger | Proposition NL |
 |---|---|
 | Update d'une convention dans `RULES.md` racine | *« Cette nouvelle convention impacte aussi le `RULES.md` de Drivenlabs/. Je le mets à jour ? »* |
-| Modification d'une fiche contact qui apparaît dans plusieurs dossiers business | *« Pierre Martin apparaît aussi dans Clients/Acme/. Je propage ? »* |
+| Modification d'une fiche contact qui apparaît dans plusieurs dossiers business | *« John Doe apparaît aussi dans Clients/Acme/. Je propage ? »* |
 | Décision documentée dans une memory qui contredit un fichier normatif | *« Cette décision contredit ce qui est écrit dans `positioning.md`. Tu veux que je rafraîchisse le positioning ? »* |
 | Lecture d'un normatif dont une section contredit une mémoire datée du scope | *« Ce que dit `positioning.md` contredit la décision du 14/05. On tranche ? »* (détection : `audit-sections.md`, mode lecture) |
 | Refonte holistique d'un fichier qui pourrait casser des références | *« Cette refonte change la structure des sections de `SOUL.md`. 4 docs liés pourraient être impactés. Je propose un audit ? »* |
@@ -34,14 +34,14 @@ Une seule question, langage naturel, jamais de menu technique. Si user dit oui, 
 
 Le cas le plus fréquent. Workflow :
 
-1. User demande de renommer un fichier ou un dossier (ex `Clients/Olenbee/` → `Clients/Olenbee-Mature/`).
+1. User demande de renommer un fichier ou un dossier (ex `Clients/Acme/` → `Clients/Acme-Mature/`).
 2. Invoquer `scripts/graph.py impact <ancien-path>` pour obtenir les liens entrants typés (cf `graphe.md`). Si le script échoue, retomber sur un grep du path littéral.
 3. Avec ≤ 50 liens à regénérer : cascade silencieuse, recap minimal.
 4. Avec > 50 liens : demande de validation en NL avant exécution (volume = risque).
 5. Renommage effectif + regen des liens vers le nouveau path.
 6. Memory entry créée dans le `memory/` du parent commun, documentant le renommage et la liste des fichiers impactés.
 
-Le recap distingue les types d'arête : un lien `at-ref` (`@fichier`) cassé est un chargement transitif rompu, signalé plus fortement qu'un lien markdown simple. Exemple : *« renommé Olenbee, mis à jour 2 chargements obligatoires et 12 liens. »*
+Le recap distingue les types d'arête : un lien `at-ref` (`@fichier`) cassé est un chargement transitif rompu, signalé plus fortement qu'un lien markdown simple. Exemple : *« renommé Acme, mis à jour 2 chargements obligatoires et 12 liens. »*
 
 ## Cascade vers les memory entries
 
@@ -69,13 +69,13 @@ Avant chaque write sur un fichier shared, vérifier la présence d'une copie de 
 ```
 
 Exemples :
-- `CLAUDE (2026-05-12) - Mael.md`
+- `CLAUDE (2026-05-12) - Jane Doe.md`
 - `pricing (2026-05-11 10:45) - Alex.md`
 
 Si une copie de conflit est détectée pour le fichier cible :
 
 1. **Interrompre l'écriture** en cours.
-2. Proposer en NL : *« Il y a une version concurrente de ce fichier par Maël du 12/05. Je fusionne les deux avant d'écrire ? »*
+2. Proposer en NL : *« Il y a une version concurrente de ce fichier par Jane Doe du 12/05. Je fusionne les deux avant d'écrire ? »*
 3. Si user accepte : lire les deux versions, raisonner sur les divergences, proposer une version fusionnée en NL (pas un diff brut), valider, écrire la version fusionnée comme canonical, supprimer la copie conflit, créer une memory entry documentant la fusion.
 4. Si user refuse : abandonner l'écriture, afficher les deux paths au user pour résolution manuelle.
 
@@ -97,7 +97,7 @@ Le personal space n'a pas de tracking `authors`, pas de cross-author, pas de val
 
 Cascades silencieuses : recap minimal en une ligne à la fin de l'action principale.
 
-> OK, j'ai renommé Olenbee, mis à jour les 14 liens et noté ça dans la mémoire.
+> OK, j'ai renommé Acme, mis à jour les 14 liens et noté ça dans la mémoire.
 
 Cascades proposées : une question NL avant exécution, puis recap minimal après.
 

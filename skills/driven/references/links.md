@@ -12,8 +12,8 @@ Les liens entre fichiers du workspace sont des liens markdown standards : `[Text
 ## Format
 
 ```markdown
-[Olenbee](Clients/Olenbee/CLAUDE.md)
-[la décision pricing](Clients/Olenbee/memory/2026-05-11-1430-mael-decision-pricing.md)
+[Acme](Clients/Acme/CLAUDE.md)
+[la décision pricing](Clients/Acme/memory/2026-05-11-1430-jane-decision-pricing.md)
 [le positioning](Drivenlabs/positioning.md)
 ```
 
@@ -29,16 +29,16 @@ Quand une entité est mentionnée dans un document :
 
 Choisi quand la mention est ponctuelle, non-business, ou anecdotique. Exemples :
 
-- « Comme l'a dit John dans son post », John n'a pas de document dans le workspace, le post non plus. Pas de lien.
-- « C'était pas mal, à la manière de Tarantino », référence culturelle. Pas de lien.
+- « Comme l'a dit John Doe dans son post », John n'a pas de document dans le workspace, le post non plus. Pas de lien.
+- « C'était pas mal, à la manière d'un grand réalisateur », référence culturelle. Pas de lien.
 - « On a regardé l'option Stripe », Stripe a pas de fiche dédiée. Pas de lien.
 
 ### Option B : Création réelle du document cible
 
 Choisi quand l'entité est importante et devrait avoir un document propre dans le workspace. Exemples :
 
-- « J'ai rencontré Pierre Martin de chez Acme, prospect intéressant », Pierre Martin et Acme sont des entités business pertinentes. Proposer création de `Contacts/pierre-martin.md` et `Clients/acme/CLAUDE.md` (en langage naturel : *« Je crée des docs pour Pierre Martin et Acme ? »*).
-- « Le RDV avec Laurent était sur Olenbee », Olenbee est un client suivi. S'il a déjà un dossier (`Clients/Olenbee/`), lien direct. Sinon, proposer création.
+- « J'ai rencontré John Doe de chez Acme, prospect intéressant », John Doe et Acme sont des entités business pertinentes. Proposer création de `Contacts/john-doe.md` et `Clients/acme/CLAUDE.md` (en langage naturel : *« Je crée des docs pour John Doe et Acme ? »*).
+- « Le RDV avec John Doe était sur Acme », Acme est un client suivi. S'il a déjà un dossier (`Clients/Acme/`), lien direct. Sinon, proposer création.
 
 ## Saillance contextuelle
 
@@ -63,12 +63,12 @@ Une entité mentionnée pour la 1ʳᵉ fois est un candidat fiche. Une entité m
 Un stub est un lien vers un fichier qui n'existe pas encore, créé « au cas où ». Exemple à bannir :
 
 ```markdown
-RDV avec [Pierre Martin](Contacts/pierre-martin.md)
+RDV avec [John Doe](Contacts/john-doe.md)
 ```
 
-…sans que `Contacts/pierre-martin.md` existe. Le lien casse, le fichier n'apparaît pas dans l'index, l'orchestration future fait référence à un fantôme.
+…sans que `Contacts/john-doe.md` existe. Le lien casse, le fichier n'apparaît pas dans l'index, l'orchestration future fait référence à un fantôme.
 
-**Toujours** : soit créer réellement le document cible, soit ne pas mettre de lien. Si user dit *« je préfère juste mentionner sans créer »*, pas de lien, éventuellement gras pour signaler l'entité (`**Pierre Martin**`).
+**Toujours** : soit créer réellement le document cible, soit ne pas mettre de lien. Si user dit *« je préfère juste mentionner sans créer »*, pas de lien, éventuellement gras pour signaler l'entité (`**John Doe**`).
 
 ## Seuil de pertinence
 
@@ -84,18 +84,18 @@ Claude raisonne sur l'importance contextuelle de chaque mention. Quelques heuris
 
 En cas de doute, demander en NL :
 
-> Je crée un doc pour Pierre Martin ou je le mentionne juste sans créer ?
+> Je crée un doc pour John Doe ou je le mentionne juste sans créer ?
 
 ## Renommage et propagation
 
-Quand un document lié est renommé, le plugin scanne le workspace pour les liens entrants et les regen automatiquement. Détail : `references/propagation.md`. Le user voit seulement *« j'ai mis à jour les 14 liens vers Olenbee. »*
+Quand un document lié est renommé, le plugin scanne le workspace pour les liens entrants et les regen automatiquement. Détail : `references/propagation.md`. Le user voit seulement *« j'ai mis à jour les 14 liens vers Acme. »*
 
 ## Liens vers les mémoires
 
 Liens markdown standards, mêmes règles. Format typique :
 
 ```markdown
-Voir la [décision pricing du 11/05](Clients/Olenbee/memory/2026-05-11-1430-mael-decision-pricing.md).
+Voir la [décision pricing du 11/05](Clients/Acme/memory/2026-05-11-1430-jane-decision-pricing.md).
 ```
 
 Texte affiché qui résume + path complet. Lisible dans le corps d'un autre fichier sans lien actif (le résumé textuel donne déjà l'essentiel).
@@ -105,7 +105,7 @@ Texte affiché qui résume + path complet. Lisible dans le corps d'un autre fich
 URLs http(s) en lien standard markdown :
 
 ```markdown
-[le post LinkedIn de Greg Isenberg](https://www.linkedin.com/posts/...)
+[le post LinkedIn de John Doe](https://www.linkedin.com/posts/...)
 ```
 
 Pas de raccourci, pas de markdown réflexif (`<url>`). Format identique aux liens internes pour la cohérence visuelle.

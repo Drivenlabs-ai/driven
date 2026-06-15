@@ -44,9 +44,9 @@ Charger la reference correspondante et exécuter.
 
 ### 3. Avec argument : intention en langage naturel
 
-`/driven retiens que Laurent a changé le tarif`
-`/driven note ça pour Olenbee`
-`/driven crée un doc pour Pierre Martin`
+`/driven retiens que John Doe a changé le tarif`
+`/driven note ça pour Acme`
+`/driven crée un doc pour John Doe`
 `/driven le SOUL.md est trop strict, refonds-le`
 
 Inférer l'action depuis `references/routage.md`, charger les références pertinentes, exécuter.
@@ -80,7 +80,7 @@ python "${CLAUDE_PLUGIN_ROOT}/scripts/search_memories.py" \
 
 Workflow :
 
-1. User invoque `/driven search "pricing olenbee"`.
+1. User invoque `/driven search "pricing acme"`.
 2. Claude **expand** la query avec des synonymes (pricing → pricing, tarif, tariff, pricing-pack, sales-pack, offre).
 3. Claude détermine le scope (par défaut : cwd workspace racine si user dans le workspace driven, sinon path passé en flag).
 4. Invocation du script via Bash tool.
@@ -90,13 +90,13 @@ Workflow :
 Format type de restitution :
 
 ```
-J'ai trouvé 5 mémoires pertinentes sur le pricing Olenbee :
+J'ai trouvé 5 mémoires pertinentes sur le pricing Acme :
 
-1. [Décision pricing 11/05](Clients/Olenbee/memory/2026-05-11-1430-mael-decision-pricing.md)
-   RDV pricing du 11/05. Laurent propose 8K, alignement validé en réunion.
+1. [Décision pricing 11/05](Clients/Acme/memory/2026-05-11-1430-jane-decision-pricing.md)
+   RDV pricing du 11/05. John Doe propose 8K, alignement validé en réunion.
 
-2. [Révision pricing 14/05](Clients/Olenbee/memory/2026-05-14-0900-mael-revision-pricing.md)
-   Révision à 10K après nouveau brief Olenbee.
+2. [Révision pricing 14/05](Clients/Acme/memory/2026-05-14-0900-jane-revision-pricing.md)
+   Révision à 10K après nouveau brief Acme.
 
 3. [...]
 
@@ -108,8 +108,8 @@ Tu veux que je détaille une mémoire en particulier ?
 Mapping vers `scripts/graph.py` (cf `graphe.md` pour le détail des sous-commandes et le format de restitution) :
 
 ```
-/driven explain "Olenbee"      → python "${CLAUDE_PLUGIN_ROOT}/scripts/graph.py" explain "Olenbee" --scope=<racine>
-/driven path "Olenbee" "Acme"  → python "${CLAUDE_PLUGIN_ROOT}/scripts/graph.py" path "Olenbee" "Acme" --scope=<racine>
+/driven explain "Acme"      → python "${CLAUDE_PLUGIN_ROOT}/scripts/graph.py" explain "Acme" --scope=<racine>
+/driven path "Acme" "Acme"  → python "${CLAUDE_PLUGIN_ROOT}/scripts/graph.py" path "Acme" "Acme" --scope=<racine>
 ```
 
 Restitution en NL (jamais le JSON brut) : fiche lisible avec liens markdown pour `explain`, chaîne de connexions pour `path`. Si le résultat est ambigu (plusieurs candidats), demander en NL lequel.

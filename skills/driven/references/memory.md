@@ -17,14 +17,14 @@ Activé quand user dit :
 Le user ne tape jamais le frontmatter. Claude infère silencieusement :
 
 1. **Scope**, perso vs shared, et lequel. Voir `scope-check.md`.
-2. **Dossier cible**, chercher le `memory/` du dossier thématique pertinent (ex `Clients/Olenbee/memory/`). Si absent → créer le dossier. Si le sujet est transverse → choisir le dossier qui colle le mieux ou demander en NL. Dans un projet code (repo git hors workspace driven), pas de choix : la mémoire native du repo, cf `memoire-projet-code.md`.
+2. **Dossier cible**, chercher le `memory/` du dossier thématique pertinent (ex `Clients/Acme/memory/`). Si absent → créer le dossier. Si le sujet est transverse → choisir le dossier qui colle le mieux ou demander en NL. Dans un projet code (repo git hors workspace driven), pas de choix : la mémoire native du repo, cf `memoire-projet-code.md`.
 3. **Lecture proactive des dernières mémoires du dossier cible**, par souci de cohérence. Claude juge le volume selon l'activité du dossier :
    - Dossier neuf (< 5 mémoires) → toutes lues.
    - Dossier modéré (5-30 mémoires) → 5 plus récentes (tri lexico = tri chrono).
    - Dossier dense (> 30 mémoires) → 5 plus récentes + search BM25 sur le topic inféré (top 5 hits).
    - Préambule `## Contexte` suffit en général. Lecture du corps si une mémoire semble directement pertinente au sujet.
    - Permet d'enrichir une mémoire existante plutôt que créer un doublon, et de croiser proprement les liens.
-4. **`topic`**, kebab-case court (ex `rdv-olenbee`, `decision-pricing`, `update-positioning`).
+4. **`topic`**, kebab-case court (ex `rdv-acme`, `decision-pricing`, `update-positioning`).
 5. **`type`**, `decision` si arbitrage tranché, `interaction` si RDV/call/échange, `insight` si apprentissage ou observation, `memory` par défaut, `other` exceptionnel.
 6. **`keywords`**, 5 à 10 mots-clés couvrant variantes + synonymes implicites. Critique pour la recherche BM25 (pondération ×3). Inférés depuis le contenu, pas demandés au user.
 7. **Préambule `## Contexte`**, 2 à 3 phrases self-contained. Doit pouvoir être lu isolément 6 mois plus tard.
@@ -39,7 +39,7 @@ Le user ne tape jamais le frontmatter. Claude infère silencieusement :
 - `author`, préfixe email primaire du créateur initial (ex `alex` pour `alex@drivenlabs.ai`).
 - `topic`, slug kebab-case identique au champ `topic` du frontmatter.
 
-Exemple : `2026-05-11-1430-mael-rdv-olenbee.md`.
+Exemple : `2026-05-11-1430-jane-rdv-acme.md`.
 
 Tri lexicographique = tri chronologique. Grep par auteur trivial.
 
@@ -51,8 +51,8 @@ Une memory entry représente un état figé à un instant T. Si l'information é
 
 Exemple :
 
-- `2026-05-11-1430-mael-decision-pricing.md`, décision initiale 8K.
-- `2026-05-14-0900-mael-revision-pricing.md`, révision à 10K, mémoire avec lien vers la précédente : « Révision de la [décision initiale](2026-05-11-1430-mael-decision-pricing.md). »
+- `2026-05-11-1430-jane-decision-pricing.md`, décision initiale 8K.
+- `2026-05-14-0900-jane-revision-pricing.md`, révision à 10K, mémoire avec lien vers la précédente : « Révision de la [décision initiale](2026-05-11-1430-jane-decision-pricing.md). »
 
 L'historique reste lisible. Pas de réécriture qui efface le passé.
 
@@ -75,7 +75,7 @@ Une mémoire fige un événement et ce qui en a découlé concrètement. Six moi
 
 Les lectures et recherches sans effet ne sont pas tracées : seules les mutations et les actions sortantes le sont.
 
-En shared space, ces lignes passent le filtre de `factualite.md` comme le reste du corps ; une action sortante y est par nature factuelle (« devis envoyé à laurent@olenbee.com le 11/05 »).
+En shared space, ces lignes passent le filtre de `factualite.md` comme le reste du corps ; une action sortante y est par nature factuelle (« devis envoyé à john@acme.com le 11/05 »).
 
 ## Détection sensibles → routage perso
 
@@ -92,7 +92,7 @@ Avant d'écrire une mémoire dans un dossier shared, Claude vérifie 6 patterns 
 
 Si user **insiste** pour écrire en shared malgré le pattern, Claude reformule avec **factualité maximale** (« décision prise », pas « X est nul »).
 
-Si user accepte le routage perso : créer la mémoire dans le personal space miroir (path parallèle, ex `~/Personal OS/Clients/Olenbee/memory/...`).
+Si user accepte le routage perso : créer la mémoire dans le personal space miroir (path parallèle, ex `~/Personal OS/Clients/Acme/memory/...`).
 
 Cas hybride (info en partie sensible) : extraire la part factuelle vers shared, le reste vers perso, avec lien réciproque.
 
@@ -106,13 +106,13 @@ Avant que Claude formule une proposition stratégique (« je suggère X », « o
 
 Après écriture, deux lignes maximum :
 
-> OK, j'ai noté ça dans Olenbee.
+> OK, j'ai noté ça dans Acme.
 
 Pas de chemin complet, pas de mention du frontmatter, pas de description de la mémoire elle-même. Le user ne doit pas avoir l'impression que la machinerie est lourde, elle ne l'est pas pour lui.
 
 En tech-level haut (cf `verbosity-tech-level.md`), recap peut être un peu plus détaillé :
 
-> OK, ajouté une décision dans `Clients/Olenbee/memory/` avec liens vers le pricing et le brief.
+> OK, ajouté une décision dans `Clients/Acme/memory/` avec liens vers le pricing et le brief.
 
 ## Suppression
 
