@@ -34,8 +34,16 @@ demande de retenir une info, modification d'un fichier de règle).
 
 ## Dépendances Python (recherche mémoire)
 
+Le script de recherche mémoire requiert `rank-bm25` et `pyyaml` dans l'environnement Python :
+
 ```bash
 uv pip install rank-bm25 pyyaml
+```
+
+Pour le développement (tests), l'environnement est managé via `pyproject.toml` + `uv.lock` :
+
+```bash
+uv sync
 ```
 
 Marche en Claude Code et Claude Cowork (Bash + Python disponibles dans les deux).
