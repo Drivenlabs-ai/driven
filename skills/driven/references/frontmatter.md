@@ -147,6 +147,10 @@ Après le frontmatter, deux sections obligatoires en shared, recommandées en pe
 ## Notes
 [Contenu factuel, scope projet, RULE factualité en shared. Entités = liens markdown
 vers des documents existants.]
+
+## Sources
+[Sources externes localisables + scripts utilisés (chemins). Optionnel, présent dès
+qu'il y a des sources/outils externes. Détail : `memory.md` §Sources.]
 ```
 
 Le préambule `## Contexte` est obligatoire en shared parce que les memory entries doivent être lisibles isolément, 6 mois plus tard, par un contributeur qui n'était pas dans la conversation. En personal space il reste recommandé mais peut être omis pour des notes très courtes.

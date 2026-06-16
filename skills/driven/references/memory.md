@@ -2,6 +2,8 @@
 
 Une memory entry est une note timestampée dans un dossier `memory/` à la racine d'un dossier thématique. C'est la mémoire long terme du workspace : décisions, RDV, interactions, insights, contexte projet.
 
+Créer une mémoire n'est qu'une partie de « mémoriser » : selon le périmètre du travail, le geste déclenche la consolidation de l'espace (`consolidation.md`) — mise à jour des fichiers impactés, structure, liens. Cette ref couvre le geste mémoire lui-même.
+
 Avant d'écrire une mémoire, le test pivot doit avoir été passé : l'information est un événement révolu ou une décision contextuelle, pas une convention durable. Si c'est vrai demain, c'est un fichier, pas une mémoire (cf `connaissance-vs-memoire.md`).
 
 ## Trigger
@@ -76,6 +78,16 @@ Une mémoire fige un événement et ce qui en a découlé concrètement. Six moi
 Les lectures et recherches sans effet ne sont pas tracées : seules les mutations et les actions sortantes le sont.
 
 En shared space, ces lignes passent le filtre de `factualite.md` comme le reste du corps ; une action sortante y est par nature factuelle (« devis envoyé à john@acme.com le 11/05 »).
+
+## Sources
+
+Une mémoire doit rester auto-suffisante pour retracer d'où vient l'information et de quoi la retrouver. Dès qu'elle s'appuie sur des sources ou des outils externes, une section `## Sources` en pied agrège les pointeurs localisables :
+
+- **Documents externes** → lien localisable : permalien ou Message-ID Gmail (`gws-gmail-read`), URL Drive (`gws-drive`), doc partagé, URL hors workspace. `gws` est l'autorité du format.
+- **Scripts ou outils utilisés** dans la session → référence + chemin (ex `scripts/parse_data.py`).
+- **Autres pointeurs de retour** → ID document, identifiant interne, etc.
+
+Distinction avec la trace des actions : la trace dit ce que la session a *fait* (fichiers créés/supprimés, éléments envoyés) ; `## Sources` dit *d'où vient l'info et comment la retrouver*. Un élément envoyé apparaît dans les deux — la trace le mentionne, `## Sources` porte son lien localisable. Les liens inline du corps `## Notes` restent pour la lecture au fil du texte ; `## Sources` garantit la vue d'ensemble.
 
 ## Détection sensibles → routage perso
 
