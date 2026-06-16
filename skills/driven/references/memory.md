@@ -16,8 +16,8 @@ Activé quand user dit :
 
 Le user ne tape jamais le frontmatter. Claude infère silencieusement :
 
-1. **Scope**, perso vs shared, et lequel. Voir `scope-check.md`.
-2. **Dossier cible**, chercher le `memory/` du dossier thématique pertinent (ex `Clients/Acme/memory/`). Si absent → créer le dossier. Si le sujet est transverse → choisir le dossier qui colle le mieux ou demander en NL. Dans un projet code (repo git hors workspace driven), pas de choix : la mémoire native du repo, cf `memoire-projet-code.md`.
+1. **Scope, ancré sur le dossier courant** (`scope-check.md`). Si le dossier courant est un repo git hors workspace driven (projet code), la mémoire va dans sa mémoire native (`memoire-projet-code.md`), même si un espace perso ou partagé est ouvert en parallèle. Sinon, perso vs shared et lequel.
+2. **Dossier cible** (workspace driven). Chercher le `memory/` du dossier thématique pertinent (ex `Clients/Acme/memory/`). Si absent → créer le dossier. Si le sujet est transverse → choisir le dossier qui colle le mieux ou demander en NL.
 3. **Lecture proactive des dernières mémoires du dossier cible**, par souci de cohérence. Claude juge le volume selon l'activité du dossier :
    - Dossier neuf (< 5 mémoires) → toutes lues.
    - Dossier modéré (5-30 mémoires) → 5 plus récentes (tri lexico = tri chrono).
