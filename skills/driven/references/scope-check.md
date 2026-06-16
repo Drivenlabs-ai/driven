@@ -53,6 +53,10 @@ Un user peut avoir plusieurs workspaces ouverts simultanément. Le plugin vérif
 3. Premier `CLAUDE.md` avec signaux pertinents = workspace du fichier.
 4. Règles appliquées selon signaux observés.
 
+## Mémoire ancrée sur le dossier courant
+
+Une nouvelle mémoire (sans fichier cible préexistant) suit le **dossier courant**, pas un espace ouvert en parallèle dans les dossiers additionnels — la mémoire d'un travail vit là où le travail se fait. Conséquence : si le cwd est un repo git hors workspace driven, sa mémoire native (`memoire-projet-code.md`) prime même quand un espace perso ou partagé est aussi ouvert ; on ne route pas vers l'espace perso par défaut.
+
 ## Anti-fuite personal → shared
 
 Si user demande une action qui pourrait écrire un contenu sensible dans un dossier shared (signaux observés) :

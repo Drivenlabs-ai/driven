@@ -23,7 +23,7 @@ Un dossier absent signifie « rien mémorisé encore », pas une erreur.
 
 Format d'entrée identique aux workspaces driven : naming `YYYY-MM-DD-HHMM-author-topic.md`, frontmatter inféré, append-only, cross-link, trace des actions, recap minimal — tout vit dans `memory.md`. Deux spécificités :
 
-- Pas de choix de dossier cible (étape 2 du workflow de `memory.md`) : c'est le dossier natif résolu (`--create`).
+- Pas de choix de dossier cible : le dossier natif résolu (`--create`), même si un espace driven perso ou partagé est ouvert en parallèle — la mémoire suit le cwd (`scope-check.md`).
 - Les liens vers des fichiers du repo sont des chemins absolus : la mémoire vit hors de l'arbre du repo, un chemin relatif ne porterait pas.
 
 Le test pivot s'applique inchangé : une convention durable du projet (stack, commandes, architecture, pièges connus) va dans le CLAUDE.md ou la doc du repo, pas en mémoire (`connaissance-vs-memoire.md`). La mémoire capte l'épisodique : décision datée, état d'une investigation, contexte d'un arbitrage technique, échange avec un client sur le projet.
