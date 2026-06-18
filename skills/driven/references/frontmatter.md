@@ -155,6 +155,24 @@ qu'il y a des sources/outils externes. Détail : `memory.md` §Sources.]
 
 Le préambule `## Contexte` est obligatoire en shared parce que les memory entries doivent être lisibles isolément, 6 mois plus tard, par un contributeur qui n'était pas dans la conversation. En personal space il reste recommandé mais peut être omis pour des notes très courtes.
 
+## Contenu métier — statut et portée
+
+Les contenus métier (briefs, plans de livrables, notes, fiches produit, decks…) portent deux propriétés que Claude infère à la production, sans validation de l'user :
+
+```yaml
+---
+authors:
+  - alex@drivenlabs.ai
+status: wip
+last-updated: 2026-06-18
+---
+```
+
+- **`status: wip`** — artefact temporaire, étape d'un travail en cours (exploration, plan intermédiaire, itération susceptible d'être remplacée). Il **ne fait pas foi** : une session future ne le traite pas comme une référence établie, ne s'appuie pas dessus comme acquis, ne le généralise pas. Un contenu abouti, qui fait foi dans son périmètre, ne porte pas le champ (défaut). Ce n'est pas un statut de relecture — Claude classe selon la nature de l'info, l'user ne valide rien.
+- **Portée contextuelle** — un contenu métier est lié à son contexte (un client, un livrable). Ce qui a été fait pour le client X ne s'applique pas au client Y : jamais une instruction universelle, même quand il fait foi. Seuls les fichiers normatifs portent de l'universel.
+
+Ne s'applique pas aux normatifs (CLAUDE/RULES/ME/SOUL/VOICE/ABOUT/CONTRIBUTING) : leur autorité et leur modification sont déjà encadrées (`maintenance-fichiers-racines.md`).
+
 ## Règles d'écriture du frontmatter
 
 - Toujours quoter les valeurs string qui pourraient être parsées comme nombre ou date (`time: "0930"`, jamais `time: 0930`).

@@ -15,7 +15,7 @@ Pour explorer un dossier nouveau ou commencer une tâche sur un sujet :
 1. **`CLAUDE.md` du dossier courant**, vue stratégique, structure, conventions.
 2. **`CONTRIBUTING.md` du dossier si présent**, workflows et règles locales.
 3. **5 dernières memory entries du `memory/` local**, contexte récent.
-4. **Fichiers thématiques pertinents** (si tâche le justifie), positioning, brief, etc.
+4. **Fichiers thématiques pertinents** (si tâche le justifie), positioning, brief, etc. Un fichier `status: wip` est une étape de travail, pas une référence établie — le lire comme tel, ne pas s'appuyer dessus comme acquis (`frontmatter.md` §contenu métier).
 5. **Sous-dossiers concernés**, `Clients/Acme/` si on bosse sur Acme.
 
 Le tri lexicographique des memory entries (naming `YYYY-MM-DD-HHMM-...`) = tri chronologique. Les 5 plus récentes par ordre alphabétique inversé.
