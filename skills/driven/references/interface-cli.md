@@ -32,6 +32,7 @@ Adapté au workspace détecté (perso vs shared, fichiers présents).
 
 | Argument | Action |
 |---|---|
+| `/driven context "sujet"` | Récupère le contexte du sujet avant de bosser : normatifs + interne (arborescence, BM25, graphe) + canaux externes pointés. Charge `recuperation-contexte.md`. |
 | `/driven search "query"` | Recherche BM25 dans les mémoires du scope courant. Invocation du script Python. |
 | `/driven explain "entité"` | Fiche d'une entité : ses liens, arêtes et mémoires connexes. Invocation de `scripts/graph.py explain`. |
 | `/driven path "A" "B"` | Plus court chemin entre deux entités du workspace. Invocation de `scripts/graph.py path`. |
@@ -62,6 +63,14 @@ Pas de parsing strict, l'intention est lue en NL et Claude raisonne. Si ambigu, 
 | Pas de récap stratégique du workspace | Récap stratégique (mode sans argument) |
 
 Le user n'a typiquement **pas besoin** de taper `/driven`. C'est un raccourci pour les power users ou pour des cas spécifiques (force un audit, force une recherche).
+
+## `/driven context` : passe de récupération de contexte
+
+```
+/driven context "sujet"
+```
+
+Charge `recuperation-contexte.md` et exécute la passe : cadre normatif, contexte interne du workspace (arborescence, search BM25, graphe d'entités), canaux externes pointés par l'interne, puis restitution NL de l'état des lieux et amorce de travail. Détail et garde-fous : `recuperation-contexte.md`.
 
 ## `/driven search` : invocation du script Python
 
@@ -146,7 +155,7 @@ Pas de menu technique. Le user choisit en NL.
 Le frontmatter de `commands/driven.md` déclare :
 
 ```
-argument-hint: "[intention en langage naturel] | [search | explain | path | audit | migrate | setup-doc]"
+argument-hint: "[intention en langage naturel] | [context | search | explain | path | audit | migrate | setup-doc]"
 ```
 
 Le user voit cette hint en tapant `/driven`. Suggère les actions principales sans forcer.
