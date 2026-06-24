@@ -150,16 +150,6 @@ Si l'argument NL ne mappe clairement sur aucun cas de `routage.md`, demande NL :
 
 Pas de menu technique. Le user choisit en NL.
 
-## Tab completion / argument-hint
-
-Le frontmatter de `commands/driven.md` déclare :
-
-```
-argument-hint: "[intention en langage naturel] | [context | search | explain | path | audit | migrate | setup-doc]"
-```
-
-Le user voit cette hint en tapant `/driven`. Suggère les actions principales sans forcer.
-
 ## Pas d'options avancées V1
 
 Pas de flags complexes en V1 (`--dry-run`, `--verbose`, `--scope=...`, etc.) sauf pour `/driven search` qui supporte `--scope` et `--top` pour usage power-user.

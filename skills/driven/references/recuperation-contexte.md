@@ -6,7 +6,7 @@ Avant de commencer à travailler sur un sujet, Claude rassemble en une passe le 
 
 Signal central : **une intention de démarrer ou reprendre un travail sur un sujet ou un dossier.** Les formulations varient — « récupère le contexte », « charge le contexte », « prends connaissance du dossier X », « reprends le travail sur X », « on attaque X » — ou toute autre tournure équivalente. C'est l'intention qui déclenche, pas une formule figée. Action explicite équivalente : `/driven context <sujet>` (`interface-cli.md`).
 
-En début de session (premiers échanges, contexte du sujet pas encore en session), ce réflexe est prioritaire : dès que user signale le sujet sur lequel il veut travailler, prendre connaissance du contexte avant de produire, sans attendre une demande explicite. Démarrer informé prime sur une réponse immédiate hors-sol.
+En début de session (premiers tours de la conversation — seuil défini au §2 du SKILL.md), le contexte du sujet pas encore chargé, ce réflexe est prioritaire : dès que user signale le sujet sur lequel il veut travailler, prendre connaissance du contexte avant de produire, sans attendre une demande explicite. Démarrer informé prime sur une réponse immédiate hors-sol.
 
 Proportionner la passe à l'intention :
 
@@ -19,7 +19,7 @@ Elle orchestre les deux patterns de lecture qu'elle ne remplace pas — `lecture
 
 ## Objectif de la passe
 
-Rassembler ce qui rend Claude pertinent sur le sujet, interne et externe, sans sur-charger. Claude détermine ce qui fait sens pour le sujet ; les axes ci-dessous sont les graines d'une passe ouverte, pas une checklist fermée.
+Les axes ci-dessous sont les graines d'une passe ouverte, pas une checklist fermée : Claude détermine ce qui fait sens pour le sujet, au-delà de ce qui est listé.
 
 ### Cadre normatif
 

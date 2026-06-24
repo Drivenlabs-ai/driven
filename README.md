@@ -25,7 +25,7 @@ En mode universel, les patterns proactifs (setup-dossier, capitalise-workflow) e
 
 ```
 /driven                    # récap contexte + actions proposées
-/driven [intention en NL]  # ex: « retiens que Laurent a changé le tarif »
+/driven [intention en NL]  # ex: « retiens que John Doe a changé le tarif »
 /driven context "sujet"    # récupère le contexte d'un sujet avant de bosser dessus
 /driven search "query"     # recherche mémoire (BM25)
 ```
