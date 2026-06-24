@@ -1,6 +1,6 @@
 ---
 description: "Maintient un workspace driven, capture, cross-author, propagation, routage, structure. Activé automatiquement dans un workspace dont le CLAUDE.md racine porte space-type dans son frontmatter."
-argument-hint: "[intention en langage naturel] | [search | explain | path | audit | migrate | setup-doc | setup-dossier | workflow]"
+argument-hint: "[intention en langage naturel] | [context | search | explain | path | audit | migrate | setup-doc | setup-dossier | workflow]"
 ---
 
 # /driven
@@ -15,6 +15,7 @@ Selon l'argument :
 
 - **Aucun argument** → afficher récap contexte courant + actions pertinentes en langage naturel.
 - **Nom d'action explicite** → charger la référence correspondante :
+  - `context` → récupère le contexte d'un sujet avant de bosser dessus (charge `recuperation-contexte.md`)
   - `search` → recherche mémoire
   - `explain` → fiche d'une entité (liens + mémoires connexes ; charge `graphe.md`)
   - `path` → plus court chemin entre deux entités (charge `graphe.md`)

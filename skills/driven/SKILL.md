@@ -9,14 +9,15 @@ description: >
   Desktop) : capture mémoire timestampée, cross-author, propagation silencieuse,
   routage de l'information, maintenance holistique des fichiers normatifs. Activer
   quand l'utilisateur dit 'retiens ça', 'note ce truc', 'on a décidé que', 'rdv avec',
-  'X m'a dit', 'je veux retenir', 'on bascule', 'nouvelle session', 'fais le récap pour
-  reprendre', 'prépare le handoff' ; quand il crée un fichier dans un workspace driven ;
+  'X m'a dit', 'je veux retenir', 'on bascule', 'récupère le contexte', 'charge le contexte',
+  'prends connaissance du dossier', 'reprends le travail sur X', 'nouvelle session', 'fais le
+  récap pour reprendre', 'prépare le handoff' ; quand il crée un fichier dans un workspace driven ;
   quand il modifie un RULES.md, CONTRIBUTING.md, CLAUDE.md, SOUL.md, ME.md, VOICE.md
   ou ABOUT.md ; quand il mentionne une entité (personne ou organisation) qui mérite
   un document. Activer aussi sur signaux d'universalité ('désormais',
   'à partir de maintenant', 'à chaque fois', 'toujours', 'par défaut') qui
   marquent une convention durable plutôt qu'un événement ponctuel.
-argument-hint: "[intention en langage naturel] | [search | explain | path | audit | migrate | setup-doc | setup-dossier | workflow]"
+argument-hint: "[intention en langage naturel] | [context | search | explain | path | audit | migrate | setup-doc | setup-dossier | workflow]"
 license: Proprietary — Drivenlabs
 ---
 
@@ -201,6 +202,7 @@ Chaque ref ⭐ transverse a un signal d'activation observable. Quand le signal e
 |---|---|---|
 | ≥ 2 actions distinctes proposées dans la même réponse OU décision user-facing à valider | `askuserquestion.md` | Format batch d'options pré-rédigées |
 | Ambiguïté NL sur destination de l'info OU demande qui touche plusieurs cibles | `routage.md` | Table de routage + cas tordus |
+| Intention de démarrer ou reprendre un travail sur un sujet / dossier (réflexe prioritaire en début de session) | `recuperation-contexte.md` | Passe de récupération (normatifs + interne + canaux externes pointés) puis synthèse NL |
 | cwd ou cible dans dossier sans CLAUDE.md | `setup-dossier.md` | Mini-interview + outputs |
 | Signal d'universalité (« désormais », « à partir de », « toujours », « par défaut », « doit », « cadence ») | `connaissance-vs-memoire.md` + `lessons.md` + `consolidation.md` | Test « vrai demain ? » + lesson scopée + consolidation du drift si périmètre large |
 | Convention scopée à un dossier (universel + intemporel dans le scope) | `lessons.md` | Section Lessons dans CLAUDE.md du dossier |
@@ -281,6 +283,7 @@ Afficher un récap du contexte courant :
 
 | Argument | Action | Reference principale |
 |---|---|---|
+| `context` | Récupère le contexte d'un sujet avant de bosser dessus | `recuperation-contexte.md` |
 | `search` | Recherche BM25 dans les mémoires | `interface-cli.md` + invocation `scripts/search_memories.py` |
 | `explain` | Fiche d'une entité : liens, arêtes, mémoires connexes | `graphe.md` |
 | `path` | Plus court chemin entre deux entités du workspace | `graphe.md` |
@@ -372,6 +375,7 @@ Toutes les references vivent dans `${CLAUDE_PLUGIN_ROOT}/skills/driven/reference
 - `drive-conflicts.md` — Charger AVANT toute action si pattern fichier `*(<n>).md` détecté (signal §6.2).
 - `proactivite.md` — Charger DÈS qu'un signal proactif latent existe : fact-drop, mention d'entité sans fiche, doute sur proposer (signal §6.2).
 - `graphe.md` — Charger AVANT d'invoquer `scripts/graph.py` (renommage, suppression, proposition stratégique, requête de graphe, audit de liens — signal §6.2).
+- `recuperation-contexte.md` — Charger AVANT de démarrer ou reprendre un travail sur un sujet (signal §6.2).
 
 ### Triggers user et opérationnelles
 
